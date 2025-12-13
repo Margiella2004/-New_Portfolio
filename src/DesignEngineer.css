@@ -1,0 +1,33 @@
+/* Design Engineer Container */
+.design-engineer-container {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1231.6px;
+  margin: 0;
+  z-index: 50;
+}
+
+/* SVG Image */
+.design-engineer-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .design-engineer-container {
+    width: 90%;
+    max-width: 572.646px;
+  }
+}
+
+@media (max-width: 480px) {
+  .design-engineer-container {
+    width: 90%;
+    bottom: 20px;
+  }
+}
