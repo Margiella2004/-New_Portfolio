@@ -266,8 +266,22 @@ function App() {
     ),
   })
 
+  // Debug logging for Design Engineer width calculation
+  const paddingValue = controls.introPaddingX
+  const paddingTotal = paddingValue * 2
+  const widthFormula = `calc(90vw - ${paddingTotal}px)`
+
+  console.log('========== DESIGN ENGINEER WIDTH DEBUG ==========')
+  console.log('Padding (one side):', paddingValue, 'px')
+  console.log('Padding (both sides):', paddingTotal, 'px')
+  console.log('Width Formula:', widthFormula)
+  console.log('Viewport Width:', window.innerWidth, 'px')
+  console.log('90% of Viewport:', window.innerWidth * 0.9, 'px')
+  console.log('Expected Final Width:', (window.innerWidth * 0.9) - paddingTotal, 'px')
+  console.log('=================================================')
+
   return (
-    <div className="stage">
+    <div className="stage" style={{ '--content-total-width': widthFormula }}>
       <Header />
       <IntroText paddingX={controls.introPaddingX} />
       <DesignEngineer />
