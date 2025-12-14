@@ -1,22 +1,31 @@
 #root {
-  height: 100vh;
   margin: 0;
-  position: relative;
 }
 
 .stage {
   width: 100%;
-  height: 100%;
   position: relative;
-  overflow: hidden;
   background: #ffffff;
+}
+
+/* Sticky Hero Section */
+.hero-section {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 0;
 }
 
 /* Canvas container */
 .canvas-wrapper {
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
+  z-index: 1;
 }
 
 /* Noise texture overlay on top of canvas */
@@ -37,4 +46,12 @@ canvas {
   display: block;
   filter: blur(var(--canvas-blur, 0px));
   -webkit-filter: blur(var(--canvas-blur, 0px));
+}
+
+/* Projects Section */
+.projects-wrapper {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  min-height: 100vh;
 }
