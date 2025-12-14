@@ -5,12 +5,14 @@ import { EffectComposer, Bloom, TiltShift2, Noise } from '@react-three/postproce
 import { Leva, useControls, folder } from 'leva'
 import { Color } from 'three'
 import { BlendFunction } from 'postprocessing'
-import { motion, useScroll, useTransform } from 'motion/react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Iridescence } from './IridescenceMaterial'
 import Header from './Header'
 import IntroText from './IntroText'
 import DesignEngineer from './DesignEngineer'
 import Projects from './Projects'
+import MakeCodeLiveSection from './MakeCodeLiveSection'
 import './App.css'
 
 function RoundedCube({
@@ -181,6 +183,45 @@ function Scene({
 function App() {
   // Container ref for scroll structure
   const containerRef = useRef(null)
+  const heroContentRef = useRef(null)
+  const heroSectionRef = useRef(null)
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger)
+    const ctx = gsap.context(() => {
+      if (!heroContentRef.current || !heroSectionRef.current) return
+
+      const content = heroContentRef.current
+      let lastLogged = -1
+
+      gsap.fromTo(
+        content,
+        { opacity: 1, pointerEvents: 'auto' },
+        {
+          opacity: 0,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: heroSectionRef.current,
+            start: 'top top',
+            end: `+=${Math.max(window.innerHeight * 1.25, 900)}`,
+            scrub: true,
+            onUpdate: ({ progress }) => {
+              if (Math.abs(progress - lastLogged) > 0.05) {
+                lastLogged = progress
+                const scrollY = window.scrollY
+                const end = Math.max(window.innerHeight * 1.25, 900)
+                // Debug logging to understand fade behavior
+                console.log('[Hero Fade]', { progress: progress.toFixed(3), scrollY, end })
+              }
+              content.style.pointerEvents = progress < 0.85 ? 'auto' : 'none'
+            },
+          },
+        }
+      )
+    }, containerRef)
+
+    return () => ctx.revert()
+  }, [])
 
   const controls = useControls({
     Gradient: folder(
@@ -284,6 +325,7 @@ function App() {
   console.log('90% of Viewport:', window.innerWidth * 0.9, 'px')
   console.log('Expected Final Width:', (window.innerWidth * 0.9) - paddingTotal, 'px')
   console.log('=================================================')
+  console.log('App render pipeline: Hero -> Projects -> MakeCodeLiveSection')
 
   return (
     <div ref={containerRef} className="stage" style={{ '--content-total-width': widthFormula }}>
@@ -291,9 +333,13 @@ function App() {
       <Leva collapsed={false} />
 
       {/* Sticky Hero Section */}
-      <div className="hero-section">
-        <IntroText paddingX={controls.introPaddingX} />
-        <DesignEngineer />
+      <div ref={heroSectionRef} className="hero-section">
+        <div
+          ref={heroContentRef}
+        >
+          <IntroText paddingX={controls.introPaddingX} />
+          <DesignEngineer />
+        </div>
 
         <div
           className="canvas-wrapper"
@@ -333,6 +379,9 @@ function App() {
       <div className="projects-wrapper">
         <Projects />
       </div>
+
+      {/* Make Code Live content */}
+      <MakeCodeLiveSection />
     </div>
   )
 }
