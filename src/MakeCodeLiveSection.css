@@ -3,24 +3,24 @@
   position: relative;
   z-index: 20;
   background: transparent;
-  padding: 64px 16px 96px;
+  padding: 64px 0 96px;
 }
 
 @media (min-width: 768px) {
   .make-live-section {
-    padding: 88px 24px 120px;
+    padding: 88px 0 120px;
   }
 }
 
 @media (min-width: 1024px) {
   .make-live-section {
-    padding: 104px 32px 140px;
+    padding: 104px 0 140px;
   }
 }
 
 .make-live-inner {
-  width: 100%;
-  max-width: 1216px;
+  width: var(--page-width, 90vw);
+  max-width: var(--page-max-width, 1400px);
   margin: 0 auto;
   display: flex;
   flex-direction: column;
