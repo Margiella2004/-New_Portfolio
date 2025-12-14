@@ -1,8 +1,8 @@
 # Portfolio Design System
 
-**Last Updated:** December 13, 2024 (Updated with Scrolling Hero Effect)
+**Last Updated:** December 13, 2024 (Make Code Live integration, floating tabs)
 **Project:** Jonathan Ramesh Portfolio
-**Tech Stack:** React + Vite + Three.js + React Three Fiber + Motion + GSAP
+**Tech Stack:** React + Vite + Three.js + React Three Fiber + GSAP
 
 ---
 
@@ -23,7 +23,7 @@
 
 ### Font Families
 
-**Primary Font:** `Pangea Afrikan VAR 2.003`
+**Primary Font:** `Pangea Afrikan VAR 2.003` (blocked in some environments; falls back to system)
 - Used for: Body text, intro text, navigation
 - Weights: 300 (Light), 400 (Regular)
 - Fallbacks: `-apple-system, system-ui, sans-serif`
@@ -262,6 +262,16 @@ box-shadow:
 ```
 
 ---
+
+### Projects
+- File: `src/Projects.jsx` / `Projects.css`
+- Behavior: GSAP hover fades on per-card gradients/title/description; stacked layout with rounded top container after the sticky hero.
+
+### Make Code Live Section
+- File: `src/MakeCodeLiveSection.jsx` / `src/MakeCodeLiveSection.css`
+- Placement: Renders after Projects; transparent background (inherits page backdrop).
+- Structure: Divider line; text + portrait hero; lists (Companies, Certifications); CTA with inline arrow path; portrait served from `/make-code-live-portrait.png`.
+- Styling: White typography, no text shadows; Instrument Serif for subheads, Inter/system for body/CTA.
 
 ## CSS Variables
 
