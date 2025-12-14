@@ -11,8 +11,11 @@ import { Iridescence } from './IridescenceMaterial'
 import Header from './Header'
 import IntroText from './IntroText'
 import DesignEngineer from './DesignEngineer'
+import FloatingTabs from './FloatingTabs'
 import Projects from './Projects'
 import MakeCodeLiveSection from './MakeCodeLiveSection'
+import Footer from './Footer'
+import { footerData } from './footerData'
 import './App.css'
 
 function RoundedCube({
@@ -56,6 +59,7 @@ function RoundedCube({
         colorC={colorCArray}
         stopAB={stopAB}
         stopBC={stopBC}
+        softness={softness}
         direction={directionArray}
         range={range}
         fresnelColor={fresnelColor}
@@ -76,6 +80,7 @@ function CameraRig({ camX, camY, camZ, fov }) {
 
   useEffect(() => {
     camera.position.set(camX, camY, camZ)
+    // eslint-disable-next-line react-hooks/immutability
     camera.fov = fov
     camera.updateProjectionMatrix()
   }, [camera, camX, camY, camZ, fov])
@@ -185,39 +190,60 @@ function App() {
   const containerRef = useRef(null)
   const heroContentRef = useRef(null)
   const heroSectionRef = useRef(null)
+  const projectsRef = useRef(null)
+  const canvasWrapperRef = useRef(null)
+  const footerRef = useRef(null)
+  const aboutRef = useRef(null)
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger)
     const ctx = gsap.context(() => {
-      if (!heroContentRef.current || !heroSectionRef.current) return
+      if (!heroContentRef.current || !projectsRef.current) return
 
-      const content = heroContentRef.current
-      let lastLogged = -1
+      gsap.set(heroContentRef.current, { opacity: 1, pointerEvents: 'auto' })
 
-      gsap.fromTo(
-        content,
-        { opacity: 1, pointerEvents: 'auto' },
-        {
-          opacity: 0,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: heroSectionRef.current,
-            start: 'top top',
-            end: `+=${Math.max(window.innerHeight * 1.25, 900)}`,
-            scrub: true,
-            onUpdate: ({ progress }) => {
-              if (Math.abs(progress - lastLogged) > 0.05) {
-                lastLogged = progress
-                const scrollY = window.scrollY
-                const end = Math.max(window.innerHeight * 1.25, 900)
-                // Debug logging to understand fade behavior
-                console.log('[Hero Fade]', { progress: progress.toFixed(3), scrollY, end })
-              }
-              content.style.pointerEvents = progress < 0.85 ? 'auto' : 'none'
-            },
-          },
-        }
-      )
+      ScrollTrigger.create({
+        trigger: projectsRef.current,
+        start: 'top top',
+        end: 'top top',
+        markers: true,
+        onEnter: () => {
+          gsap.to(heroContentRef.current, {
+            opacity: 0,
+            duration: 0.4,
+            ease: 'power1.out',
+          })
+        },
+        onLeaveBack: () => {
+          gsap.to(heroContentRef.current, {
+            opacity: 1,
+            duration: 0.4,
+            ease: 'power1.out',
+          })
+        },
+      })
+
+      if (aboutRef.current) {
+        ScrollTrigger.create({
+          trigger: aboutRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          pin: true,
+          pinSpacing: false,
+        })
+      }
+
+      if (canvasWrapperRef.current && footerRef.current) {
+        ScrollTrigger.create({
+          trigger: footerRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          onEnter: () => canvasWrapperRef.current.classList.add('canvas-disabled'),
+          onEnterBack: () => canvasWrapperRef.current.classList.add('canvas-disabled'),
+          onLeaveBack: () => canvasWrapperRef.current.classList.remove('canvas-disabled'),
+          onLeave: () => canvasWrapperRef.current.classList.remove('canvas-disabled'),
+        })
+      }
     }, containerRef)
 
     return () => ctx.revert()
@@ -306,9 +332,23 @@ function App() {
     ),
     'Intro Text': folder(
       {
-        introPaddingX: { value: 72, min: 0, max: 200, step: 1, label: 'horizontal padding' },
+        introPaddingX: { value: 0, min: 0, max: 200, step: 1, label: 'horizontal padding' },
       },
       { collapsed: false }
+    ),
+    'Floating Tabs': folder(
+      {
+        tabsEnabled: { value: true, label: 'enabled' },
+        tabsFloatAmpX: { value: 6, min: 0, max: 30, step: 0.5, label: 'float X' },
+        tabsFloatAmpY: { value: 10, min: 0, max: 30, step: 0.5, label: 'float Y' },
+        tabsFloatSpeedX: { value: 9, min: 1, max: 20, step: 0.5, label: 'speed X' },
+        tabsFloatSpeedY: { value: 8, min: 1, max: 20, step: 0.5, label: 'speed Y' },
+        tabsHoverScale: { value: 1.05, min: 1, max: 1.6, step: 0.01, label: 'hover scale' },
+        tabsDragScale: { value: 1.1, min: 1, max: 2, step: 0.01, label: 'drag scale' },
+        tabsArrowWiggle: { value: 3, min: 0, max: 12, step: 0.1, label: 'arrow wiggle' },
+        tabsArrowDelayOffset: { value: 0, min: -2, max: 2, step: 0.1, label: 'arrow delay' },
+      },
+      { collapsed: true }
     ),
   })
 
@@ -333,16 +373,29 @@ function App() {
       <Leva collapsed={false} />
 
       {/* Sticky Hero Section */}
-      <div ref={heroSectionRef} className="hero-section">
+      <div ref={heroSectionRef} id="home" className="hero-section">
         <div
           ref={heroContentRef}
+          className="hero-overlay"
         >
           <IntroText paddingX={controls.introPaddingX} />
           <DesignEngineer />
+          <FloatingTabs
+            enabled={controls.tabsEnabled}
+            floatAmpX={controls.tabsFloatAmpX}
+            floatAmpY={controls.tabsFloatAmpY}
+            floatSpeedX={controls.tabsFloatSpeedX}
+            floatSpeedY={controls.tabsFloatSpeedY}
+            hoverScale={controls.tabsHoverScale}
+            dragScale={controls.tabsDragScale}
+            arrowWiggle={controls.tabsArrowWiggle}
+            arrowDelayOffset={controls.tabsArrowDelayOffset}
+          />
         </div>
 
         <div
           className="canvas-wrapper"
+          ref={canvasWrapperRef}
           style={{
             '--canvas-blur': `${controls.backdropBlur}px`,
             '--noise-opacity': controls.noiseOpacity,
@@ -376,12 +429,18 @@ function App() {
       </div>
 
       {/* Projects Section - Slides up */}
-      <div className="projects-wrapper">
+      <div ref={projectsRef} id="projects" className="projects-wrapper">
         <Projects />
       </div>
 
       {/* Make Code Live content */}
-      <MakeCodeLiveSection />
+      <div ref={aboutRef} id="about">
+        <MakeCodeLiveSection />
+      </div>
+
+      <div ref={footerRef} id="contact" className="footer-layer">
+        <Footer data={footerData} />
+      </div>
     </div>
   )
 }

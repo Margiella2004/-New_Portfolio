@@ -1,0 +1,129 @@
+.floating-tabs {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(var(--content-total-width), var(--page-max-width, 1400px));
+  height: 260px;
+  pointer-events: none;
+  z-index: 60;
+}
+
+.floating-tab {
+  position: absolute;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 132px;
+  height: 42px;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+}
+
+.floating-tab-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 0 70px;
+  border-radius: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.floating-tab-label {
+  font-family: 'Pangea Afrikan VAR 2.003', -apple-system, system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18px;
+  letter-spacing: -0.3px;
+  color: white;
+  white-space: nowrap;
+  position: relative;
+  z-index: 1;
+}
+
+.floating-tab-border {
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  border: 1.1px solid rgba(255, 255, 255, 0.74);
+  pointer-events: none;
+}
+
+.floating-tab-arrow {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.floating-tab-arrow-icon {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+@media (max-width: 1024px) {
+  .floating-tabs {
+    height: 240px;
+    bottom: 10px;
+  }
+
+  .floating-tab {
+    min-width: 120px;
+    height: 38px;
+  }
+
+  .floating-tab-inner {
+    padding: 0 70px;
+  }
+
+  .floating-tab-label {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .floating-tabs {
+    width: 94vw;
+    height: 220px;
+    bottom: 4px;
+  }
+
+  .floating-tab {
+    min-width: 110px;
+  }
+
+  .floating-tab-ux-research { left: 16% !important; top: 24% !important; }
+  .floating-tab-branding { left: 46% !important; top: 68% !important; }
+  .floating-tab-creative-direction { left: 54% !important; top: 26% !important; }
+  .floating-tab-typography { left: 70% !important; top: 72% !important; }
+  .floating-tab-ui-design { left: 82% !important; top: 34% !important; }
+}
+
+@media (max-width: 560px) {
+  .floating-tabs {
+    height: 210px;
+  }
+
+  .floating-tab {
+    min-width: 104px;
+    height: 36px;
+  }
+
+  .floating-tab-label {
+    font-size: 11.5px;
+  }
+
+  .floating-tab-ux-research { left: 18% !important; top: 30% !important; }
+  .floating-tab-branding { left: 50% !important; top: 74% !important; }
+  .floating-tab-creative-direction { left: 50% !important; top: 24% !important; }
+  .floating-tab-typography { left: 72% !important; top: 78% !important; }
+  .floating-tab-ui-design { left: 84% !important; top: 40% !important; }
+}

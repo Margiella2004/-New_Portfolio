@@ -2,8 +2,10 @@
 .intro-section {
   position: absolute;
   top: 147px;
-  left: 0;
-  width: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--content-total-width, var(--page-width, 90vw));
+  max-width: var(--page-max-width, 1400px);
   z-index: 100;
 
   display: flex;
@@ -169,6 +171,10 @@
 @media (max-width: 768px) {
   .intro-section {
     padding: 0 40px;
+    left: 0;
+    transform: none;
+    width: 100%;
+    gap: 19px;
   }
 
   .intro-line-container {
@@ -190,6 +196,7 @@
 @media (max-width: 480px) {
   .intro-section {
     padding: 0 20px;
+    gap: 19px;
   }
 
   .who-text {
