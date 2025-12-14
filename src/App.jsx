@@ -5,10 +5,12 @@ import { EffectComposer, Bloom, TiltShift2, Noise } from '@react-three/postproce
 import { Leva, useControls, folder } from 'leva'
 import { Color } from 'three'
 import { BlendFunction } from 'postprocessing'
+import { motion, useScroll, useTransform } from 'motion/react'
 import { Iridescence } from './IridescenceMaterial'
 import Header from './Header'
 import IntroText from './IntroText'
 import DesignEngineer from './DesignEngineer'
+import Projects from './Projects'
 import './App.css'
 
 function RoundedCube({
@@ -177,6 +179,9 @@ function Scene({
 }
 
 function App() {
+  // Container ref for scroll structure
+  const containerRef = useRef(null)
+
   const controls = useControls({
     Gradient: folder(
       {
@@ -281,42 +286,52 @@ function App() {
   console.log('=================================================')
 
   return (
-    <div className="stage" style={{ '--content-total-width': widthFormula }}>
+    <div ref={containerRef} className="stage" style={{ '--content-total-width': widthFormula }}>
       <Header />
-      <IntroText paddingX={controls.introPaddingX} />
-      <DesignEngineer />
       <Leva collapsed={false} />
-      <div
-        className="canvas-wrapper"
-        style={{
-          '--canvas-blur': `${controls.backdropBlur}px`,
-          '--noise-opacity': controls.noiseOpacity,
-        }}
-      >
-        <Scene
-          cubeProps={controls}
-          bloomIntensity={controls.bloomIntensity}
-          bloomThreshold={controls.bloomThreshold}
-          bloomSmoothing={controls.bloomSmoothing}
-          bloomRadius={controls.bloomRadius}
-          blurEnabled={controls.blurEnabled}
-          blurStrength={controls.blurStrength}
-          blurTaper={controls.blurTaper}
-          blurSamples={controls.blurSamples}
-          grainEnabled={controls.grainEnabled}
-          grainOpacity={controls.grainOpacity}
-          grainBlend={controls.grainBlend}
-          camX={controls.camX}
-          camY={controls.camY}
-          camZ={controls.camZ}
-          targetX={controls.targetX}
-          targetY={controls.targetY}
-          targetZ={controls.targetZ}
-          fov={controls.fov}
-          minDistance={controls.minDistance}
-          maxDistance={controls.maxDistance}
-          enablePan={controls.enablePan}
-        />
+
+      {/* Sticky Hero Section */}
+      <div className="hero-section">
+        <IntroText paddingX={controls.introPaddingX} />
+        <DesignEngineer />
+
+        <div
+          className="canvas-wrapper"
+          style={{
+            '--canvas-blur': `${controls.backdropBlur}px`,
+            '--noise-opacity': controls.noiseOpacity,
+          }}
+        >
+          <Scene
+            cubeProps={controls}
+            bloomIntensity={controls.bloomIntensity}
+            bloomThreshold={controls.bloomThreshold}
+            bloomSmoothing={controls.bloomSmoothing}
+            bloomRadius={controls.bloomRadius}
+            blurEnabled={controls.blurEnabled}
+            blurStrength={controls.blurStrength}
+            blurTaper={controls.blurTaper}
+            blurSamples={controls.blurSamples}
+            grainEnabled={controls.grainEnabled}
+            grainOpacity={controls.grainOpacity}
+            grainBlend={controls.grainBlend}
+            camX={controls.camX}
+            camY={controls.camY}
+            camZ={controls.camZ}
+            targetX={controls.targetX}
+            targetY={controls.targetY}
+            targetZ={controls.targetZ}
+            fov={controls.fov}
+            minDistance={controls.minDistance}
+            maxDistance={controls.maxDistance}
+            enablePan={controls.enablePan}
+          />
+        </div>
+      </div>
+
+      {/* Projects Section - Slides up */}
+      <div className="projects-wrapper">
+        <Projects />
       </div>
     </div>
   )
