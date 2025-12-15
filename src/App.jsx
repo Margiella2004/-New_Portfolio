@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useThree } from '@react-three/fiber'
 import { RoundedBox, OrbitControls } from '@react-three/drei'
 import { EffectComposer, Bloom, TiltShift2, Noise } from '@react-three/postprocessing'
@@ -12,6 +12,7 @@ import Header from './Header'
 import IntroText from './IntroText'
 import DesignEngineer from './DesignEngineer'
 import FloatingTabs from './FloatingTabs'
+import HeroTextOverlay from './HeroTextOverlay'
 import Projects from './Projects'
 import MakeCodeLiveSection from './MakeCodeLiveSection'
 import Footer from './Footer'
@@ -188,6 +189,7 @@ function Scene({
 function App() {
   // Container ref for scroll structure
   const containerRef = useRef(null)
+  const headerRef = useRef(null)
   const heroContentRef = useRef(null)
   const heroSectionRef = useRef(null)
   const projectsRef = useRef(null)
@@ -195,59 +197,14 @@ function App() {
   const footerRef = useRef(null)
   const aboutRef = useRef(null)
 
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger)
-    const ctx = gsap.context(() => {
-      if (!heroContentRef.current || !projectsRef.current) return
-
-      gsap.set(heroContentRef.current, { opacity: 1, pointerEvents: 'auto' })
-
-      ScrollTrigger.create({
-        trigger: projectsRef.current,
-        start: 'top top',
-        end: 'top top',
-        markers: true,
-        onEnter: () => {
-          gsap.to(heroContentRef.current, {
-            opacity: 0,
-            duration: 0.4,
-            ease: 'power1.out',
-          })
-        },
-        onLeaveBack: () => {
-          gsap.to(heroContentRef.current, {
-            opacity: 1,
-            duration: 0.4,
-            ease: 'power1.out',
-          })
-        },
-      })
-
-      if (aboutRef.current) {
-        ScrollTrigger.create({
-          trigger: aboutRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          pin: true,
-          pinSpacing: false,
-        })
-      }
-
-      if (canvasWrapperRef.current && footerRef.current) {
-        ScrollTrigger.create({
-          trigger: footerRef.current,
-          start: 'top bottom',
-          end: 'bottom top',
-          onEnter: () => canvasWrapperRef.current.classList.add('canvas-disabled'),
-          onEnterBack: () => canvasWrapperRef.current.classList.add('canvas-disabled'),
-          onLeaveBack: () => canvasWrapperRef.current.classList.remove('canvas-disabled'),
-          onLeave: () => canvasWrapperRef.current.classList.remove('canvas-disabled'),
-        })
-      }
-    }, containerRef)
-
-    return () => ctx.revert()
-  }, [])
+  const [canvasOpacity, setCanvasOpacity] = useState(0)
+  const [introTextOpacity, setIntroTextOpacity] = useState(1)
+  const [animatedFov, setAnimatedFov] = useState(111)
+  const [animatedBlur, setAnimatedBlur] = useState(8)
+  const [animatedBloomThreshold, setAnimatedBloomThreshold] = useState(1.13)
+  const [introComplete, setIntroComplete] = useState(false)
+  const [scrollFov, setScrollFov] = useState(0)
+  const textFadeStartedRef = useRef(false)
 
   const controls = useControls({
     Gradient: folder(
@@ -281,7 +238,7 @@ function App() {
     Effects: folder(
       {
         bloomIntensity: { value: 0.21, min: 0, max: 5, step: 0.01 },
-        bloomThreshold: { value: 1.13, min: 0, max: 2, step: 0.01 },
+        bloomThreshold: { value: 0.94, min: 0, max: 2, step: 0.01 },
         bloomSmoothing: { value: 1.46, min: 0, max: 2, step: 0.01 },
         bloomRadius: { value: 2.12, min: 0, max: 5, step: 0.01 },
         blurEnabled: { value: false, label: 'blur on' },
@@ -316,7 +273,7 @@ function App() {
         targetX: { value: -0.2, min: -10, max: 10, step: 0.05, label: 'target X' },
         targetY: { value: 0.0, min: -10, max: 10, step: 0.05, label: 'target Y' },
         targetZ: { value: -0.8, min: -10, max: 10, step: 0.05, label: 'target Z' },
-        fov: { value: 12, min: 10, max: 120, step: 1 },
+        fov: { value: 10, min: 10, max: 120, step: 1 },
         minDistance: { value: 7.3, min: 0.1, max: 20, step: 0.1 },
         maxDistance: { value: 33.0, min: 0.1, max: 50, step: 0.1 },
         enablePan: { value: true },
@@ -325,7 +282,7 @@ function App() {
     ),
     Background: folder(
       {
-        backdropBlur: { value: 70, min: 0, max: 300, step: 1, label: 'canvas blur' },
+        backdropBlur: { value: 130, min: 0, max: 300, step: 1, label: 'canvas blur' },
         noiseOpacity: { value: 0.10, min: 0, max: 0.5, step: 0.01, label: 'texture' },
       },
       { collapsed: false }
@@ -352,6 +309,135 @@ function App() {
     ),
   })
 
+  const introTargetsRef = useRef({
+    fov: controls.fov,
+    blur: controls.backdropBlur,
+    bloomThreshold: controls.bloomThreshold,
+  })
+
+  useEffect(() => {
+    introTargetsRef.current = {
+      fov: controls.fov,
+      blur: controls.backdropBlur,
+      bloomThreshold: controls.bloomThreshold,
+    }
+  }, [controls.fov, controls.backdropBlur, controls.bloomThreshold])
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger)
+    const html = document.documentElement
+    const body = document.body
+    const previousBodyOverflow = body.style.overflow
+    const previousHtmlOverflow = html.style.overflow
+
+    body.style.overflow = 'hidden'
+    html.style.overflow = 'hidden'
+
+    const animState = { fov: 111, blur: 8, bloomThreshold: 1.13 }
+
+    if (headerRef.current) {
+      gsap.set(headerRef.current, { opacity: 0, y: -10, pointerEvents: 'none' })
+    }
+    if (heroContentRef.current) {
+      gsap.set(heroContentRef.current, { opacity: 0, pointerEvents: 'none' })
+    }
+
+    const tl = gsap.timeline({
+      defaults: { ease: 'power2.out' },
+      onComplete: () => {
+        setIntroComplete(true)
+        body.style.overflow = previousBodyOverflow
+        html.style.overflow = previousHtmlOverflow
+      },
+    })
+
+    tl.to({}, { duration: 0.9 }, 0)
+      .to(
+        {},
+        {
+          duration: 1.2,
+          ease: 'power2.out',
+          onUpdate() {
+            setCanvasOpacity(this.progress())
+          },
+        },
+        0.9
+      )
+      .to({}, { duration: 5.3 }, '>')
+      .to({}, { duration: 1.5 }, '>')
+      .to(
+        {},
+        {
+          duration: 0.8,
+          ease: 'power2.inOut',
+          onUpdate() {
+            textFadeStartedRef.current = true
+            setIntroTextOpacity(1 - this.progress())
+          },
+        },
+        '>'
+      )
+      .to(
+        animState,
+        {
+          fov: introTargetsRef.current.fov,
+          duration: 5,
+          ease: 'expo.out',
+          onUpdate: () => setAnimatedFov(animState.fov),
+        },
+        '>'
+      )
+      .to(
+        animState,
+        {
+          blur: introTargetsRef.current.blur,
+          duration: 3,
+          ease: 'expo.in',
+          onUpdate: () => setAnimatedBlur(animState.blur),
+        },
+        '<'
+      )
+      .to(
+        animState,
+        {
+          bloomThreshold: introTargetsRef.current.bloomThreshold,
+          duration: 5,
+          ease: 'power2.inOut',
+          onUpdate: () => setAnimatedBloomThreshold(animState.bloomThreshold),
+        },
+        '<'
+      )
+      .add(() => {
+        if (headerRef.current) {
+          gsap.to(headerRef.current, {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: 'power2.out',
+            onStart: () => {
+              headerRef.current.style.pointerEvents = 'auto'
+            },
+          })
+        }
+        if (heroContentRef.current) {
+          gsap.to(heroContentRef.current, {
+            opacity: 1,
+            duration: 0.8,
+            ease: 'power2.out',
+            onStart: () => {
+              heroContentRef.current.style.pointerEvents = 'auto'
+            },
+          })
+        }
+      }, '-=1')
+
+    return () => {
+      tl.kill()
+      body.style.overflow = previousBodyOverflow
+      html.style.overflow = previousHtmlOverflow
+    }
+  }, [])
+
   // Debug logging for Design Engineer width calculation
   const paddingValue = controls.introPaddingX
   const paddingTotal = paddingValue * 2
@@ -367,16 +453,109 @@ function App() {
   console.log('=================================================')
   console.log('App render pipeline: Hero -> Projects -> MakeCodeLiveSection')
 
+  const effectiveFov = introComplete ? controls.fov + scrollFov : animatedFov
+  const effectiveBlur = introComplete ? controls.backdropBlur : animatedBlur
+  const effectiveBloomThreshold = introComplete ? controls.bloomThreshold : animatedBloomThreshold
+
+  useEffect(() => {
+    if (!introComplete) return undefined
+    if (headerRef.current) {
+      gsap.set(headerRef.current, { opacity: 1, y: 0, clearProps: 'opacity,y' })
+    }
+    const ctx = gsap.context(() => {
+      if (!heroContentRef.current || !projectsRef.current) return
+
+      ScrollTrigger.create({
+        trigger: projectsRef.current,
+        start: 'top top',
+        end: 'top top',
+        onEnter: () => {
+          gsap.to(heroContentRef.current, {
+            opacity: 0,
+            duration: 0.4,
+            ease: 'power1.out',
+          })
+        },
+        onLeaveBack: () => {
+          gsap.to(heroContentRef.current, {
+            opacity: 1,
+            duration: 0.4,
+            ease: 'power1.out',
+          })
+        },
+      })
+
+      // FOV increase as scrolling from hero to projects
+      if (heroSectionRef.current && projectsRef.current) {
+        ScrollTrigger.create({
+          trigger: projectsRef.current,
+          start: 'top bottom',
+          end: 'top top',
+          markers: true,
+          id: 'fov-increase',
+          scrub: 1,
+          onUpdate: (self) => {
+            const fovIncrease = self.progress * 5 // Increase FOV by max 5
+            setScrollFov(fovIncrease)
+          }
+        })
+      }
+
+      if (aboutRef.current) {
+        // Pin the about section - keep it pinned until FOV returns to normal
+        ScrollTrigger.create({
+          trigger: aboutRef.current,
+          start: 'top top',
+          end: '+=100%', // Pin for full viewport height
+          pin: true,
+          pinSpacing: true, // This creates space so footer doesn't scroll up
+          markers: true,
+          id: 'about-pin',
+        })
+
+        // FOV decrease through about section to bring cube back
+        ScrollTrigger.create({
+          trigger: aboutRef.current,
+          start: 'top top',
+          end: '+=100%',
+          markers: true,
+          id: 'fov-decrease',
+          scrub: 0,
+          onUpdate: (self) => {
+            const fovDecrease = 5 - (self.progress * 5) // Decrease from 5 back to 0
+            setScrollFov(fovDecrease)
+          }
+        })
+      }
+
+      if (canvasWrapperRef.current && footerRef.current) {
+        ScrollTrigger.create({
+          trigger: footerRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          onEnter: () => canvasWrapperRef.current.classList.add('canvas-disabled'),
+          onEnterBack: () => canvasWrapperRef.current.classList.add('canvas-disabled'),
+          onLeaveBack: () => canvasWrapperRef.current.classList.remove('canvas-disabled'),
+          onLeave: () => canvasWrapperRef.current.classList.remove('canvas-disabled'),
+        })
+      }
+    }, containerRef)
+
+    return () => ctx.revert()
+  }, [introComplete])
+
   return (
     <div ref={containerRef} className="stage" style={{ '--content-total-width': widthFormula }}>
-      <Header />
+      <Header innerRef={headerRef} />
       <Leva collapsed={false} />
 
       {/* Sticky Hero Section */}
       <div ref={heroSectionRef} id="home" className="hero-section">
+        <HeroTextOverlay opacity={introTextOpacity} />
         <div
           ref={heroContentRef}
           className="hero-overlay"
+          style={{ opacity: 0, pointerEvents: 'none' }}
         >
           <IntroText paddingX={controls.introPaddingX} />
           <DesignEngineer />
@@ -397,14 +576,15 @@ function App() {
           className="canvas-wrapper"
           ref={canvasWrapperRef}
           style={{
-            '--canvas-blur': `${controls.backdropBlur}px`,
+            '--canvas-blur': `${effectiveBlur}px`,
             '--noise-opacity': controls.noiseOpacity,
+            opacity: canvasOpacity,
           }}
         >
           <Scene
             cubeProps={controls}
             bloomIntensity={controls.bloomIntensity}
-            bloomThreshold={controls.bloomThreshold}
+            bloomThreshold={effectiveBloomThreshold}
             bloomSmoothing={controls.bloomSmoothing}
             bloomRadius={controls.bloomRadius}
             blurEnabled={controls.blurEnabled}
@@ -420,7 +600,7 @@ function App() {
             targetX={controls.targetX}
             targetY={controls.targetY}
             targetZ={controls.targetZ}
-            fov={controls.fov}
+            fov={effectiveFov}
             minDistance={controls.minDistance}
             maxDistance={controls.maxDistance}
             enablePan={controls.enablePan}

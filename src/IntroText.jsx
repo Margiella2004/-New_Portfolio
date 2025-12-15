@@ -5,8 +5,12 @@ const arrowImage = "https://www.figma.com/api/mcp/asset/ede21216-651c-4981-b9b1-
 const linkArrowImage = "https://www.figma.com/api/mcp/asset/9022f730-05eb-470d-afb4-a302a6d5991a"
 
 export default function IntroText({ paddingX = 72 }) {
+  // Ensure minimum padding on mobile
+  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768
+  const effectivePadding = isMobile ? Math.max(paddingX, 40) : paddingX
+
   return (
-    <div className="intro-section" style={{ paddingLeft: `${paddingX}px`, paddingRight: `${paddingX}px` }}>
+    <div className="intro-section" style={{ paddingLeft: `${effectivePadding}px`, paddingRight: `${effectivePadding}px` }}>
       {/* Horizontal Line */}
       <div className="intro-line-container">
         <img src={lineImage} alt="" className="intro-line" />
