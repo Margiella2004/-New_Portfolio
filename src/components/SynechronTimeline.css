@@ -1,0 +1,202 @@
+.synechron-timeline {
+  --timeline-bg: #000000;
+  --timeline-text: #ffffff;
+  --timeline-stroke: rgba(255, 255, 255, 0.2);
+  --timeline-border: rgba(255, 255, 255, 0.06);
+  --timeline-shadow: 0 24px 80px rgba(0, 0, 0, 0.24);
+  --timeline-radius-mobile: var(--content-module-border-radius-mobile, 1.25rem);
+  --timeline-radius-desktop: var(--content-module-border-radius-desktop, 2.125rem);
+  --timeline-accent: #e1d590;
+  --timeline-font-sans: 'Pangea Afrikan VAR 2.003', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --timeline-icon-size: 18px;
+  --timeline-icon-center: calc(var(--timeline-icon-size) / 2);
+  --timeline-milestone-width: clamp(170px, 14vw, 220px);
+  --timeline-track-right: calc(var(--timeline-milestone-width) - var(--timeline-icon-center));
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.synechron-timeline-card {
+  position: relative;
+  width: 100%;
+  max-width: none;
+  margin: 0 auto;
+  background-color: var(--timeline-bg);
+  color: var(--timeline-text);
+  border-radius: var(--timeline-radius-mobile);
+  min-height: 520px;
+  padding: clamp(2.75rem, 5vw, 4.5rem);
+  overflow: hidden;
+  box-shadow: var(--timeline-shadow);
+  border: 1px solid var(--timeline-border);
+}
+
+@media (min-width: 768px) {
+  .synechron-timeline-card {
+    border-radius: var(--timeline-radius-desktop);
+  }
+}
+
+.synechron-timeline-title-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: clamp(2.5rem, 5vw, 3.75rem);
+}
+
+.synechron-timeline-title {
+  margin: 0;
+  font-family: var(--timeline-font-sans);
+  font-size: clamp(2rem, 2.5vw, 2.75rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.synechron-timeline-track-area {
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 0.75rem;
+}
+
+.synechron-timeline-track-area::-webkit-scrollbar {
+  height: 8px;
+}
+
+.synechron-timeline-track-area::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+}
+
+.synechron-timeline-track-area::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.synechron-timeline-scroll {
+  position: relative;
+  width: 100%;
+  min-width: 1120px;
+}
+
+.synechron-timeline-track-wrapper {
+  position: absolute;
+  pointer-events: none;
+}
+
+.synechron-timeline-track-base {
+  position: absolute;
+  inset: 0;
+  background-color: var(--timeline-stroke);
+}
+
+.synechron-timeline-track-progress {
+  position: absolute;
+  inset: 0;
+  background-color: var(--timeline-text);
+}
+
+.synechron-timeline-milestones {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  padding-top: 0;
+}
+
+.synechron-timeline-milestone {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  flex: 0 0 var(--timeline-milestone-width);
+  align-items: flex-start;
+  text-align: left;
+}
+
+.synechron-timeline-icon-wrapper {
+  width: var(--timeline-icon-size);
+  height: var(--timeline-icon-size);
+  margin: 0;
+}
+
+.synechron-timeline-icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.synechron-timeline-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.synechron-timeline-week {
+  margin: 0 0 0.35rem;
+  font-size: 0.85rem;
+  font-family: var(--timeline-font-sans);
+  color: rgba(255, 255, 255, 0.78);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+}
+
+.synechron-timeline-milestone-title {
+  margin: 0;
+  font-family: var(--timeline-font-sans);
+  font-size: clamp(1.35rem, 1.6vw, 1.75rem);
+  font-weight: 300;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+@media (max-width: 640px) {
+  .synechron-timeline-card {
+    border-radius: var(--timeline-radius-mobile);
+  }
+
+  .synechron-timeline-milestone-title {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .synechron-timeline-card {
+    min-height: auto;
+    padding: clamp(2.25rem, 6vw, 3.5rem);
+  }
+
+  .synechron-timeline-title {
+    max-width: 14ch;
+  }
+
+  .synechron-timeline-track-area {
+    overflow: visible;
+    padding-bottom: 0;
+  }
+
+  .synechron-timeline-scroll {
+    min-width: 0;
+  }
+
+  .synechron-timeline-milestones {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: clamp(2.25rem, 5vw, 3.25rem);
+  }
+
+  .synechron-timeline-milestone {
+    flex: none;
+    width: 100%;
+    flex-direction: row;
+    gap: 1.25rem;
+    align-items: flex-start;
+  }
+
+  .synechron-timeline-icon-wrapper {
+    flex: 0 0 var(--timeline-icon-size);
+    margin-top: 2px;
+  }
+}

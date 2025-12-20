@@ -1,442 +1,370 @@
-/* Main Projects Container */
 .projects-container {
-  background: white;
+  background: #ffffff;
   width: 100%;
-  min-height: calc(100vh + 100px);
-  border-top-left-radius: 40px;
-  border-top-right-radius: 40px;
-  border-bottom-left-radius: 40px;
-  border-bottom-right-radius: 40px;
+  min-height: 100vh;
   box-shadow: 0px -4px 7.5px -0.9px rgba(0, 0, 0, 0.07);
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
 }
 
-/* Inner Content Container */
 .projects-inner {
-  width: var(--page-width, 90vw);
-  max-width: var(--page-max-width, 1400px);
-  padding: 40px 40px 80px;
+  width: var(--page-width, 94vw);
+  max-width: 1600px;
+  padding: 156px 0 330px;
+  margin: 0 auto;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: center;
-}
-
-@media (min-width: 768px) {
-  .projects-inner {
-    padding: 80px 0 120px;
-  }
-}
-
-/* Header Section */
-.projects-header-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  margin-bottom: 40px;
+  gap: 45px;
 }
 
 .projects-header {
   width: 100%;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8px;
-  max-width: 530px;
-}
-
-@media (min-width: 768px) {
-  .projects-header {
-    max-width: none;
-  }
+  margin-top: 0;
+  transform: translateY(-60px);
 }
 
 .projects-title {
-  font-size: 26px;
-  letter-spacing: -0.64px;
-  color: #4b4949;
-  opacity: 0.9;
-  font-weight: 400;
   margin: 0;
-}
-
-@media (min-width: 768px) {
-  .projects-title {
-    font-size: 32px;
-  }
+  font-family: 'Pangea Afrikan VAR 2.003', -apple-system, system-ui, sans-serif;
+  font-size: 29px;
+  font-weight: 400;
+  letter-spacing: -0.5px;
+  color: #393939;
+  font-variation-settings: 'ital' 0, 'XTDR' 0, 'APRT' 0, 'SPAC' 0, 'INKT' 0,
+    'SS01' 0, 'SS02' 0, 'SS03' 0;
 }
 
 .projects-count {
-  font-size: 10px;
-  letter-spacing: -0.2px;
-  color: #4b4949;
-  opacity: 0.9;
-}
-
-@media (min-width: 768px) {
-  .projects-count {
-    font-size: 14px;
-  }
-}
-
-/* Intro Paragraph */
-.projects-intro {
-  width: 100%;
-  max-width: 530px;
-  display: flex;
-}
-
-@media (min-width: 768px) {
-  .projects-intro {
-    max-width: none;
-  }
-}
-
-.projects-intro-text {
-  color: #9f9fa9;
+  font-family: 'Pangea Afrikan VAR 2.003', -apple-system, system-ui, sans-serif;
   font-size: 13px;
-  line-height: 16px;
-  letter-spacing: -0.15px;
-  max-width: 541px;
-  margin: 0;
+  font-weight: 400;
+  letter-spacing: -0.25px;
+  color: #393939;
+  font-variation-settings: 'ital' 0, 'XTDR' 0, 'APRT' 0, 'SPAC' 0, 'INKT' 0,
+    'SS01' 0, 'SS02' 0, 'SS03' 0;
 }
 
-@media (min-width: 768px) {
-  .projects-intro-text {
-    font-size: 14px;
-    line-height: 17px;
-  }
-}
-
-/* Main Grid */
-.projects-grid {
+.projects-content {
   display: flex;
-  flex-direction: column;
-  gap: 40px;
-  align-items: center;
-  width: 100%;
-}
-
-/* Project Card Base */
-.project-card {
-  position: relative;
-  background: white;
-  border-radius: 32px;
-  width: 100%;
-  overflow: hidden;
-  cursor: pointer;
-}
-
-.project-card-large {
-  max-width: 530px;
-  display: flex;
-  flex-direction: column;
-}
-
-@media (min-width: 768px) {
-  .project-card-large {
-    max-width: none;
-    flex-direction: row;
-    min-height: 500px;
-  }
-}
-
-/* Gradient Backgrounds */
-.project-gradient-0,
-.project-gradient-1,
-.project-gradient-2 {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(to bottom, #af4b70, #ffffff);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Border */
-.project-border {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border: 2px solid rgba(99, 99, 99, 0.17);
-  border-radius: 32px;
-  pointer-events: none;
-  z-index: 20;
-}
-
-/* Card Content */
-.project-card-content {
-  padding: 38px;
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
+  align-items: flex-start;
   justify-content: space-between;
-  position: relative;
-  z-index: 10;
+  gap: 100px;
   width: 100%;
-  height: 100%;
+  margin-top: -50px;
 }
 
-@media (min-width: 768px) {
-  .project-card-content {
-    padding: 34px;
-    flex-direction: row;
-    gap: 0;
-    align-items: flex-start;
-  }
+.projects-nav {
+  display: flex;
+  gap: 16.943px;
+  max-width: 303.426px;
+  flex-shrink: 0;
 }
 
-/* Left Content (Text) */
-.project-text-section {
+.projects-timeline {
+  width: 4px;
+  position: relative;
+  margin-top: 12px;
+  flex-shrink: 0;
+}
+
+.projects-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  background-color: rgba(111, 61, 89, 0.5);
+}
+
+.projects-indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 60px;
+  background-color: #6f3d59;
+  border-radius: 999px;
+}
+
+.projects-list {
   display: flex;
   flex-direction: column;
-  gap: 26px;
-  z-index: 10;
+  gap: 10px;
+  width: 100%;
 }
 
-@media (min-width: 768px) {
-  .project-text-section {
-    width: 427px;
-    flex-shrink: 0;
-  }
-}
-
-.project-text-content {
+.projects-item {
+  background: none;
+  border: none;
+  padding: 0;
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  align-items: baseline;
+  gap: 15px;
+  text-align: left;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
 }
 
-.project-title {
+.projects-item:hover {
+  opacity: 0.8;
+}
+
+.projects-item-number {
   font-family: 'Instrument Serif', serif;
+  font-size: 20px;
+  letter-spacing: 0.1872px;
+  line-height: 1;
+  color: #7c7b7b;
+}
+
+.projects-item-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: 72px;
   font-style: italic;
-  font-size: 32px;
-  line-height: 30px;
-  letter-spacing: -1.92px;
-  color: #232125;
-  margin: 0;
+  letter-spacing: -2px;
+  line-height: 1;
+  color: #7c7b7b;
+  white-space: nowrap;
 }
 
-.project-description {
-  color: #9f9fa9;
-  font-size: 14px;
-  line-height: 17px;
-  letter-spacing: -0.15px;
-  max-width: 416px;
-  margin: 0;
+.projects-item.is-active .projects-item-number,
+.projects-item.is-active .projects-item-title {
+  color: #6f3d59;
 }
 
-.project-tags {
+.project-preview {
+  width: 100%;
+  max-width: 900px;
   display: flex;
-  gap: 9px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 24px;
 }
 
-/* Right Content (Images) - Large Card */
-.project-images-large {
-  flex: 1;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  gap: 40px;
-  height: 100%;
-  padding-top: 20px;
-}
-
-@media (min-width: 768px) {
-  .project-images-large {
-    justify-content: flex-end;
-  }
-}
-
-.project-image-container {
+.project-image-frame {
+  width: 100%;
+  max-width: 900px;
+  height: 452px;
   border-radius: 26px;
   overflow: hidden;
-  background: #e5e5e5;
-  flex-shrink: 0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: #000000;
   position: relative;
-  cursor: pointer;
-}
-
-.project-image-main {
-  width: 100%;
-  height: 250px;
-}
-
-@media (min-width: 768px) {
-  .project-image-main {
-    width: 480px;
-    height: 400px;
-  }
-}
-
-.project-image-secondary {
-  display: none;
-}
-
-@media (min-width: 768px) {
-  .project-image-secondary {
-    display: block;
-    width: 260px;
-    height: 240px;
-    margin-bottom: 0;
-  }
 }
 
 .project-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: 50% 50%;
+}
+
+.project-meta {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'tags button'
+    'desc desc';
+  column-gap: 20px;
+  row-gap: 16px;
+  align-items: center;
+  width: 100%;
+  max-width: 900px;
+}
+
+.project-tags {
+  grid-area: tags;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.project-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 20px;
+  border: 1px solid #6f3d59;
+  border-radius: 14px;
+  color: #6f3d59;
+  font-family: 'Pangea Afrikan VAR 2.003', -apple-system, system-ui, sans-serif;
+  font-size: 11px;
+  line-height: 1.214;
+  letter-spacing: -0.1px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.project-cta {
+  grid-area: button;
+  width: 130px;
+  height: 50px;
+  background-color: #6f3d59;
+  border-radius: 16px;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  justify-self: end;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.project-cta:hover {
+  background-color: #5a3148;
+}
+
+.project-cta:focus-visible {
+  outline: 2px solid #6f3d59;
+  outline-offset: 4px;
+}
+
+.project-cta-text {
+  font-family: 'Pangea Afrikan VAR 2.003', -apple-system, system-ui, sans-serif;
+  font-size: 11px;
+  line-height: 1.214;
+  letter-spacing: -0.1px;
+  font-weight: 400;
+  color: #ffffff;
+}
+
+.project-cta-icon {
+  width: 18px;
+  height: 18px;
+  color: #ffffff;
   display: block;
 }
 
-/* Bottom Row */
-.projects-bottom-row {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-  width: 100%;
-  max-width: 530px;
-  justify-content: space-between;
-}
-
-@media (min-width: 768px) {
-  .projects-bottom-row {
-    flex-direction: row;
-    max-width: none;
-  }
-}
-
-/* Small Cards */
-.project-card-small {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-@media (min-width: 768px) {
-  .project-card-small {
-    width: calc(50% - 20px);
-    flex: 1;
-    flex-shrink: 0;
-  }
-}
-
-.project-card-content-vertical {
-  padding: 37px 37px 25px;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  flex: 1;
-  position: relative;
-  z-index: 10;
-}
-
-.project-content-vertical {
-  display: flex;
-  flex-direction: column;
-  gap: 36px;
-  width: 100%;
-  height: 100%;
-  flex: 1;
-}
-
-/* Text Section for Small Cards */
-.project-text-vertical {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  width: 100%;
-}
-
-@media (min-width: 768px) {
-  .project-text-vertical {
-    max-width: 455px;
-  }
-}
-
-.project-text-vertical .project-text-content {
-  gap: 12px;
-}
-
-/* Image for Small Cards */
-.project-image-single {
-  width: 100%;
-  height: 250px;
-  border-radius: 26px;
-  margin-top: auto;
-}
-
-@media (min-width: 768px) {
-  .project-image-single {
-    height: 284px;
-  }
-}
-
-/* Pill Component */
-.pill {
-  position: relative;
-  border-radius: 13.2px;
-  flex-shrink: 0;
-  display: inline-flex;
-}
-
-.pill.bg-color-1 {
-  background: #bad7a8;
-}
-
-.pill.bg-color-2 {
-  background: #aaa8d7;
-}
-
-.pill.bg-color-3 {
-  background: #d7d6a8;
-}
-
-.pill.bg-color-4 {
-  background: #d7a8a8;
-}
-
-.pill.bg-color-5 {
-  background: #d7a8cc;
-}
-
-.pill-inner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 7.6px 21.5px;
-  position: relative;
-  border-radius: inherit;
-  overflow: hidden;
-}
-
-.pill-text {
-  font-family: 'Pangea Afrikan VAR 2.003', -apple-system, system-ui, sans-serif;
-  font-weight: 400;
-  font-size: 10px;
-  line-height: 12px;
-  color: white;
-  letter-spacing: -0.1px;
-  white-space: nowrap;
+.project-description {
+  grid-area: desc;
   margin: 0;
+  max-width: 600px;
+  color: #a58698;
+  font-family: 'Pangea Afrikan VAR 2.003', -apple-system, system-ui, sans-serif;
+  font-size: 20px;
+  line-height: 1.4;
+  letter-spacing: -0.5px;
+  font-weight: 300;
+  font-variation-settings: 'ital' 0, 'XTDR' 50, 'APRT' 100, 'SPAC' 40,
+    'INKT' 1, 'SS01' 1, 'SS02' 0, 'SS03' 0;
 }
 
-.pill-border {
-  position: absolute;
-  top: -1px;
-  left: -1px;
-  right: -1px;
-  bottom: -1px;
-  border: 1px solid #f1f1f1;
-  border-radius: 14.2px;
-  pointer-events: none;
+@media (max-width: 1024px) {
+  .projects-container {
+    border-radius: 0;
+  }
+
+  .projects-inner {
+    padding: 20px 0 260px;
+    gap: 45px;
+  }
+
+  .projects-title {
+    font-size: 25px;
+    letter-spacing: -0.5px;
+  }
+
+  .projects-count {
+    font-size: 12.5px;
+  }
+
+  .projects-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 40px;
+  }
+
+  .projects-nav {
+    gap: 12.081px;
+    max-width: 216.358px;
+  }
+
+  .projects-timeline {
+    margin-top: 8px;
+  }
+
+  .projects-indicator {
+    height: 38px;
+  }
+
+  .projects-list {
+    gap: 22px;
+  }
+
+  .projects-item-number {
+    font-size: 13.5px;
+    letter-spacing: 0.1335px;
+  }
+
+  .projects-item-title {
+    font-size: 43px;
+    letter-spacing: -2px;
+  }
+
+  .project-preview {
+    max-width: 370px;
+  }
+
+  .project-image-frame {
+    height: 452px;
+  }
+
+  .project-image {
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+  }
+
+  .project-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    max-width: 370px;
+  }
+
+  .project-tags {
+    width: 100%;
+    max-width: 361px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .project-description {
+    max-width: 361px;
+    font-size: 13px;
+    line-height: 1.5;
+    letter-spacing: -0.39px;
+  }
+
+  .project-cta {
+    width: 116px;
+    height: 45px;
+    border-radius: 13px;
+    margin-top: 0;
+  }
+
+  .project-tag {
+    padding: 7px 19px;
+    font-size: 9px;
+    border-radius: 12px;
+  }
+
+  .project-cta-text {
+    font-size: 10px;
+  }
+
+  .project-cta-icon {
+    width: 17px;
+    height: 17px;
+  }
 }

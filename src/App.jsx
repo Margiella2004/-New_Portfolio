@@ -98,12 +98,36 @@ function ControlsRig({
   enablePan,
 }) {
   const controlsRef = useRef(null)
+  const { camera } = useThree()
 
   useEffect(() => {
     if (!controlsRef.current) return
     controlsRef.current.target.set(targetX, targetY, targetZ)
     controlsRef.current.update()
   }, [targetX, targetY, targetZ])
+
+  useEffect(() => {
+    const controls = controlsRef.current
+    if (!controls) return undefined
+
+    const handleChange = () => {
+      const { x, y, z } = camera.position
+      const { x: tx, y: ty, z: tz } = controls.target
+      console.log('[OrbitControls] camera', {
+        x: Number(x.toFixed(3)),
+        y: Number(y.toFixed(3)),
+        z: Number(z.toFixed(3)),
+        targetX: Number(tx.toFixed(3)),
+        targetY: Number(ty.toFixed(3)),
+        targetZ: Number(tz.toFixed(3)),
+      })
+    }
+
+    controls.addEventListener('change', handleChange)
+    return () => {
+      controls.removeEventListener('change', handleChange)
+    }
+  }, [camera])
 
   return (
     <OrbitControls
@@ -113,6 +137,7 @@ function ControlsRig({
       minDistance={minDistance}
       maxDistance={maxDistance}
       enablePan={enablePan}
+      enableRotate={false}
     />
   )
 }
@@ -204,7 +229,13 @@ function App() {
   const [animatedBloomThreshold, setAnimatedBloomThreshold] = useState(1.13)
   const [introComplete, setIntroComplete] = useState(false)
   const [scrollFov, setScrollFov] = useState(0)
+  const [activeSection, setActiveSection] = useState('home')
+  const [mouseBloom, setMouseBloom] = useState({ x: 0.5, y: 0.5 })
   const textFadeStartedRef = useRef(false)
+  const mouseBloomTargetRef = useRef({ x: 0.5, y: 0.5 })
+  const mouseBloomCurrentRef = useRef({ x: 0.5, y: 0.5 })
+  const mouseBloomRafRef = useRef(null)
+  const mouseBloomStateRef = useRef({ x: 0.5, y: 0.5 })
 
   const controls = useControls({
     Gradient: folder(
@@ -268,12 +299,12 @@ function App() {
     Camera: folder(
       {
         camX: { value: -1.7, min: -20, max: 20, step: 0.1, label: 'pos X' },
-        camY: { value: -0.6, min: -20, max: 20, step: 0.1, label: 'pos Y' },
+        camY: { value: -2.8, min: -20, max: 20, step: 0.1, label: 'pos Y' },
         camZ: { value: -6.5, min: -20, max: 20, step: 0.1, label: 'pos Z' },
         targetX: { value: -0.2, min: -10, max: 10, step: 0.05, label: 'target X' },
         targetY: { value: 0.0, min: -10, max: 10, step: 0.05, label: 'target Y' },
         targetZ: { value: -0.8, min: -10, max: 10, step: 0.05, label: 'target Z' },
-        fov: { value: 10, min: 10, max: 120, step: 1 },
+        fov: { value: 12, min: 10, max: 120, step: 1 },
         minDistance: { value: 7.3, min: 0.1, max: 20, step: 0.1 },
         maxDistance: { value: 33.0, min: 0.1, max: 50, step: 0.1 },
         enablePan: { value: true },
@@ -324,12 +355,88 @@ function App() {
   }, [controls.fov, controls.backdropBlur, controls.bloomThreshold])
 
   useEffect(() => {
+    const tick = () => {
+      const current = mouseBloomCurrentRef.current
+      const target = mouseBloomTargetRef.current
+      const nextX = current.x + (target.x - current.x) * 0.08
+      const nextY = current.y + (target.y - current.y) * 0.08
+
+      mouseBloomCurrentRef.current = { x: nextX, y: nextY }
+
+      const last = mouseBloomStateRef.current
+      if (
+        Math.abs(nextX - last.x) > 0.001 ||
+        Math.abs(nextY - last.y) > 0.001
+      ) {
+        const next = { x: nextX, y: nextY }
+        mouseBloomStateRef.current = next
+        setMouseBloom(next)
+      }
+
+      mouseBloomRafRef.current = requestAnimationFrame(tick)
+    }
+
+    mouseBloomRafRef.current = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(mouseBloomRafRef.current)
+  }, [])
+
+  const clamp = (value, min, max) => Math.min(max, Math.max(min, value))
+  const clamp01 = (value) => clamp(value, 0, 1)
+
+
+  const handleHeroPointerMove = (event) => {
+    if (!heroSectionRef.current) return
+    const rect = heroSectionRef.current.getBoundingClientRect()
+    const x = clamp01((event.clientX - rect.left) / rect.width)
+    const y = clamp01((event.clientY - rect.top) / rect.height)
+    mouseBloomTargetRef.current = { x, y }
+  }
+
+  const handleHeroPointerLeave = () => {
+    mouseBloomTargetRef.current = { x: 0.5, y: 0.5 }
+  }
+
+  useEffect(() => {
     gsap.registerPlugin(ScrollTrigger)
     const html = document.documentElement
     const body = document.body
     const previousBodyOverflow = body.style.overflow
     const previousHtmlOverflow = html.style.overflow
 
+    // Check URL params for forcing intro
+    const urlParams = new URLSearchParams(window.location.search)
+    const forceIntro = urlParams.get('intro') === 'true'
+
+    // Check if intro has already been played in this session (unless forced)
+    const hasPlayedIntro = !forceIntro && sessionStorage.getItem('hasPlayedIntro') === 'true'
+
+    console.log('🎬 Intro Debug:', { hasPlayedIntro, forceIntro, sessionStorage: sessionStorage.getItem('hasPlayedIntro') })
+
+    if (hasPlayedIntro) {
+      console.log('⏭️  Skipping intro - already played')
+      // Skip intro - set everything to final state immediately
+      setIntroComplete(true)
+      setCanvasOpacity(1)
+      setIntroTextOpacity(0)
+      setAnimatedFov(controls.fov)
+      setAnimatedBlur(controls.backdropBlur)
+      setAnimatedBloomThreshold(controls.bloomThreshold)
+
+      if (headerRef.current) {
+        gsap.set(headerRef.current, { opacity: 1, y: 0, pointerEvents: 'auto' })
+      }
+      if (heroContentRef.current) {
+        gsap.set(heroContentRef.current, { opacity: 1, pointerEvents: 'auto' })
+      }
+
+      body.style.overflow = previousBodyOverflow
+      html.style.overflow = previousHtmlOverflow
+      return
+    }
+
+    console.log('▶️  Playing intro animation')
+
+    // First time - play the intro
     body.style.overflow = 'hidden'
     html.style.overflow = 'hidden'
 
@@ -346,6 +453,7 @@ function App() {
       defaults: { ease: 'power2.out' },
       onComplete: () => {
         setIntroComplete(true)
+        sessionStorage.setItem('hasPlayedIntro', 'true')
         body.style.overflow = previousBodyOverflow
         html.style.overflow = previousHtmlOverflow
       },
@@ -436,6 +544,7 @@ function App() {
       body.style.overflow = previousBodyOverflow
       html.style.overflow = previousHtmlOverflow
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Debug logging for Design Engineer width calculation
@@ -456,6 +565,40 @@ function App() {
   const effectiveFov = introComplete ? controls.fov + scrollFov : animatedFov
   const effectiveBlur = introComplete ? controls.backdropBlur : animatedBlur
   const effectiveBloomThreshold = introComplete ? controls.bloomThreshold : animatedBloomThreshold
+
+  const mouseTrackingEnabled = introComplete && activeSection === 'home'
+  const bloomMouseX = mouseTrackingEnabled ? (mouseBloom.x - 0.5) * 2 : 0
+  const bloomMouseY = mouseTrackingEnabled ? (mouseBloom.y - 0.5) * 2 : 0
+  const dynamicBloomIntensity = clamp(
+    controls.bloomIntensity + bloomMouseX * 0.05 + bloomMouseY * 0.035,
+    0,
+    5
+  )
+  const dynamicBloomThreshold = clamp(
+    effectiveBloomThreshold + bloomMouseY * 0.04,
+    0,
+    2
+  )
+  const dynamicBloomSmoothing = clamp(
+    controls.bloomSmoothing + bloomMouseX * 0.05 - bloomMouseY * 0.02,
+    0,
+    2
+  )
+  const dynamicBloomRadius = clamp(
+    controls.bloomRadius + bloomMouseX * 0.14,
+    0,
+    5
+  )
+  const dynamicFresnelOffset = clamp(
+    controls.fresnelOffset + bloomMouseX * 0.06 + bloomMouseY * 0.045,
+    0,
+    1
+  )
+  const dynamicSoftness = clamp(
+    controls.softness + bloomMouseY * 0.08 + bloomMouseX * 0.04,
+    0,
+    0.5
+  )
 
   useEffect(() => {
     if (!introComplete) return undefined
@@ -485,13 +628,31 @@ function App() {
         },
       })
 
+      const projectsContainer = projectsRef.current.querySelector('.projects-container')
+      if (projectsContainer) {
+        gsap.set(projectsContainer, { xPercent: 100 })
+
+        gsap.to(projectsContainer, {
+          xPercent: 0,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: projectsRef.current,
+            start: 'top top',
+            end: '+=600',
+            scrub: true,
+            pin: true,
+            pinSpacing: true,
+            invalidateOnRefresh: true,
+          },
+        })
+      }
+
       // FOV increase as scrolling from hero to projects
       if (heroSectionRef.current && projectsRef.current) {
         ScrollTrigger.create({
           trigger: projectsRef.current,
           start: 'top bottom',
           end: 'top top',
-          markers: true,
           id: 'fov-increase',
           scrub: 1,
           onUpdate: (self) => {
@@ -501,30 +662,139 @@ function App() {
         })
       }
 
-      if (aboutRef.current) {
-        // Pin the about section - keep it pinned until FOV returns to normal
+      if (aboutRef.current && footerRef.current) {
+        // Pin the about section - first for FOV animation, THEN footer scrolls over
+        const fovAnimationDistance = (window.innerHeight * 1.5) + 200
+        const footerHeight = footerRef.current.offsetHeight
+
+        gsap.set(aboutRef.current, { autoAlpha: 0 })
+
         ScrollTrigger.create({
           trigger: aboutRef.current,
           start: 'top top',
-          end: '+=100%', // Pin for full viewport height
+          end: () => `+=${fovAnimationDistance + footerHeight}`,
           pin: true,
-          pinSpacing: true, // This creates space so footer doesn't scroll up
-          markers: true,
+          pinSpacing: false,
           id: 'about-pin',
+          refreshPriority: 1,
+          onEnter: () => gsap.set(aboutRef.current, { autoAlpha: 1 }),
+          onLeaveBack: () => gsap.set(aboutRef.current, { autoAlpha: 0 }),
         })
 
-        // FOV decrease through about section to bring cube back
+        // FOV decrease - completes BEFORE footer starts scrolling
         ScrollTrigger.create({
           trigger: aboutRef.current,
           start: 'top top',
-          end: '+=100%',
-          markers: true,
+          end: () => `+=${fovAnimationDistance}`,
           id: 'fov-decrease',
-          scrub: 0,
+          scrub: 1,
+          refreshPriority: 1,
           onUpdate: (self) => {
-            const fovDecrease = 5 - (self.progress * 5) // Decrease from 5 back to 0
+            const fovDecrease = 5 - (self.progress * 5)
             setScrollFov(fovDecrease)
           }
+        })
+
+        // Control footer position - keep it below viewport during FOV animation
+        ScrollTrigger.create({
+          trigger: aboutRef.current,
+          start: 'top top',
+          end: () => `+=${fovAnimationDistance + footerHeight}`,
+          id: 'footer-reveal',
+          scrub: true,
+          refreshPriority: 1,
+          onUpdate: (self) => {
+            // During first part (FOV animation): keep footer below viewport
+            // During second part: let footer scroll up
+            const fovProgress = Math.min(self.progress / (fovAnimationDistance / (fovAnimationDistance + footerHeight)), 1)
+
+            if (fovProgress < 1) {
+              // FOV still animating - keep footer below viewport
+              const translateY = footerHeight
+              footerRef.current.style.transform = `translateY(${translateY}px)`
+            } else {
+              // FOV done - calculate footer scroll
+              const footerProgress = (self.progress - (fovAnimationDistance / (fovAnimationDistance + footerHeight))) / (footerHeight / (fovAnimationDistance + footerHeight))
+              const translateY = footerHeight * (1 - footerProgress)
+              footerRef.current.style.transform = `translateY(${translateY}px)`
+            }
+          },
+          onLeave: () => {
+            footerRef.current.style.transform = 'translateY(0px)'
+          },
+          onLeaveBack: () => {
+            footerRef.current.style.transform = `translateY(${footerHeight}px)`
+          }
+        })
+
+        const aboutSection = aboutRef.current.querySelector('.make-live-section')
+        const aboutText = aboutRef.current.querySelector('.make-live-text')
+        const aboutPortrait = aboutRef.current.querySelector('.make-live-portrait')
+        const aboutLists = aboutRef.current.querySelector('.make-live-lists')
+        const aboutCta = aboutRef.current.querySelector('.make-live-cta')
+
+        if (aboutSection && aboutText && aboutPortrait && aboutLists && aboutCta) {
+          gsap.set([aboutText, aboutPortrait, aboutLists, aboutCta], { opacity: 0 })
+
+          const aboutTimeline = gsap.timeline({
+            scrollTrigger: {
+              trigger: aboutSection,
+              start: 'top top+=300',
+              end: '+=900',
+              scrub: true,
+              id: 'about-fadein',
+              invalidateOnRefresh: true,
+              refreshPriority: 0,
+            },
+          })
+
+          aboutTimeline
+            .to(aboutText, { opacity: 1, duration: 0.3 })
+            .to(aboutPortrait, { opacity: 1, duration: 0.3 }, 0.1)
+            .to(aboutLists, { opacity: 1, duration: 0.3 }, 0.2)
+            .to(aboutCta, { opacity: 1, duration: 0.3 }, 0.3)
+        }
+
+        ScrollTrigger.refresh()
+      }
+
+      if (heroSectionRef.current) {
+        ScrollTrigger.create({
+          trigger: heroSectionRef.current,
+          start: 'top top',
+          end: 'bottom center',
+          onEnter: () => setActiveSection('home'),
+          onEnterBack: () => setActiveSection('home'),
+        })
+      }
+
+      if (projectsRef.current) {
+        ScrollTrigger.create({
+          trigger: projectsRef.current,
+          start: 'top center',
+          end: 'bottom center',
+          onEnter: () => setActiveSection('projects'),
+          onEnterBack: () => setActiveSection('projects'),
+        })
+      }
+
+      if (aboutRef.current) {
+        ScrollTrigger.create({
+          trigger: aboutRef.current,
+          start: 'top center',
+          end: 'bottom center',
+          onEnter: () => setActiveSection('about'),
+          onEnterBack: () => setActiveSection('about'),
+        })
+      }
+
+      if (footerRef.current) {
+        ScrollTrigger.create({
+          trigger: footerRef.current,
+          start: 'top center',
+          end: 'bottom center',
+          onEnter: () => setActiveSection('contact'),
+          onEnterBack: () => setActiveSection('contact'),
         })
       }
 
@@ -546,11 +816,17 @@ function App() {
 
   return (
     <div ref={containerRef} className="stage" style={{ '--content-total-width': widthFormula }}>
-      <Header innerRef={headerRef} />
+      <Header innerRef={headerRef} activeSection={activeSection} />
       <Leva collapsed={false} />
 
       {/* Sticky Hero Section */}
-      <div ref={heroSectionRef} id="home" className="hero-section">
+      <div
+        ref={heroSectionRef}
+        id="home"
+        className="hero-section"
+        onPointerMove={handleHeroPointerMove}
+        onPointerLeave={handleHeroPointerLeave}
+      >
         <HeroTextOverlay opacity={introTextOpacity} />
         <div
           ref={heroContentRef}
@@ -559,17 +835,19 @@ function App() {
         >
           <IntroText paddingX={controls.introPaddingX} />
           <DesignEngineer />
-          <FloatingTabs
-            enabled={controls.tabsEnabled}
-            floatAmpX={controls.tabsFloatAmpX}
-            floatAmpY={controls.tabsFloatAmpY}
-            floatSpeedX={controls.tabsFloatSpeedX}
-            floatSpeedY={controls.tabsFloatSpeedY}
-            hoverScale={controls.tabsHoverScale}
-            dragScale={controls.tabsDragScale}
-            arrowWiggle={controls.tabsArrowWiggle}
-            arrowDelayOffset={controls.tabsArrowDelayOffset}
-          />
+          {/*
+            <FloatingTabs
+              enabled={controls.tabsEnabled}
+              floatAmpX={controls.tabsFloatAmpX}
+              floatAmpY={controls.tabsFloatAmpY}
+              floatSpeedX={controls.tabsFloatSpeedX}
+              floatSpeedY={controls.tabsFloatSpeedY}
+              hoverScale={controls.tabsHoverScale}
+              dragScale={controls.tabsDragScale}
+              arrowWiggle={controls.tabsArrowWiggle}
+              arrowDelayOffset={controls.tabsArrowDelayOffset}
+            />
+          */}
         </div>
 
         <div
@@ -582,11 +860,15 @@ function App() {
           }}
         >
           <Scene
-            cubeProps={controls}
-            bloomIntensity={controls.bloomIntensity}
-            bloomThreshold={effectiveBloomThreshold}
-            bloomSmoothing={controls.bloomSmoothing}
-            bloomRadius={controls.bloomRadius}
+            cubeProps={{
+              ...controls,
+              softness: dynamicSoftness,
+              fresnelOffset: dynamicFresnelOffset,
+            }}
+            bloomIntensity={dynamicBloomIntensity}
+            bloomThreshold={dynamicBloomThreshold}
+            bloomSmoothing={dynamicBloomSmoothing}
+            bloomRadius={dynamicBloomRadius}
             blurEnabled={controls.blurEnabled}
             blurStrength={controls.blurStrength}
             blurTaper={controls.blurTaper}
