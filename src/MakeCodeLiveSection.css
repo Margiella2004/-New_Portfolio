@@ -44,7 +44,7 @@
   .make-live-hero {
     flex-direction: row;
     align-items: flex-start;
-    gap: 32px;
+    gap: clamp(6rem, 38vw, 30.25rem);
   }
 }
 

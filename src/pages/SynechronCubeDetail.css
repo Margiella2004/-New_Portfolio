@@ -1,0 +1,532 @@
+/* ===========================
+   Synechron Cube Page CSS Variables
+   =========================== */
+.synechron-cube-page {
+  /* Colors */
+  --synechron-page-bg: #ffffff;
+  --synechron-title-color: #000000;
+  --synechron-metadata-primary-color: #363636;
+  --synechron-metadata-secondary-color: #919191;
+  --synechron-description-color: #3c3c3c;
+  --synechron-skill-color: #3c3c3c;
+  --synechron-quote-color: #3c3c3c;
+  --synechron-other-projects-title-color: #323232;
+  --synechron-hero-bg: #000000;
+  --synechron-hero-image-opacity: 0.9;
+
+  /* Spacing */
+  --synechron-container-max-width: 100%;
+  --synechron-container-padding-mobile: 1.25rem; /* 20px */
+  --synechron-container-padding-desktop: 1.25rem; /* 20px */
+  --synechron-container-padding-top-mobile: 5rem; /* 80px */
+  --synechron-container-padding-top-desktop: 7rem; /* 112px */
+  --synechron-container-padding-bottom: 6rem; /* 96px */
+  --synechron-section-gap-mobile: 1.25rem; /* 20px */
+  --synechron-section-gap-desktop: 1.25rem; /* 20px */
+
+  /* Header Section */
+  --synechron-header-gap: 7.5rem; /* 120px (40px * 3) */
+  --synechron-title-section-gap: 1rem; /* 16px */
+  --synechron-metadata-gap-mobile: 0.75rem; /* 12px */
+  --synechron-metadata-gap-desktop: 1rem; /* 16px */
+
+  /* Hero Image */
+  --synechron-hero-height-mobile: 400px;
+  --synechron-hero-height-md: 600px;
+  --synechron-hero-height-lg: 700px;
+  --synechron-hero-border-radius-mobile: 1.25rem; /* 20px */
+  --synechron-hero-border-radius-desktop: 2.1875rem; /* 35px */
+
+  /* Bio & Skills */
+  --synechron-bio-skills-gap-mobile: 2rem; /* 32px */
+  --synechron-bio-skills-gap-lg: 3rem; /* 48px */
+  --synechron-description-max-width: 660px;
+  --synechron-skills-gap: 0.25rem; /* 4px */
+
+  /* Quote Section */
+  --synechron-quote-padding-mobile: 1.5rem; /* 24px */
+  --synechron-quote-padding-desktop: 13rem; /* 208px */
+  --synechron-quote-max-width: 800px;
+
+  /* Added Sections */
+  --synechron-added-block-gap: 1.25rem; /* 20px */
+  --synechron-new-sections-gap: 1.25rem; /* 20px */
+  --synechron-bento-pair-gap: 1.25rem; /* 20px */
+
+  /* Other Projects */
+  --synechron-other-projects-gap: 1.5rem; /* 24px */
+  --synechron-other-projects-grid-gap: 1.5rem; /* 24px */
+
+  /* Typography - From Figma */
+  --synechron-metadata-font-size-mobile: 1.125rem; /* 18px */
+  --synechron-metadata-font-size-desktop: 1.3625rem; /* 21.801px from Figma */
+  --synechron-metadata-font-weight-medium: 500;
+  --synechron-metadata-letter-spacing: -0.03em; /* -0.654px / 21.801px from Figma */
+  --synechron-metadata-line-height: 3.106; /* 67.697px / 21.801px from Figma */
+
+  --synechron-title-font-size-mobile: 3.75rem; /* 60px */
+  --synechron-title-font-size-md: 5rem; /* 80px */
+  --synechron-title-font-size-lg: 3.4423rem; /* 55.076px from Figma */
+  --synechron-title-line-height: 0.75; /* 41.307px / 55.076px from Figma */
+  --synechron-title-letter-spacing: -0.03em; /* -1.6523px / 55.076px from Figma */
+
+  --synechron-description-font-size-mobile: 1.5rem; /* 24px */
+  --synechron-description-font-size-md: 1.625rem; /* 26px from Figma */
+  --synechron-description-font-size-lg: 1.625rem; /* 26px from Figma */
+  --synechron-description-font-weight: 300;
+  --synechron-description-line-height: 1.269; /* 33px / 26px from Figma */
+  --synechron-description-letter-spacing: -0.03em; /* -0.78px / 26px from Figma */
+
+  --synechron-skill-font-size-mobile: 1.5rem; /* 24px */
+  --synechron-skill-font-size-md: 1.625rem; /* 26px from Figma */
+  --synechron-skill-font-size-lg: 1.625rem; /* 26px from Figma */
+  --synechron-skill-font-weight: 300;
+  --synechron-skill-letter-spacing: -0.03em; /* -0.78px / 26px from Figma */
+  --synechron-skill-line-height: 1.269; /* 33px / 26px from Figma */
+
+  --synechron-quote-font-size-mobile: 1.5rem; /* 24px */
+  --synechron-quote-font-size-md: 1.875rem; /* 30px */
+  --synechron-quote-font-size-lg: 2.125rem; /* 34px */
+  --synechron-quote-font-weight: 300;
+  --synechron-quote-line-height: 1.2;
+  --synechron-quote-letter-spacing: -0.02em;
+
+  --synechron-other-projects-title-font-size-mobile: 1.875rem; /* 30px */
+  --synechron-other-projects-title-font-size-desktop: 2rem; /* 32px */
+  --synechron-other-projects-title-font-weight: 400;
+}
+
+/* ===========================
+   Page Container
+   =========================== */
+.synechron-cube-page {
+  min-height: 100vh;
+  background: var(--synechron-page-bg);
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.synechron-cube-container {
+  max-width: var(--synechron-container-max-width);
+  margin: 0 auto;
+  padding: var(--synechron-container-padding-top-mobile) var(--synechron-container-padding-mobile);
+  padding-bottom: var(--synechron-container-padding-bottom);
+  display: flex;
+  flex-direction: column;
+  gap: var(--synechron-section-gap-mobile);
+}
+
+@media (min-width: 768px) {
+  .synechron-cube-container {
+    padding-top: var(--synechron-container-padding-top-desktop);
+    gap: var(--synechron-section-gap-desktop);
+  }
+}
+
+/* ===========================
+   Header Section
+   =========================== */
+.synechron-cube-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--synechron-header-gap);
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.synechron-cube-title-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--synechron-title-section-gap);
+  text-align: center;
+}
+
+.synechron-cube-metadata {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--synechron-metadata-gap-mobile);
+  font-family: 'Pangea Afrikan VAR 2.003', sans-serif;
+  font-weight: var(--synechron-metadata-font-weight-medium);
+  font-size: var(--synechron-metadata-font-size-mobile);
+  text-transform: capitalize;
+  letter-spacing: var(--synechron-metadata-letter-spacing);
+  line-height: var(--synechron-metadata-line-height);
+}
+
+@media (min-width: 768px) {
+  .synechron-cube-metadata {
+    gap: var(--synechron-metadata-gap-desktop);
+    font-size: var(--synechron-metadata-font-size-desktop);
+  }
+}
+
+.synechron-cube-metadata-item {
+  color: var(--synechron-metadata-primary-color);
+}
+
+.synechron-cube-metadata-secondary {
+  color: var(--synechron-metadata-secondary-color);
+}
+
+.synechron-cube-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: var(--synechron-title-font-size-mobile);
+  line-height: var(--synechron-title-line-height);
+  letter-spacing: var(--synechron-title-letter-spacing);
+  color: var(--synechron-title-color);
+  margin: 0.5rem 0 0 0;
+  font-weight: 400;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .synechron-cube-title {
+    font-size: var(--synechron-title-font-size-md);
+    line-height: 1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .synechron-cube-title {
+    font-size: var(--synechron-title-font-size-lg);
+    line-height: var(--synechron-title-line-height);
+  }
+}
+
+/* ===========================
+   Hero Image
+   =========================== */
+.synechron-cube-hero-image-container {
+  width: 100%;
+  height: var(--synechron-hero-height-mobile);
+  background: var(--synechron-hero-bg);
+  border-radius: var(--synechron-hero-border-radius-mobile);
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 768px) {
+  .synechron-cube-hero-image-container {
+    height: var(--synechron-hero-height-md);
+    border-radius: var(--synechron-hero-border-radius-desktop);
+  }
+}
+
+@media (min-width: 1024px) {
+  .synechron-cube-hero-image-container {
+    height: var(--synechron-hero-height-lg);
+  }
+}
+
+.synechron-cube-hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: var(--synechron-hero-image-opacity);
+}
+
+/* ===========================
+   Bio & Skills Section
+   =========================== */
+.synechron-cube-bio-skills {
+  display: flex;
+  flex-direction: column;
+  gap: var(--synechron-bio-skills-gap-mobile);
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .synechron-cube-bio-skills {
+    gap: var(--synechron-bio-skills-gap-lg);
+  }
+}
+
+.synechron-cube-description {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.synechron-cube-description-text {
+  max-width: var(--synechron-description-max-width);
+  font-family: 'Pangea Afrikan VAR 2.003', sans-serif;
+  font-weight: var(--synechron-description-font-weight);
+  font-size: var(--synechron-description-font-size-mobile);
+  color: var(--synechron-description-color);
+  line-height: var(--synechron-description-line-height);
+  letter-spacing: var(--synechron-description-letter-spacing);
+  text-align: left;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .synechron-cube-description-text {
+    font-size: var(--synechron-description-font-size-md);
+  }
+}
+
+@media (min-width: 1024px) {
+  .synechron-cube-description-text {
+    font-size: var(--synechron-description-font-size-lg);
+  }
+}
+
+.synechron-cube-skills {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--synechron-skills-gap);
+}
+
+.synechron-cube-skill {
+  font-family: 'Pangea Afrikan VAR 2.003', sans-serif;
+  font-weight: var(--synechron-skill-font-weight);
+  font-size: var(--synechron-skill-font-size-mobile);
+  color: var(--synechron-skill-color);
+  letter-spacing: var(--synechron-skill-letter-spacing);
+  text-align: right;
+  line-height: var(--synechron-skill-line-height);
+}
+
+@media (min-width: 768px) {
+  .synechron-cube-skill {
+    font-size: var(--synechron-skill-font-size-md);
+  }
+}
+
+@media (min-width: 1024px) {
+  .synechron-cube-skill {
+    font-size: var(--synechron-skill-font-size-lg);
+  }
+}
+
+/* ===========================
+   Number Grid Section
+   =========================== */
+.synechron-cube-grid {
+  width: 100%;
+}
+
+.synechron-cube-grid-image-container {
+  width: 100%;
+  border-radius: 1.25rem;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .synechron-cube-grid-image-container {
+    border-radius: 1.875rem;
+  }
+}
+
+.synechron-cube-grid-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* ===========================
+   Quote Section
+   =========================== */
+.synechron-cube-quote {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: var(--synechron-quote-padding-mobile) 0;
+}
+
+@media (min-width: 768px) {
+  .synechron-cube-quote {
+    padding: var(--synechron-quote-padding-desktop) 0;
+  }
+}
+
+.synechron-cube-quote-text {
+  font-family: 'Pangea Afrikan VAR 2.003', sans-serif;
+  font-weight: var(--synechron-quote-font-weight);
+  font-size: var(--synechron-quote-font-size-mobile);
+  color: var(--synechron-quote-color);
+  line-height: var(--synechron-quote-line-height);
+  letter-spacing: var(--synechron-quote-letter-spacing);
+  text-align: center;
+  max-width: var(--synechron-quote-max-width);
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .synechron-cube-quote-text {
+    font-size: var(--synechron-quote-font-size-md);
+  }
+}
+
+@media (min-width: 1024px) {
+  .synechron-cube-quote-text {
+    font-size: var(--synechron-quote-font-size-lg);
+  }
+}
+
+/* ===========================
+   Big Image Section
+   =========================== */
+.synechron-cube-feature {
+  width: 100%;
+}
+
+.synechron-cube-feature-image-container {
+  width: 100%;
+  border-radius: 1.25rem;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .synechron-cube-feature-image-container {
+    border-radius: 1.875rem;
+  }
+}
+
+.synechron-cube-feature-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* ===========================
+   Added Sections
+   =========================== */
+.synechron-cube-added-block {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--synechron-added-block-gap);
+}
+
+.synechron-cube-legacy-sections {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--synechron-new-sections-gap);
+}
+
+.synechron-cube-new-sections {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--synechron-new-sections-gap);
+}
+
+.synechron-cube-bento-pair {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--synechron-bento-pair-gap);
+}
+
+@media (min-width: 768px) {
+  .synechron-cube-bento-pair {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--synechron-bento-pair-gap);
+  }
+}
+
+.synechron-cube-bento-pair-image-container {
+  width: 100%;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  background: #000000;
+  aspect-ratio: 4 / 3;
+}
+
+@media (min-width: 768px) {
+  .synechron-cube-bento-pair-image-container {
+    border-radius: 1.875rem;
+  }
+}
+
+.synechron-cube-bento-pair-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  opacity: 0.9;
+}
+
+/* ===========================
+   Content Module Spacing
+   =========================== */
+.synechron-cube-content-module {
+  /* Additional spacing for content modules if needed */
+}
+
+.synechron-cube-module-block {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .synechron-cube-module-block {
+    gap: 1.25rem;
+  }
+}
+
+.synechron-cube-timeline-wrapper {
+  width: 100%;
+  max-width: 100%;
+  margin-top: 0;
+  display: flex;
+  justify-content: center;
+}
+
+
+/* ===========================
+   Other Projects Section
+   =========================== */
+.synechron-cube-other-projects {
+  display: flex;
+  flex-direction: column;
+  gap: var(--synechron-other-projects-gap);
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.synechron-cube-other-projects-title {
+  font-family: 'Pangea Afrikan VAR 2.003', sans-serif;
+  font-size: var(--synechron-other-projects-title-font-size-mobile);
+  font-weight: var(--synechron-other-projects-title-font-weight);
+  color: var(--synechron-other-projects-title-color);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .synechron-cube-other-projects-title {
+    font-size: var(--synechron-other-projects-title-font-size-desktop);
+  }
+}
+
+.synechron-cube-other-projects-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--synechron-other-projects-grid-gap);
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .synechron-cube-other-projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .synechron-cube-other-projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3rem;
+  }
+}

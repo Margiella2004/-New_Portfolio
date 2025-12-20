@@ -1,0 +1,221 @@
+/* ===========================
+   NumberGrid CSS Variables
+   =========================== */
+.number-grid-container {
+  /* Colors */
+  --number-grid-bg: #000000;
+  --number-grid-overlay-bg: rgba(0, 0, 0, 0.3);
+  --number-grid-image-opacity: 0.6;
+  --number-grid-cell-border-color: rgba(255, 255, 255, 0.4);
+  --number-grid-cell-hover-bg: rgba(255, 255, 255, 0.1);
+  --number-grid-cell-text-color: #ffffff;
+  --number-grid-bracket-color: #ffffff;
+
+  /* Spacing */
+  --number-grid-border-radius-mobile: 2.5rem; /* 40px */
+  --number-grid-border-radius-desktop: 3.75rem; /* 60px */
+  --number-grid-bracket-padding-mobile: 1.5rem;
+  --number-grid-bracket-padding-desktop: 2rem;
+  --number-grid-content-padding-mobile: 1.5rem;
+  --number-grid-content-padding-desktop: 3rem;
+  --number-grid-gap-mobile: 0.75rem; /* 12px */
+  --number-grid-gap-desktop: 1rem; /* 16px */
+
+  /* Dimensions */
+  --number-grid-height-mobile: auto;
+  --number-grid-height-md: 600px;
+  --number-grid-height-lg: 790px;
+  --number-grid-aspect-ratio: 16 / 9;
+  --number-grid-max-width: 80rem; /* 1280px */
+  --number-grid-bracket-size: 70px;
+
+  /* Grid Layout */
+  --number-grid-columns-mobile: 4;
+  --number-grid-columns-desktop: 7;
+
+  /* Cell Dimensions */
+  --number-grid-cell-aspect-mobile: 2 / 1;
+  --number-grid-cell-aspect-desktop: 1 / 1;
+  --number-grid-cell-border-width-mobile: 2px;
+  --number-grid-cell-border-width-desktop: 3px;
+  --number-grid-cell-border-radius-mobile: 0.75rem; /* 12px */
+  --number-grid-cell-border-radius-desktop: 0.9375rem; /* 15px */
+
+  /* Typography */
+  --number-grid-cell-font-size-mobile: 1.25rem; /* 20px */
+  --number-grid-cell-font-size-desktop: 1.875rem; /* 30px */
+  --number-grid-cell-font-weight: 500;
+
+  /* Transitions */
+  --number-grid-cell-transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* ===========================
+   NumberGrid Container
+   =========================== */
+.number-grid-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--number-grid-aspect-ratio);
+  background: var(--number-grid-bg);
+  border-radius: var(--number-grid-border-radius-mobile);
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .number-grid-container {
+    aspect-ratio: auto;
+    height: var(--number-grid-height-md);
+    border-radius: var(--number-grid-border-radius-desktop);
+  }
+}
+
+@media (min-width: 1024px) {
+  .number-grid-container {
+    height: var(--number-grid-height-lg);
+  }
+}
+
+/* ===========================
+   Background Image
+   =========================== */
+.number-grid-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: var(--number-grid-image-opacity);
+}
+
+/* ===========================
+   Dark Overlay
+   =========================== */
+.number-grid-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--number-grid-overlay-bg);
+}
+
+/* ===========================
+   Corner Brackets
+   =========================== */
+.number-grid-brackets {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  padding: var(--number-grid-bracket-padding-mobile);
+}
+
+@media (min-width: 768px) {
+  .number-grid-brackets {
+    padding: var(--number-grid-bracket-padding-desktop);
+  }
+}
+
+.number-grid-brackets-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.number-grid-bracket {
+  position: absolute;
+  width: var(--number-grid-bracket-size);
+  height: var(--number-grid-bracket-size);
+}
+
+.number-grid-bracket-top-left {
+  top: 0;
+  left: 0;
+}
+
+.number-grid-bracket-top-right {
+  top: 0;
+  right: 0;
+  transform: rotate(90deg);
+}
+
+.number-grid-bracket-bottom-right {
+  bottom: 0;
+  right: 0;
+  transform: rotate(180deg);
+}
+
+.number-grid-bracket-bottom-left {
+  bottom: 0;
+  left: 0;
+  transform: rotate(-90deg);
+}
+
+/* ===========================
+   Grid Content
+   =========================== */
+.number-grid-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--number-grid-content-padding-mobile);
+}
+
+@media (min-width: 768px) {
+  .number-grid-content {
+    padding: var(--number-grid-content-padding-desktop);
+  }
+}
+
+.number-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--number-grid-columns-mobile), 1fr);
+  gap: var(--number-grid-gap-mobile);
+  width: 100%;
+  max-width: var(--number-grid-max-width);
+}
+
+@media (min-width: 768px) {
+  .number-grid {
+    grid-template-columns: repeat(var(--number-grid-columns-desktop), 1fr);
+    gap: var(--number-grid-gap-desktop);
+  }
+}
+
+/* ===========================
+   Grid Cells
+   =========================== */
+.number-grid-cell {
+  aspect-ratio: var(--number-grid-cell-aspect-mobile);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--number-grid-cell-border-width-mobile) solid var(--number-grid-cell-border-color);
+  border-radius: var(--number-grid-cell-border-radius-mobile);
+  transition: var(--number-grid-cell-transition);
+  cursor: default;
+}
+
+@media (min-width: 768px) {
+  .number-grid-cell {
+    aspect-ratio: var(--number-grid-cell-aspect-desktop);
+    border-width: var(--number-grid-cell-border-width-desktop);
+    border-radius: var(--number-grid-cell-border-radius-desktop);
+  }
+}
+
+.number-grid-cell:hover {
+  background: var(--number-grid-cell-hover-bg);
+}
+
+.number-grid-cell-number {
+  font-family: 'Pangea Afrikan VAR 2.003', sans-serif;
+  font-size: var(--number-grid-cell-font-size-mobile);
+  font-weight: var(--number-grid-cell-font-weight);
+  color: var(--number-grid-cell-text-color);
+}
+
+@media (min-width: 768px) {
+  .number-grid-cell-number {
+    font-size: var(--number-grid-cell-font-size-desktop);
+  }
+}

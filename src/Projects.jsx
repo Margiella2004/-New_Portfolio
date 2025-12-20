@@ -1,240 +1,178 @@
-import { useRef, useState } from 'react';
-import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
-import './Projects.css';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import gsap from 'gsap'
+import './Projects.css'
+import synechronIntroImage from '../img_assets/Syenchron cube intro.png'
 
 const projects = [
   {
-    title: "Guardian App",
-    description: "A series of my works that are personal projects and some I have done in past professional roles. One thing remains constant is combining both my engineering background and Design education in order to build the best product for my user.",
-    tags: ["UX Design", "UX Research", "Engineering"],
-    colors: ["bg-color-1", "bg-color-2", "bg-color-3"],
-    images: [
-      "https://images.unsplash.com/photo-1533234944761-2f5337579079?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-      "https://images.unsplash.com/photo-1563013544-824ae1b704d3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
-    ]
+    id: 'synechron-cube',
+    number: '01',
+    title: 'Synechron Cube',
+    image: synechronIntroImage,
+    tags: ['UX Design', 'UX Research', 'Engineering'],
+    description:
+      'Jonathan Ramesh is a Interdisciplinary Designer focusing on UX Design and Engineering. Jonathan combines his coding experince and design education to create products focused on bringing back human centered design.',
   },
   {
-    title: "Wander App",
-    description: "A series of my works that are personal projects and some I have done in past professional roles.",
-    tags: ["UX Design", "UX Research"],
-    colors: ["bg-color-1", "bg-color-2"],
-    images: [
-      "https://images.unsplash.com/photo-1692681157014-2f7ee75c0ea0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
-    ]
+    id: 'guardian-app',
+    number: '02',
+    title: 'Guardian App',
+    image:
+      'https://images.unsplash.com/photo-1639503547276-90230c4a4198?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMHNlY3VyaXR5JTIwc2hpZWxkJTIwZGlnaXRhbCUyMGRhdGElMjBzaW1wbGlzdGljfGVufDF8fHx8MTc2NjE3Mjc2NXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+    tags: ['Security', 'Mobile App', 'Encryption'],
+    description:
+      'Guardian App provides state-of-the-art personal security through real-time threat monitoring and secure communication channels. Designed for journalists and activists working in high-risk environments.',
   },
   {
-    title: "Synechron Cube",
-    description: "A series of my works that are personal projects and some I have done in past professional roles.",
-    tags: ["3D Engineering", "Interaction Design"],
-    colors: ["bg-color-4", "bg-color-5"],
-    images: [
-      "https://images.unsplash.com/photo-1626705343685-eb1e06c9271f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
-    ]
-  }
-];
+    id: 'wander-app',
+    number: '03',
+    title: 'Wander App',
+    image:
+      'https://images.unsplash.com/photo-1461183479101-6c14cd5299c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMG1hcCUyMG5hdmlnYXRpb24lMjB0cmF2ZWwlMjBzaW1wbGlzdGljfGVufDF8fHx8MTc2NjE3Mjc2NXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+    tags: ['Travel', 'Discovery', 'Social'],
+    description:
+      'Wander helps travelers discover hidden gems and connect with local communities. By leveraging AI-driven recommendations, it curates personalized itineraries that go beyond the typical tourist traps.',
+  },
+]
 
-function Pill({ text, color }) {
+function ArrowUpRightIcon({ className }) {
   return (
-    <div className={`pill ${color}`}>
-      <div className="pill-inner">
-        <p className="pill-text">{text}</p>
-      </div>
-      <div aria-hidden="true" className="pill-border" />
-    </div>
-  );
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M7 17L17 7" />
+      <path d="M7 7h10v10" />
+    </svg>
+  )
 }
 
 export default function Projects() {
-  const [hoveredIndex, setHoveredIndex] = useState(null);
-  const containerRef = useRef(null);
+  const [activeId, setActiveId] = useState(projects[0].id)
+  const [isMobile, setIsMobile] = useState(false)
+  const indicatorRef = useRef(null)
+  const previewRef = useRef(null)
+  const navigate = useNavigate()
 
-  useGSAP(() => {
-    projects.forEach((_, index) => {
-      const isHovered = hoveredIndex === index;
-      const targetGradient = `.project-gradient-${index}`;
-      const targetTitle = `.project-title-${index}`;
-      const targetDesc = `.project-desc-${index}`;
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 1024px)')
+    const updateMatch = (event) => setIsMobile(event.matches)
+    updateMatch(mediaQuery)
 
-      if (isHovered) {
-        gsap.to(targetGradient, { opacity: 1, duration: 0.5, ease: "power2.inOut" });
-        gsap.to(targetTitle, { color: "#ffffff", duration: 0.5, ease: "power2.inOut" });
-        gsap.to(targetDesc, { color: "#fbfbfb", duration: 0.5, ease: "power2.inOut" });
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', updateMatch)
+    } else {
+      mediaQuery.addListener(updateMatch)
+    }
+
+    return () => {
+      if (mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener('change', updateMatch)
       } else {
-        gsap.to(targetGradient, { opacity: 0, duration: 0.5, ease: "power2.inOut" });
-        gsap.to(targetTitle, { color: "#232125", duration: 0.5, ease: "power2.inOut" });
-        gsap.to(targetDesc, { color: "#9f9fa9", duration: 0.5, ease: "power2.inOut" });
+        mediaQuery.removeListener(updateMatch)
       }
-    });
-  }, { scope: containerRef, dependencies: [hoveredIndex] });
+    }
+  }, [])
+
+  const activeIndex = projects.findIndex((project) => project.id === activeId)
+  const activeProject = useMemo(
+    () => projects.find((project) => project.id === activeId) || projects[0],
+    [activeId]
+  )
+  const stride = isMobile ? 65 : 82
+
+  useLayoutEffect(() => {
+    if (!indicatorRef.current) return
+    gsap.to(indicatorRef.current, {
+      y: activeIndex * stride,
+      duration: 0.35,
+      ease: 'power2.out',
+    })
+  }, [activeIndex, stride])
+
+  useLayoutEffect(() => {
+    if (!previewRef.current) return
+    gsap.killTweensOf(previewRef.current)
+    gsap.fromTo(
+      previewRef.current,
+      { autoAlpha: 0, x: -60, y: 0 },
+      { autoAlpha: 1, x: 0, y: 0, duration: 0.45, ease: 'power3.out' }
+    )
+  }, [activeId])
 
   return (
-    <div className="projects-container">
-      {/* Inner Content Container */}
+    <section className="projects-container">
       <div className="projects-inner">
+        <header className="projects-header">
+          <h2 className="projects-title">Projects</h2>
+          <span className="projects-count">{projects.length} items</span>
+        </header>
 
-        {/* Header Section */}
-        <div className="projects-header-section">
-          <div className="projects-header">
-            <h2 className="projects-title">Projects</h2>
-            <span className="projects-count">3 items</span>
+        <div className="projects-content">
+          <div className="projects-nav">
+            <div className="projects-timeline" aria-hidden="true">
+              <div className="projects-line" />
+              <div ref={indicatorRef} className="projects-indicator" />
+            </div>
+
+            <div className="projects-list">
+              {projects.map((project) => (
+                <button
+                  key={project.id}
+                  type="button"
+                  className={`projects-item${
+                    activeId === project.id ? ' is-active' : ''
+                  }`}
+                  onClick={() => setActiveId(project.id)}
+                  aria-pressed={activeId === project.id}
+                >
+                  <span className="projects-item-number">{project.number}</span>
+                  <span className="projects-item-title">{project.title}</span>
+                </button>
+              ))}
+            </div>
           </div>
 
-          {/* Intro Paragraph */}
-          <div className="projects-intro">
-             <p className="projects-intro-text">
-               A series of my works that are personal projects and some I have done in past professional roles.
-               One thing remains constant is combining both my engineering background and Design education
-               in order to build the best product for my user.
-             </p>
-          </div>
-        </div>
+          <div ref={previewRef} className="project-preview">
+            <div className="project-image-frame">
+              <img
+                src={activeProject.image}
+                alt={activeProject.title}
+                className="project-image"
+              />
+            </div>
 
-        {/* Main Grid */}
-        <div className="projects-grid" ref={containerRef}>
-
-          {/* Card 1: Guardian App */}
-          <div
-            onMouseEnter={() => setHoveredIndex(0)}
-            onMouseLeave={() => setHoveredIndex(null)}
-            className="project-card project-card-large"
-          >
-            {/* Gradient Background */}
-            <div className="project-gradient-0" />
-
-            {/* Border */}
-            <div className="project-border" />
-
-            <div className="project-card-content">
-
-              {/* Left Content (Text) */}
-              <div className="project-text-section">
-                 <div className="project-text-content">
-                   <h3 className="project-title-0 project-title">
-                     {projects[0].title}
-                   </h3>
-                   <p className="project-desc-0 project-description">
-                     {projects[0].description}
-                   </p>
-                 </div>
-                 <div className="project-tags">
-                   {projects[0].tags.map((tag, i) => (
-                     <Pill key={i} text={tag} color={projects[0].colors[i]} />
-                   ))}
-                 </div>
+            <div className="project-meta">
+              <div className="project-tags">
+                {activeProject.tags.map((tag) => (
+                  <span key={tag} className="project-tag">
+                    {tag}
+                  </span>
+                ))}
               </div>
 
-              {/* Right Content (Images) */}
-              <div className="project-images-large">
-                  {/* Image 1 (Large) */}
-                  <div className="project-image-container project-image-main">
-                    <img
-                      src={projects[0].images[0]}
-                      alt={projects[0].title}
-                      className="project-image"
-                    />
-                  </div>
-                  {/* Image 2 (Small) */}
-                  <div className="project-image-container project-image-secondary">
-                    <img
-                      src={projects[0].images[1]}
-                      alt="Detail"
-                      className="project-image"
-                    />
-                  </div>
-              </div>
+              <button
+                type="button"
+                className="project-cta"
+                onClick={() => navigate(`/project/${activeProject.id}`)}
+                aria-label={`View work for ${activeProject.title}`}
+              >
+                <span className="project-cta-text">view work</span>
+                <ArrowUpRightIcon className="project-cta-icon" />
+              </button>
 
+              <p className="project-description">{activeProject.description}</p>
             </div>
-          </div>
-
-          {/* Bottom Row: Wander App & Synechron Cube */}
-          <div className="projects-bottom-row">
-
-            {/* Card 2: Wander App */}
-            <div
-              onMouseEnter={() => setHoveredIndex(1)}
-              onMouseLeave={() => setHoveredIndex(null)}
-              className="project-card project-card-small"
-            >
-               {/* Gradient Background */}
-               <div className="project-gradient-1" />
-
-               <div className="project-border" />
-               <div className="project-card-content-vertical">
-                  <div className="project-content-vertical">
-                     {/* Text Section */}
-                     <div className="project-text-vertical">
-                        <div className="project-text-content">
-                          <h3 className="project-title-1 project-title">
-                            {projects[1].title}
-                          </h3>
-                          <p className="project-desc-1 project-description">
-                            {projects[1].description}
-                          </p>
-                        </div>
-                        <div className="project-tags">
-                          {projects[1].tags.map((tag, i) => (
-                             <Pill key={i} text={tag} color={projects[1].colors[i]} />
-                          ))}
-                        </div>
-                     </div>
-
-                     {/* Image Section */}
-                     <div className="project-image-container project-image-single">
-                        <img
-                          src={projects[1].images[0]}
-                          alt={projects[1].title}
-                          className="project-image"
-                        />
-                     </div>
-                  </div>
-               </div>
-            </div>
-
-            {/* Card 3: Synechron Cube */}
-            <div
-              onMouseEnter={() => setHoveredIndex(2)}
-              onMouseLeave={() => setHoveredIndex(null)}
-              className="project-card project-card-small"
-            >
-               {/* Gradient Background */}
-               <div className="project-gradient-2" />
-
-               <div className="project-border" />
-               <div className="project-card-content-vertical">
-                  <div className="project-content-vertical">
-                     {/* Text Section */}
-                     <div className="project-text-vertical">
-                        <div className="project-text-content">
-                          <h3 className="project-title-2 project-title">
-                            {projects[2].title}
-                          </h3>
-                          <p className="project-desc-2 project-description">
-                            {projects[2].description}
-                          </p>
-                        </div>
-                        <div className="project-tags">
-                          {projects[2].tags.map((tag, i) => (
-                             <Pill key={i} text={tag} color={projects[2].colors[i]} />
-                          ))}
-                        </div>
-                     </div>
-
-                     {/* Image Section */}
-                     <div className="project-image-container project-image-single">
-                        <img
-                          src={projects[2].images[0]}
-                          alt={projects[2].title}
-                          className="project-image"
-                        />
-                     </div>
-                  </div>
-               </div>
-            </div>
-
           </div>
         </div>
       </div>
-    </div>
-  );
+    </section>
+  )
 }

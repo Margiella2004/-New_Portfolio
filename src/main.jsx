@@ -1,10 +1,21 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './index.css'
 import App from './App.jsx'
+import GuardianAppDetail from './pages/GuardianAppDetail'
+import WanderAppDetail from './pages/WanderAppDetail'
+import SynechronCubeDetail from './pages/SynechronCubeDetail'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/project/guardian-app" element={<GuardianAppDetail />} />
+        <Route path="/project/wander-app" element={<WanderAppDetail />} />
+        <Route path="/project/synechron-cube" element={<SynechronCubeDetail />} />
+      </Routes>
+    </BrowserRouter>
   </StrictMode>,
 )

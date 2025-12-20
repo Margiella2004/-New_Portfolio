@@ -5,7 +5,7 @@ import './Header.css'
 
 gsap.registerPlugin(ScrollToPlugin)
 
-export default function Header({ innerRef }) {
+export default function Header({ innerRef, activeSection }) {
   const [menuOpen, setMenuOpen] = useState(false)
 
   const handleNavClick = (id) => (event) => {
@@ -32,9 +32,27 @@ export default function Header({ innerRef }) {
         </div>
 
         <nav className="nav-links">
-          <a href="#home" className="nav-link" onClick={handleNavClick('home')}>home</a>
-          <a href="#projects" className="nav-link" onClick={handleNavClick('projects')}>projects</a>
-          <a href="#about" className="nav-link" onClick={handleNavClick('about')}>about me</a>
+          <a
+            href="#home"
+            className={`nav-link${activeSection === 'home' ? ' is-active' : ''}`}
+            onClick={handleNavClick('home')}
+          >
+            home
+          </a>
+          <a
+            href="#projects"
+            className={`nav-link${activeSection === 'projects' ? ' is-active' : ''}`}
+            onClick={handleNavClick('projects')}
+          >
+            projects
+          </a>
+          <a
+            href="#about"
+            className={`nav-link${activeSection === 'about' ? ' is-active' : ''}`}
+            onClick={handleNavClick('about')}
+          >
+            about me
+          </a>
         </nav>
 
         <a href="#contact" className="contact-button desktop-contact" onClick={handleNavClick('contact')}>
@@ -53,9 +71,27 @@ export default function Header({ innerRef }) {
             ✕
           </button>
           <nav className="mobile-nav">
-            <a href="#home" className="mobile-nav-link" onClick={handleNavClick('home')}>home</a>
-            <a href="#projects" className="mobile-nav-link" onClick={handleNavClick('projects')}>projects</a>
-            <a href="#about" className="mobile-nav-link" onClick={handleNavClick('about')}>about me</a>
+            <a
+              href="#home"
+              className={`mobile-nav-link${activeSection === 'home' ? ' is-active' : ''}`}
+              onClick={handleNavClick('home')}
+            >
+              home
+            </a>
+            <a
+              href="#projects"
+              className={`mobile-nav-link${activeSection === 'projects' ? ' is-active' : ''}`}
+              onClick={handleNavClick('projects')}
+            >
+              projects
+            </a>
+            <a
+              href="#about"
+              className={`mobile-nav-link${activeSection === 'about' ? ' is-active' : ''}`}
+              onClick={handleNavClick('about')}
+            >
+              about me
+            </a>
           </nav>
         </div>
       </div>

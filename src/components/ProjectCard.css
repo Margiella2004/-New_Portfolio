@@ -1,0 +1,115 @@
+.project-detail-card {
+  position: relative;
+  background: white;
+  border-radius: 2rem;
+  padding: 2rem 2.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  flex: 1;
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .project-detail-card {
+    padding: 2.5rem 3rem;
+  }
+}
+
+.project-detail-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.project-detail-card-border {
+  position: absolute;
+  inset: 0;
+  border: 0.12069rem solid rgba(99, 99, 99, 0.17);
+  border-radius: 1.93138rem;
+  pointer-events: none;
+}
+
+.project-detail-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2.17288rem;
+  position: relative;
+}
+
+.project-detail-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.72425rem;
+}
+
+.project-detail-card-title {
+  color: #232125;
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.93138rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.81069rem;
+  letter-spacing: -0.11588rem;
+  margin: 0;
+}
+
+.project-detail-card-description {
+  color: #9f9fa9;
+  font-family: 'Pangea Afrikan VAR 2.003', sans-serif;
+  font-size: 0.845rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.02606rem;
+  letter-spacing: -0.00906rem;
+  margin: 0;
+}
+
+.project-detail-card-tags {
+  display: flex;
+  gap: 0.54319rem;
+  flex-wrap: wrap;
+}
+
+.project-detail-card-tag {
+  padding: 0.46188rem 1.30144rem;
+  border-radius: 0.79794rem;
+  color: white;
+  font-family: 'Pangea Afrikan VAR 2.003', sans-serif;
+  font-size: 0.58781rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 0.71381rem;
+  letter-spacing: -0.00631rem;
+  text-transform: uppercase;
+}
+
+.project-detail-card-image-container {
+  width: 100%;
+  height: 350px;
+  border-radius: 1.56925rem;
+  overflow: hidden;
+  background: #a8a8a8;
+}
+
+@media (min-width: 768px) {
+  .project-detail-card-image-container {
+    height: 400px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .project-detail-card-image-container {
+    height: 450px;
+  }
+}
+
+.project-detail-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.project-detail-card:hover .project-detail-card-image {
+  transform: scale(1.05);
+}
