@@ -1,8 +1,7 @@
 import './IntroText.css'
-
-const lineImage = "https://www.figma.com/api/mcp/asset/3aabee4c-2f03-4b7b-9acb-67ee915e883d"
-const arrowImage = "https://www.figma.com/api/mcp/asset/ede21216-651c-4981-b9b1-42facbc7fea5"
-const linkArrowImage = "https://www.figma.com/api/mcp/asset/9022f730-05eb-470d-afb4-a302a6d5991a"
+import lineImage from '../Svg/Line 1.svg'
+import arrowImage from '../Svg/material-symbols-light_arrow-back.svg'
+import linkArrowImage from '../Svg/material-symbols-light_arrow-back.svg'
 
 export default function IntroText({ paddingX = 72 }) {
   // Ensure minimum padding on mobile
