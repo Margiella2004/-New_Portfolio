@@ -1,6 +1,6 @@
 import './IntroText.css'
 import lineImage from '../Svg/Line 1.svg'
-import arrowImage from '../Svg/material-symbols-light_arrow-back.svg'
+import arrowImage from '../Svg/majesticons_arrow-up.svg'
 import linkArrowImage from '../Svg/material-symbols-light_arrow-back.svg'
 
 export default function IntroText({ paddingX = 72 }) {
