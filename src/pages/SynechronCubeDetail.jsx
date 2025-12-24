@@ -4,10 +4,19 @@ import ProjectDetailHeader from '../components/ProjectDetailHeader';
 import ContentModule from '../components/ContentModule';
 import { projectsData } from '../data/projectsData';
 import SynechronTimeline from '../components/SynechronTimeline';
+import OtherProjects from '../components/OtherProjects';
+import StackedRevealSection from '../components/StackedRevealSection';
+import Footer from '../Footer';
+import { footerData } from '../footerData';
 import './SynechronCubeDetail.css';
+import guardianHeaderImage from '../../img_assets/Frame 56.png';
 
 export default function SynechronCubeDetail() {
   const project = projectsData.synechronCube;
+  const guardianProject = {
+    ...projectsData.guardianApp,
+    heroImage: guardianHeaderImage
+  };
   const {
     containerPadding,
     containerPaddingTopMobile,
@@ -191,6 +200,8 @@ export default function SynechronCubeDetail() {
                   src={project.numberGridImage}
                   alt="Synechron Cube Grid"
                   className="synechron-cube-grid-image"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
             </section>
@@ -253,6 +264,8 @@ export default function SynechronCubeDetail() {
                           src={project.featureBlock.bigImage}
                           alt="Synechron Cube Feature"
                           className="synechron-cube-feature-image"
+                          loading="lazy"
+                          decoding="async"
                         />
                       )}
                     </div>
@@ -295,6 +308,8 @@ export default function SynechronCubeDetail() {
                           src={img}
                           alt={`Synechron Cube Bento ${index + 1}`}
                           className="synechron-cube-bento-pair-image"
+                          loading="lazy"
+                          decoding="async"
                         />
                       )}
                     </div>
@@ -304,6 +319,15 @@ export default function SynechronCubeDetail() {
             </section>
           )}
 
+        </div>
+        <StackedRevealSection
+          className="synechron-cube-reveal-stage synechron-cube-other-projects-stage"
+          innerClassName="synechron-cube-reveal-inner"
+        >
+          <OtherProjects project={guardianProject} />
+        </StackedRevealSection>
+        <div className="footer-layer synechron-cube-footer-layer">
+          <Footer data={footerData} />
         </div>
       </main>
     </>

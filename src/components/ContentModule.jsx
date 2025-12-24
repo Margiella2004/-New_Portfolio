@@ -8,6 +8,7 @@ export default function ContentModule({
   className = '',
   overlayContent,
   hideTopImage = false,
+  hideText = false,
   bentoTextAlign = 'right',
   style
 }) {
@@ -30,7 +31,15 @@ export default function ContentModule({
       );
     }
 
-    return <img src={src} alt={alt} className={`content-module-image ${extraClassName}`.trim()} />;
+    return (
+      <img
+        src={src}
+        alt={alt}
+        className={`content-module-image ${extraClassName}`.trim()}
+        loading="lazy"
+        decoding="async"
+      />
+    );
   };
 
   // Text content subcomponent
@@ -47,9 +56,9 @@ export default function ContentModule({
   if (layout === 'stacked') {
     return (
       <div className={`content-module content-module-stacked ${className}`} style={style}>
-        <TextContent maxWidth="672px" />
+        {!hideText && <TextContent maxWidth="672px" />}
         <div className="content-module-image-container content-module-image-container-large">
-          {renderMedia(images?.[0], title)}
+          {renderMedia(images?.[0], title || 'Image')}
         </div>
       </div>
     );
@@ -87,11 +96,11 @@ export default function ContentModule({
   if (layout === 'grid-2') {
     return (
       <div className={`content-module content-module-grid-2 ${className}`} style={style}>
-        <TextContent />
+        {!hideText && <TextContent />}
         <div className="content-module-image-grid">
           {images.slice(0, 2).map((img, i) => (
             <div key={i} className="content-module-image-container content-module-image-container-grid">
-              {renderMedia(img, `${title} ${i + 1}`)}
+              {renderMedia(img, `${title || 'Image'} ${i + 1}`)}
             </div>
           ))}
         </div>
@@ -111,10 +120,12 @@ export default function ContentModule({
         )}
 
         {/* Bottom Split */}
-        <div className="content-module-bento-bottom">
-          <div className="content-module-bento-text">
-            <TextContent align="left" />
-          </div>
+        <div className={`content-module-bento-bottom ${hideText ? 'content-module-bento-bottom-no-text' : ''}`}>
+          {!hideText && (
+            <div className="content-module-bento-text">
+              <TextContent align="left" />
+            </div>
+          )}
           <div className="content-module-image-container content-module-image-container-bento">
             {renderMedia(images?.[1] || images?.[0], `${title} Detail`)}
           </div>
@@ -139,13 +150,15 @@ export default function ContentModule({
         )}
 
         {/* Bottom Split */}
-        <div className="content-module-bento-bottom">
+        <div className={`content-module-bento-bottom ${hideText ? 'content-module-bento-bottom-no-text' : ''}`}>
           <div className="content-module-image-container content-module-image-container-bento">
             {renderMedia(images?.[1] || images?.[0], `${title} Detail`)}
           </div>
-          <div className={`content-module-bento-text ${bentoTextAlignClass}`}>
-            <TextContent align={textAlign} />
-          </div>
+          {!hideText && (
+            <div className={`content-module-bento-text ${bentoTextAlignClass}`}>
+              <TextContent align={textAlign} />
+            </div>
+          )}
         </div>
       </div>
     );

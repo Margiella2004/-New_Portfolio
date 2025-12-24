@@ -19,12 +19,6 @@ export default function ProjectDetailHeader() {
   return (
     <>
       <header className="header">
-        <nav className="nav-links">
-          <a href="/" className="nav-link" onClick={handleNavClick('/')}>home</a>
-          <a href="/#projects" className="nav-link" onClick={handleNavClick('/#projects')}>projects</a>
-          <a href="/#about" className="nav-link" onClick={handleNavClick('/#about')}>about me</a>
-        </nav>
-
         <div className="logo" onClick={handleLogoClick} style={{ pointerEvents: 'auto', cursor: 'pointer' }}>
           <span className="logo-j">J</span>
           <span className="logo-text">o</span>
@@ -33,6 +27,12 @@ export default function ProjectDetailHeader() {
           <span className="logo-r">R</span>
           <span className="logo-text">am</span>
         </div>
+
+        <nav className="nav-links">
+          <a href="/" className="nav-link" onClick={handleNavClick('/')}>home</a>
+          <a href="/#projects" className="nav-link" onClick={handleNavClick('/#projects')}>projects</a>
+          <a href="/#about" className="nav-link" onClick={handleNavClick('/#about')}>about me</a>
+        </nav>
 
         <a href="/#contact" className="contact-button desktop-contact" onClick={handleNavClick('/#contact')}>
           contact me

@@ -1,8 +1,11 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import './Projects.css'
 import synechronIntroImage from '../img_assets/Syenchron cube intro.png'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const projects = [
   {
@@ -54,11 +57,33 @@ function ArrowUpRightIcon({ className }) {
   )
 }
 
+// Polaroid Images Component
+function PolaroidImages() {
+  return (
+    <div className="polaroid-container">
+      <div className="polaroid polaroid-1">
+        <img src={projects[0].image} alt="" />
+      </div>
+      <div className="polaroid polaroid-2">
+        <img src={projects[1].image} alt="" />
+      </div>
+      <div className="polaroid polaroid-3">
+        <img src={projects[2].image} alt="" />
+      </div>
+    </div>
+  )
+}
+
 export default function Projects() {
   const [activeId, setActiveId] = useState(projects[0].id)
   const [isMobile, setIsMobile] = useState(false)
+  const [hasUserInteracted, setHasUserInteracted] = useState(false)
   const indicatorRef = useRef(null)
   const previewRef = useRef(null)
+  const introTitleRef = useRef(null)
+  const introDescRef = useRef(null)
+  const projectsSectionRef = useRef(null)
+  const scrollTriggerRef = useRef(null)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -107,14 +132,138 @@ export default function Projects() {
     )
   }, [activeId])
 
+  // Intro scroll animations
+  useEffect(() => {
+    if (!introTitleRef.current || !introDescRef.current) return
+
+    // Split description text into words
+    const descText = introDescRef.current.textContent
+    const words = descText.split(' ')
+    introDescRef.current.innerHTML = words
+      .map((word) => `<span class="word-wrapper"><span class="word">${word}</span></span>`)
+      .join(' ')
+
+    const wordElements = introDescRef.current.querySelectorAll('.word')
+    const titleLetters = introTitleRef.current.querySelectorAll('.projects-intro-title-p, .projects-intro-title-rest')
+    const polaroids = document.querySelectorAll('.polaroid')
+
+    // Set initial states - vertical slide up effect for title
+    gsap.set(titleLetters, { yPercent: 100, opacity: 0 })
+    gsap.set(wordElements, { opacity: 0, y: 30 })
+
+    // Set initial states for polaroids - slide from left, already rotated
+    gsap.set(polaroids, {
+      opacity: 0,
+      x: -80,
+      rotation: (index) => index === 0 ? -3.3 : 5.763
+    })
+
+    // Create timeline with ScrollTrigger
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: introTitleRef.current,
+        start: 'top 30%',
+        end: 'top 10%',
+        scrub: 4,
+      },
+    })
+
+    // Vertical slide reveal for title
+    tl.to(titleLetters, {
+      yPercent: 0,
+      opacity: 1,
+      duration: 2,
+      stagger: 0.15,
+      ease: 'expo.out',
+    })
+
+    // Polaroids slide in from left (subtle, horizontal only)
+    tl.to(
+      polaroids,
+      {
+        opacity: 1,
+        x: 0,
+        duration: 2,
+        stagger: 0.15,
+        ease: 'power2.out',
+      },
+      '-=1.5'
+    )
+
+    // Word reveal animation
+    tl.to(
+      wordElements,
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1.5,
+        stagger: 0.08,
+        ease: 'power2.out',
+      },
+      '-=1.8'
+    )
+
+    return () => {
+      tl.kill()
+    }
+  }, [])
+
+  // Auto-scroll animation through projects
+  useEffect(() => {
+    if (hasUserInteracted) return
+
+    const tl = gsap.timeline({
+      repeat: -1,
+      repeatDelay: 1,
+    })
+
+    tl.call(() => setActiveId(projects[0].id))
+      .to({}, { duration: 3 })
+      .call(() => setActiveId(projects[1].id))
+      .to({}, { duration: 3 })
+      .call(() => setActiveId(projects[2].id))
+      .to({}, { duration: 3 })
+
+    scrollTriggerRef.current = tl
+
+    return () => {
+      tl.kill()
+    }
+  }, [hasUserInteracted])
+
+  // Handle user click - disable scroll animation
+  const handleProjectClick = (projectId) => {
+    setHasUserInteracted(true)
+    setActiveId(projectId)
+    if (scrollTriggerRef.current) {
+      scrollTriggerRef.current.kill()
+    }
+  }
+
   return (
     <section className="projects-container">
-      <div className="projects-inner">
-        <header className="projects-header">
-          <h2 className="projects-title">Projects</h2>
-          <span className="projects-count">{projects.length} items</span>
-        </header>
+      {/* Intro Section - Full Viewport */}
+      <div className="projects-intro">
+        <div className="projects-intro-content">
+          <div className="projects-intro-header">
+            <h1 ref={introTitleRef} className="projects-intro-title">
+              <span className="title-mask">
+                <span className="projects-intro-title-p">P</span>
+              </span>
+              <span className="title-mask">
+                <span className="projects-intro-title-rest">rojects</span>
+              </span>
+            </h1>
+            <PolaroidImages />
+          </div>
+          <p ref={introDescRef} className="projects-intro-description">
+            Jonathan Ramesh is a Interdisciplinary Designer focusing on UX Design and Engineering.
+          </p>
+        </div>
+      </div>
 
+      {/* Original Projects Content */}
+      <div ref={projectsSectionRef} className="projects-inner">
         <div className="projects-content">
           <div className="projects-nav">
             <div className="projects-timeline" aria-hidden="true">
@@ -130,7 +279,7 @@ export default function Projects() {
                   className={`projects-item${
                     activeId === project.id ? ' is-active' : ''
                   }`}
-                  onClick={() => setActiveId(project.id)}
+                  onClick={() => handleProjectClick(project.id)}
                   aria-pressed={activeId === project.id}
                 >
                   <span className="projects-item-number">{project.number}</span>

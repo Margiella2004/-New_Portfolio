@@ -38,6 +38,8 @@ export default function ProjectCard({ project }) {
             src={project.heroImage}
             alt={project.title}
             className="project-detail-card-image"
+            loading="lazy"
+            decoding="async"
           />
         </div>
       </div>

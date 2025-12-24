@@ -4,7 +4,155 @@
   min-height: 100vh;
   box-shadow: 0px -4px 7.5px -0.9px rgba(0, 0, 0, 0.07);
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Intro Section - Full Viewport */
+.projects-intro {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+}
+
+.projects-intro-content {
+  padding: 65px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  max-width: 1100px;
+}
+
+.projects-intro-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 50px;
+  margin-bottom: 7px;
+}
+
+/* Polaroid Styles */
+.polaroid-container {
+  position: relative;
+  width: 211px;
+  height: 141px;
+  flex-shrink: 0;
+  margin-top: 20px;
+}
+
+.polaroid {
+  position: absolute;
+  width: 88px;
+  height: 133px;
+  background: #242424;
+  border: 0.86px solid #FFFAFA;
+  border-radius: 34px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  will-change: transform;
+}
+
+.polaroid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Individual polaroid positioning and rotation */
+.polaroid-1 {
+  left: 0;
+  top: 1.66px;
+  transform: rotate(-3.3deg);
+  z-index: 1;
+}
+
+.polaroid-2 {
+  left: 53px;
+  top: 0;
+  transform: rotate(5.763deg);
+  z-index: 2;
+}
+
+.polaroid-3 {
+  left: 110px;
+  top: 0;
+  transform: rotate(5.763deg);
+  z-index: 3;
+}
+
+/* Optional hover effect */
+.polaroid:hover {
+  transform: rotate(0deg) scale(1.05);
+  z-index: 10;
+}
+
+.projects-intro-title {
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  color: #363636;
+  letter-spacing: -3.5231px;
+  display: flex;
+  align-items: baseline;
+}
+
+.title-mask {
+  display: inline-block;
+  overflow: hidden;
+  padding: 10px 20px 30px 20px;
+  margin: -10px -20px -30px -20px;
+}
+
+.projects-intro-title-p,
+.projects-intro-title-rest {
+  display: inline-block;
+  will-change: transform;
+}
+
+.projects-intro-title-p {
+  font-family: 'Instrument Serif', serif;
+  font-size: 176.154px;
+  font-style: italic;
+  color: #363636;
+  letter-spacing: -3.5231px;
+  padding-left: 40px;
+  padding-right: 5px;
+  line-height: 0.9;
+}
+
+.projects-intro-title-rest {
+  font-family: 'Pangea Afrikan VAR 2.003', -apple-system, system-ui, sans-serif;
+  font-size: 150.318px;
+  font-weight: 300;
+  color: #363636;
+  letter-spacing: -7.5159px;
+  line-height: 0.9;
+  font-variation-settings: 'ital' 0, 'XTDR' 0, 'APRT' 0, 'SPAC' 0, 'INKT' 0, 'SS01' 0, 'SS02' 0, 'SS03' 0;
+}
+
+.projects-intro-description {
+  margin: 0;
+  font-family: 'Pangea Afrikan VAR 2.003', -apple-system, system-ui, sans-serif;
+  font-size: 34.422px;
+  font-weight: 300;
+  line-height: 41.307px;
+  letter-spacing: -1.0327px;
+  color: #3c3c3c;
+  font-variation-settings: 'ital' 0, 'XTDR' 50, 'APRT' 100, 'SPAC' 40, 'INKT' 1, 'SS01' 1, 'SS02' 0, 'SS03' 0;
+}
+
+/* Word animation styles */
+.word-wrapper {
+  display: inline-block;
+  overflow: hidden;
+}
+
+.word {
+  display: inline-block;
 }
 
 .projects-inner {
@@ -259,6 +407,44 @@
 @media (max-width: 1024px) {
   .projects-container {
     border-radius: 0;
+  }
+
+  .projects-intro-content {
+    padding: 40px;
+  }
+
+  .projects-intro-header {
+    flex-direction: column;
+    gap: 30px;
+    align-items: flex-start;
+  }
+
+  .polaroid-container {
+    margin-top: 0;
+    transform: scale(0.85);
+    transform-origin: left top;
+  }
+
+  .projects-intro-title-p {
+    font-size: 100px;
+    letter-spacing: -2px;
+    padding-right: 3px;
+  }
+
+  .projects-intro-title-rest {
+    font-size: 85px;
+    letter-spacing: -4px;
+  }
+
+  .title-mask {
+    padding: 10px 15px 25px 15px;
+    margin: -10px -15px -25px -15px;
+  }
+
+  .projects-intro-description {
+    font-size: 20px;
+    line-height: 28px;
+    letter-spacing: -0.6px;
   }
 
   .projects-inner {
