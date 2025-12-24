@@ -1,0 +1,605 @@
+/* ===========================
+   Guardian App Page CSS Variables - Copied from Synechron Cube
+   =========================== */
+.guardian-app-page {
+  /* Colors */
+  --guardian-page-bg: #ffffff;
+  --guardian-title-color: #000000;
+  --guardian-metadata-primary-color: #363636;
+  --guardian-metadata-secondary-color: #919191;
+  --guardian-description-color: #3c3c3c;
+  --guardian-skill-color: #3c3c3c;
+  --guardian-quote-color: #3c3c3c;
+  --guardian-hero-bg: #000000;
+
+  /* Spacing - Matching Synechron */
+  --guardian-container-padding-mobile: 20px;
+  --guardian-container-padding-desktop: 20px;
+  --guardian-container-padding-top-mobile: 80px;
+  --guardian-container-padding-top-desktop: 112px;
+  --guardian-container-padding-bottom: 96px;
+  --guardian-section-gap: 20px;
+
+  /* Header Section - Matching Synechron */
+  --guardian-header-gap: 80px;
+  --guardian-title-section-gap: 16px;
+  --guardian-metadata-gap-mobile: 12px;
+  --guardian-metadata-gap-desktop: 16px;
+
+  /* Hero Image - Matching Synechron */
+  --guardian-hero-height-mobile: 400px;
+  --guardian-hero-height-md: 600px;
+  --guardian-hero-height-lg: 700px;
+  --guardian-hero-border-radius-mobile: 20px;
+  --guardian-hero-border-radius-desktop: 35px;
+
+  /* Bio & Skills - Matching Synechron */
+  --guardian-bio-skills-gap-mobile: 32px;
+  --guardian-bio-skills-gap-lg: 48px;
+  --guardian-description-max-width: 660px;
+  --guardian-skills-gap: 4px;
+
+  /* Quote Section */
+  --guardian-quote-padding-mobile: 24px;
+  --guardian-quote-padding-desktop: 208px;
+  --guardian-quote-max-width: 800px;
+
+  /* Typography - From Synechron/Figma */
+  --guardian-metadata-font-size-mobile: 18px;
+  --guardian-metadata-font-size-desktop: 21.801px;
+  --guardian-metadata-font-weight-medium: 500;
+  --guardian-metadata-letter-spacing: -0.03em;
+  --guardian-metadata-line-height: 3.106;
+
+  --guardian-title-font-size-mobile: 60px;
+  --guardian-title-font-size-md: 80px;
+  --guardian-title-font-size-lg: 55.076px;
+  --guardian-title-line-height: 0.75;
+  --guardian-title-letter-spacing: -0.03em;
+
+  --guardian-description-font-size-mobile: 24px;
+  --guardian-description-font-size-md: 26px;
+  --guardian-description-font-size-lg: 26px;
+  --guardian-description-font-weight: 300;
+  --guardian-description-line-height: 1.269;
+  --guardian-description-letter-spacing: -0.03em;
+
+  --guardian-skill-font-size-mobile: 24px;
+  --guardian-skill-font-size-md: 26px;
+  --guardian-skill-font-size-lg: 26px;
+  --guardian-skill-font-weight: 300;
+  --guardian-skill-letter-spacing: -0.03em;
+  --guardian-skill-line-height: 1.269;
+}
+
+/* ===========================
+   Page Container
+   =========================== */
+.guardian-app-page {
+  min-height: 100vh;
+  background: var(--guardian-page-bg);
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.guardian-app-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: var(--guardian-container-padding-top-mobile) var(--guardian-container-padding-mobile);
+  padding-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--guardian-section-gap);
+  will-change: transform;
+  background: var(--guardian-page-bg);
+  position: relative;
+  z-index: 2;
+}
+
+@media (min-width: 768px) {
+  .guardian-app-container {
+    padding-top: var(--guardian-container-padding-top-desktop);
+  }
+}
+
+/* ===========================
+   Header Section - Copied from Synechron Cube
+   =========================== */
+.guardian-app-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--guardian-header-gap);
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.guardian-app-title-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--guardian-title-section-gap);
+  text-align: center;
+}
+
+.guardian-app-metadata {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--guardian-metadata-gap-mobile);
+  font-family: 'Pangea Afrikan VAR 2.003', sans-serif;
+  font-weight: var(--guardian-metadata-font-weight-medium);
+  font-size: var(--guardian-metadata-font-size-mobile);
+  text-transform: capitalize;
+  letter-spacing: var(--guardian-metadata-letter-spacing);
+  line-height: var(--guardian-metadata-line-height);
+}
+
+@media (min-width: 768px) {
+  .guardian-app-metadata {
+    gap: var(--guardian-metadata-gap-desktop);
+    font-size: var(--guardian-metadata-font-size-desktop);
+  }
+}
+
+.guardian-app-metadata-item {
+  color: var(--guardian-metadata-primary-color);
+}
+
+.guardian-app-metadata-secondary {
+  color: var(--guardian-metadata-secondary-color);
+}
+
+.guardian-app-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: var(--guardian-title-font-size-mobile);
+  line-height: var(--guardian-title-line-height);
+  letter-spacing: var(--guardian-title-letter-spacing);
+  color: var(--guardian-title-color);
+  margin: 0.5rem 0 0 0;
+  font-weight: 400;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .guardian-app-title {
+    font-size: var(--guardian-title-font-size-md);
+    line-height: 1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .guardian-app-title {
+    font-size: var(--guardian-title-font-size-lg);
+    line-height: var(--guardian-title-line-height);
+  }
+}
+
+/* ===========================
+   Hero Image - Copied from Synechron Cube
+   =========================== */
+.guardian-app-hero-image-container {
+  width: 100%;
+  height: var(--guardian-hero-height-mobile);
+  background: var(--guardian-hero-bg);
+  border-radius: var(--guardian-hero-border-radius-mobile);
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 768px) {
+  .guardian-app-hero-image-container {
+    height: var(--guardian-hero-height-md);
+    border-radius: var(--guardian-hero-border-radius-desktop);
+  }
+}
+
+@media (min-width: 1024px) {
+  .guardian-app-hero-image-container {
+    height: var(--guardian-hero-height-lg);
+  }
+}
+
+.guardian-app-hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.9;
+}
+
+/* ===========================
+   Bio & Skills Section - Copied from Synechron Cube
+   =========================== */
+.guardian-app-bio-skills {
+  display: flex;
+  flex-direction: column;
+  gap: var(--guardian-bio-skills-gap-mobile);
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .guardian-app-bio-skills {
+    gap: var(--guardian-bio-skills-gap-lg);
+  }
+}
+
+.guardian-app-description {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.guardian-app-description-text {
+  max-width: var(--guardian-description-max-width);
+  font-family: 'Pangea Afrikan VAR 2.003', sans-serif;
+  font-weight: var(--guardian-description-font-weight);
+  font-size: var(--guardian-description-font-size-mobile);
+  color: var(--guardian-description-color);
+  line-height: var(--guardian-description-line-height);
+  letter-spacing: var(--guardian-description-letter-spacing);
+  text-align: left;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .guardian-app-description-text {
+    font-size: var(--guardian-description-font-size-md);
+  }
+}
+
+@media (min-width: 1024px) {
+  .guardian-app-description-text {
+    font-size: var(--guardian-description-font-size-lg);
+  }
+}
+
+.guardian-app-skills {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--guardian-skills-gap);
+}
+
+.guardian-app-skill {
+  font-family: 'Pangea Afrikan VAR 2.003', sans-serif;
+  font-weight: var(--guardian-skill-font-weight);
+  font-size: var(--guardian-skill-font-size-mobile);
+  color: var(--guardian-skill-color);
+  letter-spacing: var(--guardian-skill-letter-spacing);
+  text-align: right;
+  line-height: var(--guardian-skill-line-height);
+}
+
+@media (min-width: 768px) {
+  .guardian-app-skill {
+    font-size: var(--guardian-skill-font-size-md);
+  }
+}
+
+@media (min-width: 1024px) {
+  .guardian-app-skill {
+    font-size: var(--guardian-skill-font-size-lg);
+  }
+}
+
+/* ===========================
+   Image Section - Full Width, Stacked
+   =========================== */
+.guardian-app-image-section {
+  width: 100%;
+}
+
+.guardian-app-section-image {
+  width: 100%;
+  max-height: 400px;
+  display: block;
+  border-radius: 20px;
+  object-fit: cover;
+}
+
+@media (min-width: 768px) {
+  .guardian-app-section-image {
+    max-height: 500px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .guardian-app-section-image {
+    max-height: 600px;
+    border-radius: 34px;
+  }
+}
+
+/* ===========================
+   Timeline Section
+   =========================== */
+.guardian-app-timeline-section {
+  width: 100%;
+}
+
+/* ===========================
+   Quote Section
+   =========================== */
+.guardian-app-quote {
+  width: 100%;
+  padding: var(--guardian-quote-padding-mobile);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .guardian-app-quote {
+    padding-left: var(--guardian-quote-padding-desktop);
+    padding-right: var(--guardian-quote-padding-desktop);
+  }
+}
+
+.guardian-app-quote-text {
+  margin: 0;
+  max-width: var(--guardian-quote-max-width);
+  text-align: center;
+  font-family: 'Pangea Afrikan VAR 2.003', -apple-system, system-ui, sans-serif;
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--guardian-quote-color);
+  font-variation-settings: 'ital' 0, 'XTDR' 50, 'APRT' 100, 'SPAC' 40, 'INKT' 1, 'SS01' 1, 'SS02' 0, 'SS03' 0;
+}
+
+@media (min-width: 768px) {
+  .guardian-app-quote-text {
+    font-size: 30px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .guardian-app-quote-text {
+    font-size: 34px;
+  }
+}
+
+/* ===========================
+   Phone Screenshots Grid
+   =========================== */
+.guardian-app-phone-grid {
+  width: 100%;
+}
+
+.guardian-app-phone-grid-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .guardian-app-phone-grid-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .guardian-app-phone-grid-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.guardian-app-phone-grid-item {
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--guardian-hero-bg);
+}
+
+@media (min-width: 1024px) {
+  .guardian-app-phone-grid-item {
+    border-radius: 34px;
+  }
+}
+
+.guardian-app-phone-grid-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* ===========================
+   Bento Section
+   =========================== */
+.guardian-app-bento-section {
+  width: 100%;
+}
+
+.guardian-app-content-module {
+  /* Additional spacing if needed */
+}
+
+/* ===========================
+   Three Image Section
+   =========================== */
+.guardian-app-three-image-section {
+  width: 100%;
+}
+
+.guardian-app-three-image-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .guardian-app-three-image-container {
+    flex-direction: row;
+    gap: 20px;
+  }
+}
+
+.guardian-app-three-image-item {
+  flex: 1;
+  width: 100%;
+  background: #000000;
+  border-radius: 20px;
+  overflow: hidden;
+  height: auto;
+}
+
+@media (min-width: 768px) {
+  .guardian-app-three-image-item {
+    height: 400px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .guardian-app-three-image-item {
+    height: 560px;
+    border-radius: 34px;
+  }
+}
+
+.guardian-app-three-image-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ===========================
+   Single Image Section (Left/Right Aligned)
+   =========================== */
+.guardian-app-single-image-section {
+  width: 100%;
+  display: flex;
+}
+
+.guardian-app-single-image-left {
+  justify-content: flex-start;
+}
+
+.guardian-app-single-image-right {
+  justify-content: flex-end;
+}
+
+.guardian-app-single-image-item {
+  width: 100%;
+  background: #000000;
+  border-radius: 20px;
+  overflow: hidden;
+  height: auto;
+}
+
+@media (min-width: 768px) {
+  .guardian-app-single-image-item {
+    width: calc((100% - 40px) / 3);
+    height: 400px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .guardian-app-single-image-item {
+    height: 560px;
+    border-radius: 34px;
+  }
+}
+
+.guardian-app-single-image-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ===========================
+   Two Image Section (Left/Right Aligned)
+   =========================== */
+.guardian-app-two-image-section {
+  width: 100%;
+  display: flex;
+}
+
+.guardian-app-two-image-left {
+  justify-content: flex-start;
+}
+
+.guardian-app-two-image-right {
+  justify-content: flex-end;
+}
+
+.guardian-app-two-image-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .guardian-app-two-image-container {
+    flex-direction: row;
+    gap: 20px;
+  }
+}
+
+.guardian-app-two-image-item {
+  width: 100%;
+  background: #000000;
+  border-radius: 20px;
+  overflow: hidden;
+  height: auto;
+}
+
+@media (min-width: 768px) {
+  .guardian-app-two-image-item {
+    width: calc((100% - 40px) / 3);
+    height: 400px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .guardian-app-two-image-item {
+    height: 560px;
+    border-radius: 34px;
+  }
+}
+
+.guardian-app-two-image-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.guardian-app-reveal-stage {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.guardian-app-reveal-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  will-change: transform;
+}
+
+.guardian-app-reveal-inner {
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+}
+
+.guardian-app-other-projects-stage {
+  background: transparent;
+  z-index: 0;
+  margin-top: -100vh;
+}
+
+.guardian-app-footer-layer {
+  position: relative;
+  z-index: 2;
+}

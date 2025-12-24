@@ -4,7 +4,7 @@
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  width: min(var(--content-total-width), var(--page-max-width, 1400px));
+  width: min(var(--content-total-width, var(--page-width, 94vw)), var(--page-max-width, 1400px));
 
   display: flex;
   align-items: center;

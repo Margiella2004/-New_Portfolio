@@ -28,6 +28,8 @@ export default function MakeCodeLiveSection() {
               src="/make-code-live-portrait.png"
               alt="Portrait of Jonathan Ramesh"
               className="make-live-portrait-image"
+              loading="lazy"
+              decoding="async"
             />
           </div>
         </div>

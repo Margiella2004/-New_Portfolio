@@ -27,6 +27,8 @@ export default function NumberGrid({ image }) {
         src={image}
         alt="Grid Background"
         className="number-grid-image"
+        loading="lazy"
+        decoding="async"
       />
 
       <div className="number-grid-overlay" />

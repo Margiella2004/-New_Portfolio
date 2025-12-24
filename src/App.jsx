@@ -814,6 +814,7 @@ function App() {
     return () => ctx.revert()
   }, [introComplete])
 
+
   return (
     <div ref={containerRef} className="stage" style={{ '--content-total-width': widthFormula }}>
       <Header innerRef={headerRef} activeSection={activeSection} />
