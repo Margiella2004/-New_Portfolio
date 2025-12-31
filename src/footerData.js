@@ -1,6 +1,6 @@
 export const footerData = {
   email: 'jonathanrameshdesign@gmail.com',
-  projects: ['Synechron Cube', 'Synechron City', 'SeeSaw Redesign', 'Wander App'],
+  projects: ['Synechron Cube', 'Guardian App', 'Wander App'],
   social: [
     { label: 'RESUME', url: '/texture/resume.pdf' },
     { label: 'BEHANCE', url: 'https://behance.net/jonathanramesh' },

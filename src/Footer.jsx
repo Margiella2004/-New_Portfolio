@@ -1,4 +1,5 @@
 import './Footer.css'
+import logoSvg from '../img_assets/logo.svg'
 
 const baseOrigin =
   typeof window !== 'undefined' && window.location?.origin
@@ -68,12 +69,7 @@ export function Footer({ data = {} }) {
         </div>
 
         <div style={styles.bottomRow}>
-          <div style={styles.wordmark}>
-            <span style={styles.wordmarkItalic}>J</span>
-            <span style={styles.wordmarkLight}>onathan </span>
-            <span style={styles.wordmarkItalic}>R</span>
-            <span style={styles.wordmarkLight}>amesh</span>
-          </div>
+          <img src={logoSvg} alt="Logo" style={styles.logo} />
           <div style={styles.copyright}>{sanitizeText(copyright)}</div>
         </div>
       </div>
@@ -169,18 +165,10 @@ const styles = {
     alignItems: 'flex-end',
     paddingTop: '26.813px',
   },
-  wordmark: {
-    fontFamily: 'Instrument Serif, serif',
-    fontStyle: 'italic',
-    fontSize: '138.709px',
-    letterSpacing: '-9.7096px',
-  },
-  wordmarkItalic: {
-    fontStyle: 'italic',
-  },
-  wordmarkLight: {
-    fontFamily: 'Pangea Afrikan, sans-serif',
-    fontWeight: 300,
+  logo: {
+    height: '200px',
+    width: 'auto',
+    display: 'block',
   },
   copyright: {
     fontFamily: 'Instrument Serif, serif',
