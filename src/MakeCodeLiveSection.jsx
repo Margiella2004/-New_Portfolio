@@ -11,26 +11,30 @@ export default function MakeCodeLiveSection() {
   return (
     <section ref={sectionRef} className="make-live-section">
       <div className="make-live-inner">
-        <div className="make-live-divider" aria-hidden="true" />
+        <div className="make-live-top">
+          <div className="make-live-divider make-live-divider-desktop" aria-hidden="true" />
 
-        <div className="make-live-hero">
-          <div className="make-live-text">
-            <h2>
-              Jonathan Ramesh is a Interdisciplinary Designer focusing on UX
-              Design and Engineering. Jonathan combines his coding experince and
-              design education to create products focused on bringing back human
-              centered design
-            </h2>
-          </div>
+          <div className="make-live-hero">
+            <div className="make-live-portrait">
+              <img
+                src="/make-code-live-portrait.png"
+                alt="Portrait of Jonathan Ramesh"
+                className="make-live-portrait-image"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
 
-          <div className="make-live-portrait">
-            <img
-              src="/make-code-live-portrait.png"
-              alt="Portrait of Jonathan Ramesh"
-              className="make-live-portrait-image"
-              loading="lazy"
-              decoding="async"
-            />
+            <div className="make-live-divider make-live-divider-mobile" aria-hidden="true" />
+
+            <div className="make-live-text">
+              <h2>
+                Jonathan Ramesh is a Interdisciplinary Designer focusing on UX
+                Design and Engineering. Jonathan combines his coding experince and
+                design education to create products focused on bringing back human
+                centered design
+              </h2>
+            </div>
           </div>
         </div>
 
@@ -55,12 +59,6 @@ export default function MakeCodeLiveSection() {
             </div>
           </div>
 
-          <a className="make-live-cta" href="#contact" aria-label="Start a project together">
-            <span>lets get working</span>
-            <svg viewBox="0 0 38 38" className="make-live-cta-icon" aria-hidden="true">
-              <path d={arrowPath} fill="currentColor" />
-            </svg>
-          </a>
         </div>
       </div>
     </section>

@@ -78,6 +78,8 @@ export default function Projects() {
   const [activeId, setActiveId] = useState(projects[0].id)
   const [isMobile, setIsMobile] = useState(false)
   const [hasUserInteracted, setHasUserInteracted] = useState(false)
+  const [cutoutRect, setCutoutRect] = useState(null)
+  const containerRef = useRef(null)
   const indicatorRef = useRef(null)
   const previewRef = useRef(null)
   const introTitleRef = useRef(null)
@@ -112,6 +114,41 @@ export default function Projects() {
     [activeId]
   )
   const stride = isMobile ? 65 : 82
+
+  useLayoutEffect(() => {
+    if (!containerRef.current) return
+
+    const updateCutout = () => {
+      const container = containerRef.current
+      if (!container) return
+
+      const styles = getComputedStyle(container)
+      const padding = parseFloat(styles.getPropertyValue('--projects-intro-padding')) || 65
+      const cutoutHeight = parseFloat(styles.getPropertyValue('--projects-cutout-height')) || 300
+      const cutoutY = parseFloat(styles.getPropertyValue('--projects-cutout-y')) || 120
+      const cutoutRadius = parseFloat(styles.getPropertyValue('--projects-cutout-radius')) || 16
+      const containerWidth = container.clientWidth
+      const containerHeight = Math.max(container.scrollHeight, container.clientHeight)
+      const cutoutWidth = Math.max(0, containerWidth - padding * 2)
+
+      setCutoutRect({
+        x: padding,
+        y: cutoutY,
+        width: cutoutWidth,
+        height: cutoutHeight,
+        radius: cutoutRadius,
+        containerWidth,
+        containerHeight,
+      })
+    }
+
+    updateCutout()
+
+    const resizeObserver = new ResizeObserver(updateCutout)
+    resizeObserver.observe(containerRef.current)
+
+    return () => resizeObserver.disconnect()
+  }, [])
 
   useLayoutEffect(() => {
     if (!indicatorRef.current) return
@@ -241,7 +278,48 @@ export default function Projects() {
   }
 
   return (
-    <section className="projects-container">
+    <section
+      ref={containerRef}
+      className={`projects-container${cutoutRect ? ' has-cutout' : ''}`}
+    >
+      <svg
+        className="projects-cutout-defs"
+        aria-hidden="true"
+        focusable="false"
+        width="0"
+        height="0"
+      >
+        <defs>
+          <mask
+            id="projects-cutout-mask"
+            maskUnits="userSpaceOnUse"
+            maskContentUnits="userSpaceOnUse"
+            x="0"
+            y="0"
+            width={cutoutRect?.containerWidth || 0}
+            height={cutoutRect?.containerHeight || 0}
+          >
+            <rect
+              x="0"
+              y="0"
+              width={cutoutRect?.containerWidth || 0}
+              height={cutoutRect?.containerHeight || 0}
+              fill="#ffffff"
+            />
+            {cutoutRect && (
+              <rect
+                x={cutoutRect.x}
+                y={cutoutRect.y}
+                width={cutoutRect.width}
+                height={cutoutRect.height}
+                rx={cutoutRect.radius}
+                ry={cutoutRect.radius}
+                fill="#000000"
+              />
+            )}
+          </mask>
+        </defs>
+      </svg>
       {/* Intro Section - Full Viewport */}
       <div className="projects-intro">
         <div className="projects-intro-content">

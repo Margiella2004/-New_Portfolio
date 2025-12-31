@@ -138,6 +138,7 @@ function ControlsRig({
       maxDistance={maxDistance}
       enablePan={enablePan}
       enableRotate={false}
+      enableZoom={false}
     />
   )
 }
@@ -240,9 +241,9 @@ function App() {
   const controls = useControls({
     Gradient: folder(
       {
-        colorA: { value: '#000000' },
-        colorB: { value: '#ffffff' },
-        colorC: { value: '#b7d7ff' },
+        colorA: { value: '#6218a7' },
+        colorB: { value: '#ff0c0c' },
+        colorC: { value: '#ffffff' },
         stopAB: { value: 0.91, min: 0.05, max: 0.95, step: 0.01 },
         stopBC: { value: 0.76, min: 0.1, max: 0.99, step: 0.01 },
         softness: { value: 0.0, min: 0.0, max: 0.5, step: 0.005 },
@@ -385,10 +386,9 @@ function App() {
 
 
   const handleHeroPointerMove = (event) => {
-    if (!heroSectionRef.current) return
-    const rect = heroSectionRef.current.getBoundingClientRect()
-    const x = clamp01((event.clientX - rect.left) / rect.width)
-    const y = clamp01((event.clientY - rect.top) / rect.height)
+    // Use window dimensions since projects section covers hero
+    const x = clamp01(event.clientX / window.innerWidth)
+    const y = clamp01(event.clientY / window.innerHeight)
     mouseBloomTargetRef.current = { x, y }
   }
 
@@ -566,7 +566,7 @@ function App() {
   const effectiveBlur = introComplete ? controls.backdropBlur : animatedBlur
   const effectiveBloomThreshold = introComplete ? controls.bloomThreshold : animatedBloomThreshold
 
-  const mouseTrackingEnabled = introComplete && activeSection === 'home'
+  const mouseTrackingEnabled = introComplete && activeSection !== 'contact'
   const bloomMouseX = mouseTrackingEnabled ? (mouseBloom.x - 0.5) * 2 : 0
   const bloomMouseY = mouseTrackingEnabled ? (mouseBloom.y - 0.5) * 2 : 0
   const dynamicBloomIntensity = clamp(
@@ -608,121 +608,183 @@ function App() {
     const ctx = gsap.context(() => {
       if (!heroContentRef.current || !projectsRef.current) return
 
-      ScrollTrigger.create({
-        trigger: projectsRef.current,
-        start: 'top top',
-        end: 'top top',
-        onEnter: () => {
+      // Use matchMedia for responsive scroll triggers
+      ScrollTrigger.matchMedia({
+        // Desktop (1024px and up)
+        "(min-width: 1024px)": function() {
+          // Hero content fade - scrubbed with scroll
           gsap.to(heroContentRef.current, {
             opacity: 0,
-            duration: 0.4,
-            ease: 'power1.out',
+            ease: 'none',
+            scrollTrigger: {
+              trigger: projectsRef.current,
+              start: 'top bottom',
+              end: 'top center',
+              scrub: 1,
+              invalidateOnRefresh: true,
+            }
           })
+
+          const projectsContainer = projectsRef.current.querySelector('.projects-container')
+          if (projectsContainer) {
+            gsap.set(projectsContainer, { xPercent: 100 })
+
+            gsap.to(projectsContainer, {
+              xPercent: 0,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: projectsRef.current,
+                start: 'top top',
+                end: '+=1000',
+                scrub: true,
+                pin: true,
+                pinSpacing: true,
+                invalidateOnRefresh: true,
+              },
+            })
+          }
         },
-        onLeaveBack: () => {
+
+        // Tablet (768px - 1023px)
+        "(min-width: 768px) and (max-width: 1023px)": function() {
+          // Hero content fade - earlier trigger
           gsap.to(heroContentRef.current, {
-            opacity: 1,
-            duration: 0.4,
-            ease: 'power1.out',
+            opacity: 0,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: projectsRef.current,
+              start: 'top bottom',
+              end: 'top 60%',
+              scrub: 1,
+              invalidateOnRefresh: true,
+            }
           })
+
+          const projectsContainer = projectsRef.current.querySelector('.projects-container')
+          if (projectsContainer) {
+            gsap.set(projectsContainer, { xPercent: 100 })
+
+            gsap.to(projectsContainer, {
+              xPercent: 0,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: projectsRef.current,
+                start: 'top top',
+                end: '+=700',
+                scrub: true,
+                pin: true,
+                pinSpacing: true,
+                invalidateOnRefresh: true,
+              },
+            })
+          }
+        },
+
+        // Mobile (below 768px)
+        "(max-width: 767px)": function() {
+          // Hero content fade - earliest trigger
+          gsap.to(heroContentRef.current, {
+            opacity: 0,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: projectsRef.current,
+              start: 'top bottom',
+              end: 'top 70%',
+              scrub: 1,
+              invalidateOnRefresh: true,
+            }
+          })
+
+          const projectsContainer = projectsRef.current.querySelector('.projects-container')
+          if (projectsContainer) {
+            gsap.set(projectsContainer, { xPercent: 100 })
+
+            gsap.to(projectsContainer, {
+              xPercent: 0,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: projectsRef.current,
+                start: 'top top',
+                end: '+=500',
+                scrub: true,
+                pin: true,
+                pinSpacing: true,
+                invalidateOnRefresh: true,
+              },
+            })
+          }
         },
       })
 
-      const projectsContainer = projectsRef.current.querySelector('.projects-container')
-      if (projectsContainer) {
-        gsap.set(projectsContainer, { xPercent: 100 })
-
-        gsap.to(projectsContainer, {
-          xPercent: 0,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: projectsRef.current,
-            start: 'top top',
-            end: '+=600',
-            scrub: true,
-            pin: true,
-            pinSpacing: true,
-            invalidateOnRefresh: true,
-          },
-        })
-      }
-
-      // FOV increase as scrolling from hero to projects
-      if (heroSectionRef.current && projectsRef.current) {
-        ScrollTrigger.create({
-          trigger: projectsRef.current,
-          start: 'top bottom',
-          end: 'top top',
-          id: 'fov-increase',
-          scrub: 1,
-          onUpdate: (self) => {
-            const fovIncrease = self.progress * 5 // Increase FOV by max 5
-            setScrollFov(fovIncrease)
-          }
-        })
-      }
+      // FOV animation removed - FOV now stays constant during scroll
 
       if (aboutRef.current && footerRef.current) {
-        // Pin the about section - first for FOV animation, THEN footer scrolls over
-        const fovAnimationDistance = (window.innerHeight * 1.5) + 200
+        // Pin the about section while footer scrolls over it
         const footerHeight = footerRef.current.offsetHeight
 
+        // Responsive hold distances
+        const isMobile = window.matchMedia("(max-width: 767px)").matches
+        const isTablet = window.matchMedia("(min-width: 768px) and (max-width: 1023px)").matches
+
+        let holdDistance
+        if (isMobile) {
+          holdDistance = window.innerHeight * 1.5 // Earlier on mobile
+        } else if (isTablet) {
+          holdDistance = window.innerHeight * 2.2 // Earlier on tablet
+        } else {
+          holdDistance = window.innerHeight * 3.2 // Desktop
+        }
+
+        const footerTotalDistance = holdDistance + footerHeight
+
         gsap.set(aboutRef.current, { autoAlpha: 0 })
+
+        // Initially hide footer below viewport
+        gsap.set(footerRef.current, { transform: `translateY(${footerHeight}px)` })
 
         ScrollTrigger.create({
           trigger: aboutRef.current,
           start: 'top top',
-          end: () => `+=${fovAnimationDistance + footerHeight}`,
+          end: () => `+=${footerTotalDistance}`,
           pin: true,
-          pinSpacing: false,
+          pinSpacing: true,
           id: 'about-pin',
           refreshPriority: 1,
           onEnter: () => gsap.set(aboutRef.current, { autoAlpha: 1 }),
           onLeaveBack: () => gsap.set(aboutRef.current, { autoAlpha: 0 }),
         })
 
-        // FOV decrease - completes BEFORE footer starts scrolling
+        // Control footer position - scroll it up to reveal
         ScrollTrigger.create({
           trigger: aboutRef.current,
           start: 'top top',
-          end: () => `+=${fovAnimationDistance}`,
-          id: 'fov-decrease',
-          scrub: 1,
-          refreshPriority: 1,
-          onUpdate: (self) => {
-            const fovDecrease = 5 - (self.progress * 5)
-            setScrollFov(fovDecrease)
-          }
-        })
-
-        // Control footer position - keep it below viewport during FOV animation
-        ScrollTrigger.create({
-          trigger: aboutRef.current,
-          start: 'top top',
-          end: () => `+=${fovAnimationDistance + footerHeight}`,
+          end: () => `+=${footerTotalDistance}`,
           id: 'footer-reveal',
           scrub: true,
           refreshPriority: 1,
           onUpdate: (self) => {
-            // During first part (FOV animation): keep footer below viewport
-            // During second part: let footer scroll up
-            const fovProgress = Math.min(self.progress / (fovAnimationDistance / (fovAnimationDistance + footerHeight)), 1)
+            const footerEl = footerRef.current
+            if (!footerEl) return
 
-            if (fovProgress < 1) {
-              // FOV still animating - keep footer below viewport
-              const translateY = footerHeight
-              footerRef.current.style.transform = `translateY(${translateY}px)`
+            // Keep footer hidden during hold distance, then reveal
+            const holdProgress = holdDistance / footerTotalDistance
+
+            if (self.progress < holdProgress) {
+              // Still in hold phase - keep footer below viewport
+              footerEl.style.transform = `translateY(${footerHeight}px)`
             } else {
-              // FOV done - calculate footer scroll
-              const footerProgress = (self.progress - (fovAnimationDistance / (fovAnimationDistance + footerHeight))) / (footerHeight / (fovAnimationDistance + footerHeight))
-              const translateY = footerHeight * (1 - footerProgress)
-              footerRef.current.style.transform = `translateY(${translateY}px)`
+              // Calculate reveal progress after hold
+              const revealProgress = (self.progress - holdProgress) / (1 - holdProgress)
+              const translateY = footerHeight * (1 - revealProgress)
+              footerEl.style.transform = `translateY(${translateY}px)`
             }
           },
           onLeave: () => {
+            if (!footerRef.current) return
             footerRef.current.style.transform = 'translateY(0px)'
           },
           onLeaveBack: () => {
+            if (!footerRef.current) return
             footerRef.current.style.transform = `translateY(${footerHeight}px)`
           }
         })
@@ -736,11 +798,24 @@ function App() {
         if (aboutSection && aboutText && aboutPortrait && aboutLists && aboutCta) {
           gsap.set([aboutText, aboutPortrait, aboutLists, aboutCta], { opacity: 0 })
 
+          // Responsive start and end positions
+          let startOffset, endDistance
+          if (isMobile) {
+            startOffset = 150
+            endDistance = 500
+          } else if (isTablet) {
+            startOffset = 200
+            endDistance = 700
+          } else {
+            startOffset = 300
+            endDistance = 900
+          }
+
           const aboutTimeline = gsap.timeline({
             scrollTrigger: {
               trigger: aboutSection,
-              start: 'top top+=300',
-              end: '+=900',
+              start: `top top+=${startOffset}`,
+              end: `+=${endDistance}`,
               scrub: true,
               id: 'about-fadein',
               invalidateOnRefresh: true,
@@ -803,10 +878,10 @@ function App() {
           trigger: footerRef.current,
           start: 'top bottom',
           end: 'bottom top',
-          onEnter: () => canvasWrapperRef.current.classList.add('canvas-disabled'),
-          onEnterBack: () => canvasWrapperRef.current.classList.add('canvas-disabled'),
-          onLeaveBack: () => canvasWrapperRef.current.classList.remove('canvas-disabled'),
-          onLeave: () => canvasWrapperRef.current.classList.remove('canvas-disabled'),
+          onEnter: () => canvasWrapperRef.current?.classList.add('canvas-disabled'),
+          onEnterBack: () => canvasWrapperRef.current?.classList.add('canvas-disabled'),
+          onLeaveBack: () => canvasWrapperRef.current?.classList.remove('canvas-disabled'),
+          onLeave: () => canvasWrapperRef.current?.classList.remove('canvas-disabled'),
         })
       }
     }, containerRef)
@@ -816,7 +891,13 @@ function App() {
 
 
   return (
-    <div ref={containerRef} className="stage" style={{ '--content-total-width': widthFormula }}>
+    <div
+      ref={containerRef}
+      className="stage"
+      style={{ '--content-total-width': widthFormula }}
+      onPointerMove={handleHeroPointerMove}
+      onPointerLeave={handleHeroPointerLeave}
+    >
       <Header innerRef={headerRef} activeSection={activeSection} />
       <Leva collapsed={false} />
 
@@ -825,8 +906,6 @@ function App() {
         ref={heroSectionRef}
         id="home"
         className="hero-section"
-        onPointerMove={handleHeroPointerMove}
-        onPointerLeave={handleHeroPointerLeave}
       >
         <HeroTextOverlay opacity={introTextOpacity} />
         <div
