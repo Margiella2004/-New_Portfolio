@@ -23,3 +23,10 @@ body {
   background: #ffffff;
   scroll-behavior: smooth;
 }
+
+/* Hide Leva panel completely */
+.leva-c-hFtYAm,
+.leva__root,
+[class*="leva"] {
+  display: none !important;
+}

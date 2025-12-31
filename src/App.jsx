@@ -951,7 +951,6 @@ function App() {
       onPointerLeave={handleHeroPointerLeave}
     >
       <Header innerRef={headerRef} activeSection={activeSection} />
-      {import.meta.env.DEV && <Leva collapsed={false} />}
 
       {/* Sticky Hero Section */}
       <div

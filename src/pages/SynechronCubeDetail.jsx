@@ -122,7 +122,6 @@ export default function SynechronCubeDetail() {
 
   return (
     <>
-      {import.meta.env.DEV && <Leva collapsed={false} />}
       <ProjectDetailHeader />
       <main
         className="synechron-cube-page"
