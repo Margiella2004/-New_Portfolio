@@ -66,6 +66,7 @@ canvas {
   width: 100%;
   min-height: 100vh;
   overflow: hidden;
+  pointer-events: none;
 }
 
 .footer-layer {

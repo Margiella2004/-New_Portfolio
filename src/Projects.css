@@ -277,6 +277,7 @@
   text-align: left;
   cursor: pointer;
   transition: opacity 0.3s ease;
+  pointer-events: auto;
 }
 
 .projects-item:hover {
@@ -383,6 +384,7 @@
   cursor: pointer;
   padding: 0;
   transition: background-color 0.2s ease, transform 0.2s ease;
+  pointer-events: auto;
 }
 
 .project-cta:hover {

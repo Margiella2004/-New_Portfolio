@@ -230,6 +230,7 @@ function App() {
   const [animatedBloomThreshold, setAnimatedBloomThreshold] = useState(1.13)
   const [introComplete, setIntroComplete] = useState(false)
   const [scrollFov, setScrollFov] = useState(0)
+  const [scrollStopBC, setScrollStopBC] = useState(0)
   const [activeSection, setActiveSection] = useState('home')
   const [mouseBloom, setMouseBloom] = useState({ x: 0.5, y: 0.5 })
   const textFadeStartedRef = useRef(false)
@@ -612,18 +613,35 @@ function App() {
       ScrollTrigger.matchMedia({
         // Desktop (1024px and up)
         "(min-width: 1024px)": function() {
-          // Hero content fade - REMOVED (keeping content visible)
-          // gsap.to(heroContentRef.current, {
-          //   opacity: 0,
-          //   ease: 'none',
-          //   scrollTrigger: {
-          //     trigger: projectsRef.current,
-          //     start: 'top bottom',
-          //     end: 'top center',
-          //     scrub: 1,
-          //     invalidateOnRefresh: true,
-          //   }
-          // })
+          // Hero content fade during stopBC animation
+          gsap.to(heroContentRef.current, {
+            opacity: 0,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: projectsRef.current,
+              start: 'top top',
+              end: '+=1400',
+              scrub: 1,
+              invalidateOnRefresh: true,
+            }
+          })
+
+          // Animate stopBC gradient value to 0
+          const stopBCObj = { value: 0 }
+          gsap.to(stopBCObj, {
+            value: 0.76,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: projectsRef.current,
+              start: 'top top',
+              end: '+=1400',
+              scrub: 1,
+              invalidateOnRefresh: true,
+            },
+            onUpdate: () => {
+              setScrollStopBC(stopBCObj.value)
+            }
+          })
 
           const projectsContainer = projectsRef.current.querySelector('.projects-container')
           if (projectsContainer) {
@@ -647,18 +665,35 @@ function App() {
 
         // Tablet (768px - 1023px)
         "(min-width: 768px) and (max-width: 1023px)": function() {
-          // Hero content fade - REMOVED (keeping content visible)
-          // gsap.to(heroContentRef.current, {
-          //   opacity: 0,
-          //   ease: 'none',
-          //   scrollTrigger: {
-          //     trigger: projectsRef.current,
-          //     start: 'top bottom',
-          //     end: 'top 60%',
-          //     scrub: 1,
-          //     invalidateOnRefresh: true,
-          //   }
-          // })
+          // Hero content fade during stopBC animation
+          gsap.to(heroContentRef.current, {
+            opacity: 0,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: projectsRef.current,
+              start: 'top top',
+              end: '+=1400',
+              scrub: 1,
+              invalidateOnRefresh: true,
+            }
+          })
+
+          // Animate stopBC gradient value to 0
+          const stopBCObj = { value: 0 }
+          gsap.to(stopBCObj, {
+            value: 0.76,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: projectsRef.current,
+              start: 'top top',
+              end: '+=1400',
+              scrub: 1,
+              invalidateOnRefresh: true,
+            },
+            onUpdate: () => {
+              setScrollStopBC(stopBCObj.value)
+            }
+          })
 
           const projectsContainer = projectsRef.current.querySelector('.projects-container')
           if (projectsContainer) {
@@ -682,18 +717,35 @@ function App() {
 
         // Mobile (below 768px)
         "(max-width: 767px)": function() {
-          // Hero content fade - REMOVED (keeping content visible)
-          // gsap.to(heroContentRef.current, {
-          //   opacity: 0,
-          //   ease: 'none',
-          //   scrollTrigger: {
-          //     trigger: projectsRef.current,
-          //     start: 'top bottom',
-          //     end: 'top 70%',
-          //     scrub: 1,
-          //     invalidateOnRefresh: true,
-          //   }
-          // })
+          // Hero content fade during stopBC animation
+          gsap.to(heroContentRef.current, {
+            opacity: 0,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: projectsRef.current,
+              start: 'top top',
+              end: '+=1400',
+              scrub: 1,
+              invalidateOnRefresh: true,
+            }
+          })
+
+          // Animate stopBC gradient value to 0
+          const stopBCObj = { value: 0 }
+          gsap.to(stopBCObj, {
+            value: 0.76,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: projectsRef.current,
+              start: 'top top',
+              end: '+=1400',
+              scrub: 1,
+              invalidateOnRefresh: true,
+            },
+            onUpdate: () => {
+              setScrollStopBC(stopBCObj.value)
+            }
+          })
 
           const projectsContainer = projectsRef.current.querySelector('.projects-container')
           if (projectsContainer) {
@@ -942,6 +994,7 @@ function App() {
           <Scene
             cubeProps={{
               ...controls,
+              stopBC: introComplete ? controls.stopBC - scrollStopBC : controls.stopBC,
               softness: dynamicSoftness,
               fresnelOffset: dynamicFresnelOffset,
             }}
