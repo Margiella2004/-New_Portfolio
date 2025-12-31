@@ -204,7 +204,7 @@
   right: 0;
   width: 280px;
   height: 100%;
-  background: rgba(30, 30, 40, 0.98);
+  background: #6F3C59;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);

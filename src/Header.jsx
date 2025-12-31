@@ -92,6 +92,13 @@ export default function Header({ innerRef, activeSection }) {
             >
               about me
             </a>
+            <a
+              href="#contact"
+              className={`mobile-nav-link${activeSection === 'contact' ? ' is-active' : ''}`}
+              onClick={handleNavClick('contact')}
+            >
+              contact me
+            </a>
           </nav>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import './Footer.css'
 import logoSvg from '../img_assets/logo.svg'
+import linkArrowImage from '../Svg/material-symbols-light_arrow-back.svg'
 
 const baseOrigin =
   typeof window !== 'undefined' && window.location?.origin
@@ -45,7 +46,7 @@ export function Footer({ data = {} }) {
                 rel="noreferrer"
               >
                 {label}
-                <span style={styles.socialArrow}>↗</span>
+                <img src={linkArrowImage} alt="" style={styles.socialArrow} />
               </a>
             )
           })}
@@ -53,7 +54,7 @@ export function Footer({ data = {} }) {
 
         <div style={styles.emailRow}>
           <div style={styles.smallLabel}>EMAIL</div>
-          <div style={styles.emailValue}>{sanitizeText(email)}</div>
+          <div className="footer-email-value" style={styles.emailValue}>{sanitizeText(email)}</div>
         </div>
 
         <div style={styles.projectsRow}>
@@ -62,7 +63,7 @@ export function Footer({ data = {} }) {
             {projects.map((project, index) => (
               <div key={project} style={styles.projectItem}>
                 <span style={styles.projectIndex}>0{index + 1}</span>
-                <span style={styles.projectName}>{sanitizeText(project)}</span>
+                <span className="footer-project-name" style={styles.projectName}>{sanitizeText(project)}</span>
               </div>
             ))}
           </div>
@@ -103,9 +104,12 @@ const styles = {
     opacity: '0.338',
   },
   socialArrow: {
-    fontSize: '13.41px',
+    width: '16.696px',
+    height: '16.696px',
     transform: 'rotate(-45deg)',
     display: 'inline-block',
+    filter: 'brightness(0) invert(1)',
+    opacity: '0.338',
   },
   smallLabel: {
     fontFamily: 'Pangea Afrikan, sans-serif',
@@ -145,12 +149,12 @@ const styles = {
   projectItem: {
     display: 'flex',
     gap: '8.938px',
-    alignItems: 'baseline',
+    alignItems: 'flex-start',
   },
   projectIndex: {
     fontFamily: 'Pangea Afrikan, sans-serif',
-    fontSize: '14.627px',
-    lineHeight: '18.639px',
+    fontSize: '12px',
+    lineHeight: '16px',
     letterSpacing: '-0.466px',
   },
   projectName: {

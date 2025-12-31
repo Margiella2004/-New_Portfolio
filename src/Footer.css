@@ -26,15 +26,42 @@
   }
 }
 
+@media (max-width: 1023px) {
+  .footer-social {
+    gap: 30px !important;
+  }
+
+  .footer-email-value {
+    font-size: 32px !important;
+    line-height: 40px !important;
+  }
+
+  .footer-project-name {
+    font-size: 32px !important;
+    line-height: 40px !important;
+  }
+}
+
 @media (max-width: 767px) {
   .module-footer {
     padding: 32px 16px !important;
   }
 
   .footer-social {
-    flex-direction: column !important;
+    flex-direction: row !important;
     gap: 20px !important;
     align-items: flex-start !important;
+    justify-content: flex-start !important;
+  }
+
+  .footer-email-value {
+    font-size: 28px !important;
+    line-height: 36px !important;
+  }
+
+  .footer-project-name {
+    font-size: 28px !important;
+    line-height: 36px !important;
   }
 
   .module-footer > div:nth-child(2),
