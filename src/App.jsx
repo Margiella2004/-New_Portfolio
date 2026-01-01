@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useThree } from '@react-three/fiber'
 import { RoundedBox, OrbitControls } from '@react-three/drei'
 import { EffectComposer, Bloom, TiltShift2, Noise } from '@react-three/postprocessing'
+import { Perf } from 'r3f-perf'
 import { Leva, useControls, folder } from 'leva'
 import { Color } from 'three'
 import { BlendFunction } from 'postprocessing'
@@ -96,6 +97,8 @@ function ControlsRig({
   minDistance,
   maxDistance,
   enablePan,
+  enableDamping = true,
+  dampingFactor = 0.1,
 }) {
   const controlsRef = useRef(null)
   const { camera } = useThree()
@@ -107,6 +110,7 @@ function ControlsRig({
   }, [targetX, targetY, targetZ])
 
   useEffect(() => {
+    if (!import.meta.env.DEV) return undefined
     const controls = controlsRef.current
     if (!controls) return undefined
 
@@ -132,8 +136,8 @@ function ControlsRig({
   return (
     <OrbitControls
       ref={controlsRef}
-      enableDamping
-      dampingFactor={0.1}
+      enableDamping={enableDamping}
+      dampingFactor={dampingFactor}
       minDistance={minDistance}
       maxDistance={maxDistance}
       enablePan={enablePan}
@@ -149,6 +153,10 @@ function Scene({
   bloomThreshold,
   bloomSmoothing,
   bloomRadius,
+  bloomLevels,
+  bloomMipmapBlur,
+  bloomResolutionScale,
+  composerMultisampling,
   blurEnabled,
   blurStrength,
   blurTaper,
@@ -166,9 +174,19 @@ function Scene({
   minDistance,
   maxDistance,
   enablePan,
+  dpr,
+  lowPowerMode,
+  showPerf,
 }) {
   return (
-    <Canvas camera={{ position: [camX, camY, camZ], fov }}>
+    <Canvas
+      camera={{ position: [camX, camY, camZ], fov }}
+      dpr={dpr}
+      gl={{
+        antialias: !lowPowerMode,
+        powerPreference: lowPowerMode ? 'low-power' : 'high-performance',
+      }}
+    >
       <color attach="background" args={['#ffffff']} />
       <ambientLight intensity={0.6} />
       <directionalLight position={[5, 6, 5]} intensity={0.9} />
@@ -181,14 +199,19 @@ function Scene({
         minDistance={minDistance}
         maxDistance={maxDistance}
         enablePan={enablePan}
+        enableDamping={!lowPowerMode}
       />
+      {showPerf ? <Perf position="top-left" /> : null}
       <RoundedCube {...cubeProps} />
-      <EffectComposer>
+      <EffectComposer multisampling={composerMultisampling} disableNormalPass>
         <Bloom
           intensity={bloomIntensity}
           luminanceThreshold={bloomThreshold}
           luminanceSmoothing={bloomSmoothing}
           radius={bloomRadius}
+          levels={bloomLevels}
+          mipmapBlur={bloomMipmapBlur}
+          resolutionScale={bloomResolutionScale}
         />
         {blurEnabled ? (
           <TiltShift2
@@ -241,7 +264,21 @@ function App() {
   const mouseBloomCurrentRef = useRef({ x: 0.5, y: 0.5 })
   const mouseBloomRafRef = useRef(null)
   const mouseBloomStateRef = useRef({ x: 0.5, y: 0.5 })
-  const defaultFov = typeof window !== 'undefined' && window.innerWidth <= 768 ? 22 : 11
+  const defaultFov = typeof window !== 'undefined' && window.innerWidth <= 768 ? 22 : 12
+  const isLowPower = useMemo(() => {
+    if (typeof window === 'undefined' || typeof navigator === 'undefined') return false
+    const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches
+    const lowMemory = typeof navigator.deviceMemory === 'number' && navigator.deviceMemory <= 4
+    const lowCores = typeof navigator.hardwareConcurrency === 'number' && navigator.hardwareConcurrency <= 4
+    return Boolean(reducedMotion || lowMemory || lowCores)
+  }, [])
+  const debugEnabled = import.meta.env.DEV
+  const lowPowerMode = isLowPower
+  const showPerf = useMemo(() => {
+    if (typeof window === 'undefined') return false
+    const params = new URLSearchParams(window.location.search)
+    return import.meta.env.DEV && params.get('perf') === 'true'
+  }, [])
 
   const controls = useControls({
     Gradient: folder(
@@ -298,7 +335,7 @@ function App() {
         height: { value: 1.55, min: 0.2, max: 6, step: 0.05 },
         depth: { value: 1.50, min: 0.2, max: 6, step: 0.05 },
         radius: { value: 0.50, min: 0, max: 3, step: 0.01 },
-        smoothness: { value: 24, min: 1, max: 24, step: 1 },
+        smoothness: { value: 16, min: 1, max: 24, step: 1 },
       },
       { collapsed: false }
     ),
@@ -361,6 +398,7 @@ function App() {
   }, [controls.fov, controls.backdropBlur, controls.bloomThreshold])
 
   useEffect(() => {
+    if (lowPowerMode) return undefined
     const tick = () => {
       const current = mouseBloomCurrentRef.current
       const target = mouseBloomTargetRef.current
@@ -383,8 +421,12 @@ function App() {
     }
 
     mouseBloomRafRef.current = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(mouseBloomRafRef.current)
-  }, [])
+    return () => {
+      if (mouseBloomRafRef.current) {
+        cancelAnimationFrame(mouseBloomRafRef.current)
+      }
+    }
+  }, [lowPowerMode])
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value))
   const clamp01 = (value) => clamp(value, 0, 1)
@@ -396,6 +438,7 @@ function App() {
   }, [])
 
   const handleHeroPointerMove = (event) => {
+    if (lowPowerMode) return
     // Use window dimensions since projects section covers hero
     const x = clamp01(event.clientX / window.innerWidth)
     const y = clamp01(event.clientY / window.innerHeight)
@@ -403,6 +446,7 @@ function App() {
   }
 
   const handleHeroPointerLeave = () => {
+    if (lowPowerMode) return
     mouseBloomTargetRef.current = { x: 0.5, y: 0.5 }
   }
 
@@ -423,10 +467,18 @@ function App() {
     // Check if intro has already been played in this session (unless forced)
     const hasPlayedIntro = !forceIntro && sessionStorage.getItem('hasPlayedIntro') === 'true'
 
-    console.log('🎬 Intro Debug:', { hasPlayedIntro, forceIntro, sessionStorage: sessionStorage.getItem('hasPlayedIntro') })
+    if (debugEnabled) {
+      console.log('🎬 Intro Debug:', {
+        hasPlayedIntro,
+        forceIntro,
+        sessionStorage: sessionStorage.getItem('hasPlayedIntro'),
+      })
+    }
 
     if (hasPlayedIntro) {
-      console.log('⏭️  Skipping intro - already played')
+      if (debugEnabled) {
+        console.log('⏭️  Skipping intro - already played')
+      }
       // Skip intro - set everything to final state immediately
       setIntroComplete(true)
       setCanvasOpacity(1)
@@ -445,7 +497,9 @@ function App() {
       return
     }
 
-    console.log('▶️  Playing intro animation')
+    if (debugEnabled) {
+      console.log('▶️  Playing intro animation')
+    }
 
     // First time - play the intro
     body.style.overflow = 'hidden'
@@ -563,25 +617,49 @@ function App() {
   const paddingTotal = paddingValue * 2
   const widthFormula = `calc(90vw - ${paddingTotal}px)`
 
-  console.log('========== DESIGN ENGINEER WIDTH DEBUG ==========')
-  console.log('Padding (one side):', paddingValue, 'px')
-  console.log('Padding (both sides):', paddingTotal, 'px')
-  console.log('Width Formula:', widthFormula)
-  console.log('Viewport Width:', window.innerWidth, 'px')
-  console.log('90% of Viewport:', window.innerWidth * 0.9, 'px')
-  console.log('Expected Final Width:', (window.innerWidth * 0.9) - paddingTotal, 'px')
-  console.log('=================================================')
-  console.log('App render pipeline: Hero -> Projects -> MakeCodeLiveSection')
+  if (debugEnabled) {
+    console.log('========== DESIGN ENGINEER WIDTH DEBUG ==========')
+    console.log('Padding (one side):', paddingValue, 'px')
+    console.log('Padding (both sides):', paddingTotal, 'px')
+    console.log('Width Formula:', widthFormula)
+    console.log('Viewport Width:', window.innerWidth, 'px')
+    console.log('90% of Viewport:', window.innerWidth * 0.9, 'px')
+    console.log('Expected Final Width:', (window.innerWidth * 0.9) - paddingTotal, 'px')
+    console.log('=================================================')
+    console.log('App render pipeline: Hero -> Projects -> MakeCodeLiveSection')
+  }
 
+  const dprCap = lowPowerMode ? 1 : viewportWidth <= 768 ? 1.25 : 1.5
+  const effectiveDpr = typeof window !== 'undefined'
+    ? Math.min(window.devicePixelRatio || 1, dprCap)
+    : dprCap
   const blurScale = clamp(viewportWidth / 1024, 0.2, 1)
   const noiseScale = clamp(viewportWidth / 1024, 0.5, 1)
+  const bloomLevels = lowPowerMode ? 4 : 8
+  const bloomResolutionScale = lowPowerMode ? 0.35 : 0.5
+  const bloomMipmapBlur = !lowPowerMode
+  const composerMultisampling = lowPowerMode ? 0 : 2
+  const blurEnabled = !lowPowerMode && controls.blurEnabled
+  const grainEnabled = !lowPowerMode && controls.grainEnabled
+  const effectiveGrainOpacity = grainEnabled ? controls.grainOpacity : 0
+  const effectiveSmoothness = lowPowerMode
+    ? Math.min(controls.smoothness, 12)
+    : controls.smoothness
 
   const effectiveFov = introComplete ? controls.fov + scrollFov : animatedFov
-  const effectiveBlur = introComplete ? controls.backdropBlur * blurScale : animatedBlur
-  const effectiveNoiseOpacity = introComplete ? controls.noiseOpacity * noiseScale : controls.noiseOpacity
+  const effectiveBlur = lowPowerMode
+    ? 0
+    : introComplete
+      ? controls.backdropBlur * blurScale
+      : animatedBlur
+  const effectiveNoiseOpacity = lowPowerMode
+    ? 0
+    : introComplete
+      ? controls.noiseOpacity * noiseScale
+      : controls.noiseOpacity
   const effectiveBloomThreshold = introComplete ? controls.bloomThreshold : animatedBloomThreshold
 
-  const mouseTrackingEnabled = introComplete && activeSection !== 'contact'
+  const mouseTrackingEnabled = introComplete && activeSection !== 'contact' && !lowPowerMode
   const bloomMouseX = mouseTrackingEnabled ? (mouseBloom.x - 0.5) * 2 : 0
   const bloomMouseY = mouseTrackingEnabled ? (mouseBloom.y - 0.5) * 2 : 0
   const dynamicBloomIntensity = clamp(
@@ -599,11 +677,12 @@ function App() {
     0,
     2
   )
+  const bloomRadiusScale = lowPowerMode ? 0.7 : 1
   const dynamicBloomRadius = clamp(
     controls.bloomRadius + bloomMouseX * 0.14,
     0,
     5
-  )
+  ) * bloomRadiusScale
   const dynamicFresnelOffset = clamp(
     controls.fresnelOffset + bloomMouseX * 0.06 + bloomMouseY * 0.045,
     0,
@@ -1010,17 +1089,22 @@ function App() {
               stopBC: introComplete ? controls.stopBC - scrollStopBC : controls.stopBC,
               softness: dynamicSoftness,
               fresnelOffset: dynamicFresnelOffset,
+              smoothness: effectiveSmoothness,
             }}
             bloomIntensity={dynamicBloomIntensity}
             bloomThreshold={dynamicBloomThreshold}
             bloomSmoothing={dynamicBloomSmoothing}
             bloomRadius={dynamicBloomRadius}
-            blurEnabled={controls.blurEnabled}
+            bloomLevels={bloomLevels}
+            bloomMipmapBlur={bloomMipmapBlur}
+            bloomResolutionScale={bloomResolutionScale}
+            composerMultisampling={composerMultisampling}
+            blurEnabled={blurEnabled}
             blurStrength={controls.blurStrength}
             blurTaper={controls.blurTaper}
             blurSamples={controls.blurSamples}
-            grainEnabled={controls.grainEnabled}
-            grainOpacity={controls.grainOpacity}
+            grainEnabled={grainEnabled}
+            grainOpacity={effectiveGrainOpacity}
             grainBlend={controls.grainBlend}
             camX={controls.camX}
             camY={controls.camY}
@@ -1032,6 +1116,9 @@ function App() {
             minDistance={controls.minDistance}
             maxDistance={controls.maxDistance}
             enablePan={controls.enablePan}
+            dpr={effectiveDpr}
+            lowPowerMode={lowPowerMode}
+            showPerf={showPerf}
           />
         </div>
       </div>
