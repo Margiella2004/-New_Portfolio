@@ -301,6 +301,7 @@ export default function GuardianAppDetail() {
         <StackedRevealSection
           className="guardian-app-reveal-stage guardian-app-other-projects-stage"
           innerClassName="guardian-app-reveal-inner"
+          revealOnce
         >
           <OtherProjects project={projectsData.synechronCube} />
         </StackedRevealSection>

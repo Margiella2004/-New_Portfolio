@@ -12,9 +12,11 @@ export default function StackedRevealSection({
   revealOffsetFactor = 0.6,
   revealDistanceFactor = 1.15,
   pinSpacing = true,
+  revealOnce = false,
 }) {
   const stageRef = useRef(null)
   const innerRef = useRef(null)
+  const hasPlayedRef = useRef(false)
 
   useLayoutEffect(() => {
     const stageEl = stageRef.current
@@ -23,24 +25,38 @@ export default function StackedRevealSection({
 
     const getOffset = () => Math.round(stageEl.offsetHeight * revealOffsetFactor)
     const setOffset = () => {
+      if (revealOnce && hasPlayedRef.current) return
       gsap.set(innerEl, { y: getOffset() })
     }
 
     setOffset()
 
+    const scrollTriggerConfig = revealOnce
+      ? {
+          trigger: stageEl,
+          start: 'top 70%',
+          toggleActions: 'play none none none',
+          once: true,
+        }
+      : {
+          trigger: stageEl,
+          start: 'top top',
+          end: () =>
+            `+=${Math.round(stageEl.offsetHeight * revealDistanceFactor)}`,
+          pin: true,
+          pinSpacing,
+          scrub: true,
+          invalidateOnRefresh: true,
+          anticipatePin: 1,
+        }
+
     const revealTween = gsap.to(innerEl, {
       y: 0,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: stageEl,
-        start: 'top top',
-        end: () =>
-          `+=${Math.round(stageEl.offsetHeight * revealDistanceFactor)}`,
-        pin: true,
-        pinSpacing,
-        scrub: true,
-        invalidateOnRefresh: true,
-        anticipatePin: 1,
+      ease: revealOnce ? 'power2.out' : 'none',
+      duration: revealOnce ? 0.9 : 1,
+      scrollTrigger: scrollTriggerConfig,
+      onComplete: () => {
+        hasPlayedRef.current = true
       },
     })
 

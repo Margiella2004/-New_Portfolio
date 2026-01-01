@@ -259,8 +259,8 @@ export default function Projects() {
       scrollTrigger: {
         trigger: introTitleRef.current,
         start: 'top 30%',
-        end: 'top 10%',
-        scrub: 4,
+        toggleActions: 'play none none none',
+        once: true,
       },
     })
 

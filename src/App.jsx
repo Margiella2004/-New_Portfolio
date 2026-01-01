@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useThree } from '@react-three/fiber'
 import { RoundedBox, OrbitControls } from '@react-three/drei'
-import { EffectComposer, Bloom, TiltShift2, Noise } from '@react-three/postprocessing'
+import { EffectComposer, Bloom, TiltShift2, Noise, wrapEffect } from '@react-three/postprocessing'
 import { Perf } from 'r3f-perf'
 import { Leva, useControls, folder } from 'leva'
 import { Color } from 'three'
-import { BlendFunction } from 'postprocessing'
+import { BlendFunction, KernelSize, KawaseBlurPass } from 'postprocessing'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Iridescence } from './IridescenceMaterial'
@@ -19,6 +19,10 @@ import MakeCodeLiveSection from './MakeCodeLiveSection'
 import Footer from './Footer'
 import { footerData } from './footerData'
 import './App.css'
+
+gsap.registerPlugin(ScrollTrigger)
+
+const KawaseBlur = wrapEffect(KawaseBlurPass)
 
 function RoundedCube({
   width,
@@ -157,6 +161,9 @@ function Scene({
   bloomMipmapBlur,
   bloomResolutionScale,
   composerMultisampling,
+  postBlurEnabled,
+  postBlurScale,
+  postBlurKernel,
   blurEnabled,
   blurStrength,
   blurTaper,
@@ -213,6 +220,9 @@ function Scene({
           mipmapBlur={bloomMipmapBlur}
           resolutionScale={bloomResolutionScale}
         />
+        {postBlurEnabled ? (
+          <KawaseBlur args={[{ resolutionScale: postBlurScale, kernelSize: postBlurKernel }]} />
+        ) : null}
         {blurEnabled ? (
           <TiltShift2
             blur={blurStrength}
@@ -246,20 +256,15 @@ function App() {
   const footerRef = useRef(null)
   const aboutRef = useRef(null)
 
-  const [canvasOpacity, setCanvasOpacity] = useState(0)
-  const [introTextOpacity, setIntroTextOpacity] = useState(1)
-  const [animatedFov, setAnimatedFov] = useState(111)
-  const [animatedBlur, setAnimatedBlur] = useState(8)
-  const [animatedBloomThreshold, setAnimatedBloomThreshold] = useState(1.13)
-  const [introComplete, setIntroComplete] = useState(false)
-  const [scrollFov, setScrollFov] = useState(0)
+  const canvasOpacity = 1
+  const introTextOpacity = 0
+  const scrollFov = 0
   const [scrollStopBC, setScrollStopBC] = useState(0)
   const [activeSection, setActiveSection] = useState('home')
   const [mouseBloom, setMouseBloom] = useState({ x: 0.5, y: 0.5 })
   const [viewportWidth, setViewportWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1024
   )
-  const textFadeStartedRef = useRef(false)
   const mouseBloomTargetRef = useRef({ x: 0.5, y: 0.5 })
   const mouseBloomCurrentRef = useRef({ x: 0.5, y: 0.5 })
   const mouseBloomRafRef = useRef(null)
@@ -357,6 +362,11 @@ function App() {
     Background: folder(
       {
         backdropBlur: { value: 130, min: 0, max: 300, step: 1, label: 'canvas blur' },
+        blurMode: {
+          value: 'css',
+          options: ['css', 'post', 'none'],
+          label: 'blur mode',
+        },
         noiseOpacity: { value: 0.10, min: 0, max: 0.5, step: 0.01, label: 'texture' },
       },
       { collapsed: false }
@@ -382,20 +392,6 @@ function App() {
       { collapsed: true }
     ),
   })
-
-  const introTargetsRef = useRef({
-    fov: controls.fov,
-    blur: controls.backdropBlur,
-    bloomThreshold: controls.bloomThreshold,
-  })
-
-  useEffect(() => {
-    introTargetsRef.current = {
-      fov: controls.fov,
-      blur: controls.backdropBlur,
-      bloomThreshold: controls.bloomThreshold,
-    }
-  }, [controls.fov, controls.backdropBlur, controls.bloomThreshold])
 
   useEffect(() => {
     if (lowPowerMode) return undefined
@@ -450,168 +446,6 @@ function App() {
     mouseBloomTargetRef.current = { x: 0.5, y: 0.5 }
   }
 
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger)
-    const html = document.documentElement
-    const body = document.body
-    const previousBodyOverflow = body.style.overflow
-    const previousHtmlOverflow = html.style.overflow
-
-    // Check URL params for forcing intro
-    const urlParams = new URLSearchParams(window.location.search)
-    const forceIntro = urlParams.get('intro') === 'true'
-
-    // Clear sessionStorage to always play intro fresh (prevent footer jump issues)
-    sessionStorage.removeItem('hasPlayedIntro')
-
-    // Check if intro has already been played in this session (unless forced)
-    const hasPlayedIntro = !forceIntro && sessionStorage.getItem('hasPlayedIntro') === 'true'
-
-    if (debugEnabled) {
-      console.log('🎬 Intro Debug:', {
-        hasPlayedIntro,
-        forceIntro,
-        sessionStorage: sessionStorage.getItem('hasPlayedIntro'),
-      })
-    }
-
-    if (hasPlayedIntro) {
-      if (debugEnabled) {
-        console.log('⏭️  Skipping intro - already played')
-      }
-      // Skip intro - set everything to final state immediately
-      setIntroComplete(true)
-      setCanvasOpacity(1)
-      setIntroTextOpacity(0)
-      setAnimatedFov(controls.fov)
-      setAnimatedBlur(controls.backdropBlur)
-      setAnimatedBloomThreshold(controls.bloomThreshold)
-
-      if (headerRef.current) {
-        gsap.set(headerRef.current, { opacity: 1, y: 0, pointerEvents: 'auto' })
-      }
-      if (heroContentRef.current) {
-        gsap.set(heroContentRef.current, { opacity: 1, pointerEvents: 'auto' })
-      }
-
-      return
-    }
-
-    if (debugEnabled) {
-      console.log('▶️  Playing intro animation')
-    }
-
-    // First time - play the intro
-    body.style.overflow = 'hidden'
-    html.style.overflow = 'hidden'
-
-    const animState = { fov: 111, blur: 8, bloomThreshold: 1.13 }
-
-    if (headerRef.current) {
-      gsap.set(headerRef.current, { opacity: 0, y: -10, pointerEvents: 'none' })
-    }
-    if (heroContentRef.current) {
-      gsap.set(heroContentRef.current, { opacity: 0, pointerEvents: 'none' })
-    }
-
-    const tl = gsap.timeline({
-      defaults: { ease: 'power2.out' },
-      onComplete: () => {
-        setIntroComplete(true)
-        sessionStorage.setItem('hasPlayedIntro', 'true')
-        body.style.overflow = previousBodyOverflow
-        html.style.overflow = previousHtmlOverflow
-      },
-    })
-
-    tl.to({}, { duration: 0.9 }, 0)
-      .to(
-        {},
-        {
-          duration: 1.2,
-          ease: 'power2.out',
-          onUpdate() {
-            setCanvasOpacity(this.progress())
-          },
-        },
-        0.9
-      )
-      .to({}, { duration: 5.3 }, '>')
-      .to({}, { duration: 1.5 }, '>')
-      .to(
-        {},
-        {
-          duration: 0.8,
-          ease: 'power2.inOut',
-          onUpdate() {
-            textFadeStartedRef.current = true
-            setIntroTextOpacity(1 - this.progress())
-          },
-        },
-        '>'
-      )
-      .to(
-        animState,
-        {
-          fov: introTargetsRef.current.fov,
-          duration: 5,
-          ease: 'expo.out',
-          onUpdate: () => setAnimatedFov(animState.fov),
-        },
-        '>'
-      )
-      .to(
-        animState,
-        {
-          blur: introTargetsRef.current.blur,
-          duration: 3,
-          ease: 'expo.in',
-          onUpdate: () => setAnimatedBlur(animState.blur),
-        },
-        '<'
-      )
-      .to(
-        animState,
-        {
-          bloomThreshold: introTargetsRef.current.bloomThreshold,
-          duration: 5,
-          ease: 'power2.inOut',
-          onUpdate: () => setAnimatedBloomThreshold(animState.bloomThreshold),
-        },
-        '<'
-      )
-      .add(() => {
-        if (headerRef.current) {
-          gsap.to(headerRef.current, {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: 'power2.out',
-            onStart: () => {
-              headerRef.current.style.pointerEvents = 'auto'
-            },
-          })
-        }
-        if (heroContentRef.current) {
-          gsap.to(heroContentRef.current, {
-            opacity: 1,
-            duration: 0.8,
-            ease: 'power2.out',
-            onStart: () => {
-              heroContentRef.current.style.pointerEvents = 'auto'
-            },
-          })
-        }
-      }, '-=1')
-
-    return () => {
-      tl.kill()
-      body.style.overflow = previousBodyOverflow
-      html.style.overflow = previousHtmlOverflow
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   // Debug logging for Design Engineer width calculation
   const paddingValue = controls.introPaddingX
   const paddingTotal = paddingValue * 2
@@ -645,21 +479,27 @@ function App() {
   const effectiveSmoothness = lowPowerMode
     ? Math.min(controls.smoothness, 12)
     : controls.smoothness
+  const blurModeParam = useMemo(() => {
+    if (typeof window === 'undefined') return null
+    const value = new URLSearchParams(window.location.search).get('blur')
+    if (value === 'css' || value === 'post' || value === 'none') return value
+    return null
+  }, [])
+  const blurMode = lowPowerMode ? 'none' : (blurModeParam ?? controls.blurMode)
+  const postBlurEnabled = blurMode === 'post'
+  const postBlurScale = lowPowerMode ? 0.3 : 0.45
+  const postBlurKernel = lowPowerMode ? KernelSize.SMALL : KernelSize.MEDIUM
 
-  const effectiveFov = introComplete ? controls.fov + scrollFov : animatedFov
-  const effectiveBlur = lowPowerMode
-    ? 0
-    : introComplete
-      ? controls.backdropBlur * blurScale
-      : animatedBlur
+  const effectiveFov = controls.fov + scrollFov
+  const effectiveBlur = blurMode === 'css'
+    ? controls.backdropBlur * blurScale
+    : 0
   const effectiveNoiseOpacity = lowPowerMode
     ? 0
-    : introComplete
-      ? controls.noiseOpacity * noiseScale
-      : controls.noiseOpacity
-  const effectiveBloomThreshold = introComplete ? controls.bloomThreshold : animatedBloomThreshold
+    : controls.noiseOpacity * noiseScale
+  const effectiveBloomThreshold = controls.bloomThreshold
 
-  const mouseTrackingEnabled = introComplete && activeSection !== 'contact' && !lowPowerMode
+  const mouseTrackingEnabled = activeSection !== 'contact' && !lowPowerMode
   const bloomMouseX = mouseTrackingEnabled ? (mouseBloom.x - 0.5) * 2 : 0
   const bloomMouseY = mouseTrackingEnabled ? (mouseBloom.y - 0.5) * 2 : 0
   const dynamicBloomIntensity = clamp(
@@ -695,7 +535,6 @@ function App() {
   )
 
   useEffect(() => {
-    if (!introComplete) return undefined
     if (headerRef.current) {
       gsap.set(headerRef.current, { opacity: 1, y: 0, clearProps: 'opacity,y' })
     }
@@ -1032,7 +871,7 @@ function App() {
     }, containerRef)
 
     return () => ctx.revert()
-  }, [introComplete])
+  }, [])
 
 
   return (
@@ -1055,7 +894,7 @@ function App() {
         <div
           ref={heroContentRef}
           className="hero-overlay"
-          style={{ opacity: 0, pointerEvents: 'none' }}
+          style={{ opacity: 1, pointerEvents: 'auto' }}
         >
           <IntroText paddingX={controls.introPaddingX} />
           <DesignEngineer />
@@ -1086,7 +925,7 @@ function App() {
           <Scene
             cubeProps={{
               ...controls,
-              stopBC: introComplete ? controls.stopBC - scrollStopBC : controls.stopBC,
+              stopBC: controls.stopBC - scrollStopBC,
               softness: dynamicSoftness,
               fresnelOffset: dynamicFresnelOffset,
               smoothness: effectiveSmoothness,
@@ -1099,6 +938,9 @@ function App() {
             bloomMipmapBlur={bloomMipmapBlur}
             bloomResolutionScale={bloomResolutionScale}
             composerMultisampling={composerMultisampling}
+            postBlurEnabled={postBlurEnabled}
+            postBlurScale={postBlurScale}
+            postBlurKernel={postBlurKernel}
             blurEnabled={blurEnabled}
             blurStrength={controls.blurStrength}
             blurTaper={controls.blurTaper}
