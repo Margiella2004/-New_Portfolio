@@ -86,6 +86,7 @@ export default function Projects() {
   const introDescRef = useRef(null)
   const projectsSectionRef = useRef(null)
   const scrollTriggerRef = useRef(null)
+  const cutoutRectRef = useRef(null)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -168,6 +169,32 @@ export default function Projects() {
       { autoAlpha: 1, x: 0, y: 0, duration: 0.45, ease: 'power3.out' }
     )
   }, [activeId])
+
+  // Window frame expand animation (earlier than other animations)
+  useEffect(() => {
+    if (!cutoutRectRef.current || !cutoutRect || !introTitleRef.current) return
+
+    const fullWidth = cutoutRect.width
+    const startX = cutoutRect.x + fullWidth
+
+    // Set initial state - width 0, positioned at right edge
+    gsap.set(cutoutRectRef.current, {
+      attr: { width: 0, x: startX }
+    })
+
+    // Animate to full width, expanding from right to left
+    gsap.to(cutoutRectRef.current, {
+      attr: { width: fullWidth, x: cutoutRect.x },
+      duration: 1,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: introTitleRef.current,
+        start: 'top 60%',
+        end: 'top 40%',
+        scrub: 2,
+      }
+    })
+  }, [cutoutRect])
 
   // Intro scroll animations
   useEffect(() => {
@@ -308,6 +335,7 @@ export default function Projects() {
             />
             {cutoutRect && (
               <rect
+                ref={cutoutRectRef}
                 x={cutoutRect.x}
                 y={cutoutRect.y}
                 width={cutoutRect.width}

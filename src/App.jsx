@@ -408,6 +408,9 @@ function App() {
     const urlParams = new URLSearchParams(window.location.search)
     const forceIntro = urlParams.get('intro') === 'true'
 
+    // Clear sessionStorage to always play intro fresh (prevent footer jump issues)
+    sessionStorage.removeItem('hasPlayedIntro')
+
     // Check if intro has already been played in this session (unless forced)
     const hasPlayedIntro = !forceIntro && sessionStorage.getItem('hasPlayedIntro') === 'true'
 
@@ -430,8 +433,6 @@ function App() {
         gsap.set(heroContentRef.current, { opacity: 1, pointerEvents: 'auto' })
       }
 
-      body.style.overflow = previousBodyOverflow
-      html.style.overflow = previousHtmlOverflow
       return
     }
 

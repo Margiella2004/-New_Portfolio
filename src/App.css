@@ -69,10 +69,12 @@ canvas {
   pointer-events: none;
 }
 
-.footer-layer {
+.stage .footer-layer {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
   z-index: 100;
+  transform: translateY(100%);
+  will-change: transform;
 }
