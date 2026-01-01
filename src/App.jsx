@@ -241,7 +241,7 @@ function App() {
   const mouseBloomCurrentRef = useRef({ x: 0.5, y: 0.5 })
   const mouseBloomRafRef = useRef(null)
   const mouseBloomStateRef = useRef({ x: 0.5, y: 0.5 })
-  const defaultFov = typeof window !== 'undefined' && window.innerWidth <= 768 ? 18 : 12
+  const defaultFov = typeof window !== 'undefined' && window.innerWidth <= 768 ? 22 : 11
 
   const controls = useControls({
     Gradient: folder(
@@ -573,11 +573,12 @@ function App() {
   console.log('=================================================')
   console.log('App render pipeline: Hero -> Projects -> MakeCodeLiveSection')
 
-  const blurScale = clamp(viewportWidth / 1024, 0.35, 1)
+  const blurScale = clamp(viewportWidth / 1024, 0.2, 1)
   const noiseScale = clamp(viewportWidth / 1024, 0.5, 1)
 
   const effectiveFov = introComplete ? controls.fov + scrollFov : animatedFov
-  const effectiveBlur = (introComplete ? controls.backdropBlur : animatedBlur) * blurScale
+  const effectiveBlur = introComplete ? controls.backdropBlur * blurScale : animatedBlur
+  const effectiveNoiseOpacity = introComplete ? controls.noiseOpacity * noiseScale : controls.noiseOpacity
   const effectiveBloomThreshold = introComplete ? controls.bloomThreshold : animatedBloomThreshold
 
   const mouseTrackingEnabled = introComplete && activeSection !== 'contact'
@@ -999,7 +1000,7 @@ function App() {
           ref={canvasWrapperRef}
           style={{
             '--canvas-blur': `${effectiveBlur}px`,
-            '--noise-opacity': controls.noiseOpacity * noiseScale,
+            '--noise-opacity': effectiveNoiseOpacity,
             opacity: canvasOpacity,
           }}
         >
