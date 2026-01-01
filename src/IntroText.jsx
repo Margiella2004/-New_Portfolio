@@ -1,6 +1,5 @@
 import './IntroText.css'
 import lineImage from '../Svg/Line 1.svg'
-import arrowImage from '../Svg/majesticons_arrow-up.svg'
 import linkArrowImage from '../Svg/material-symbols-light_arrow-back.svg'
 
 export default function IntroText({ paddingX = 72 }) {
@@ -17,17 +16,10 @@ export default function IntroText({ paddingX = 72 }) {
 
       {/* Content Container */}
       <div className="intro-content">
-        {/* Left: "who is this guy" with arrow */}
+        {/* Left: "who is this guy" */}
         <div className="who-is-this-guy">
           <div className="who-text-wrapper">
             <p className="who-text">who is this guy</p>
-          </div>
-          <div className="arrow-wrapper">
-            <div className="arrow-rotate">
-              <div className="arrow-container">
-                <img src={arrowImage} alt="" className="arrow-image" />
-              </div>
-            </div>
           </div>
         </div>
 

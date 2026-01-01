@@ -114,6 +114,12 @@ font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-seri
 ### Responsive Breakpoints
 
 ```css
+/* Compact Mobile */
+@media (max-width: 360px) { }
+
+/* Small Mobile */
+@media (max-width: 420px) { }
+
 /* Mobile */
 @media (max-width: 480px) { }
 
@@ -179,6 +185,10 @@ border-radius: 6.837px;
 box-shadow: 0px 5.469px 5.469px rgba(0, 0, 0, 0.25);
 ```
 
+**Compact Mobile Notes (<=420px):**
+- Reduced header height and menu button sizing to prevent overlap.
+- Uses rem-based sizing for predictable scaling.
+
 ### Projects Timeline
 **Location:** `src/Projects.jsx`
 
@@ -193,6 +203,10 @@ box-shadow: 0px 5.469px 5.469px rgba(0, 0, 0, 0.25);
 - Timeline: 4px width indicator, 1px line
 - Item gap: 10px vertical
 - Number + Title layout with baseline alignment
+
+**Projects Intro Cutout:**
+- Cutout window uses CSS variables for padding/height/radius.
+- Values are parsed from rem/vw/vh to px for consistent mobile spacing.
 
 ### Content Module
 **Location:** `src/components/ContentModule.jsx`
@@ -210,6 +224,14 @@ box-shadow: 0px 5.469px 5.469px rgba(0, 0, 0, 0.25);
 - Automatically detects video files (.mp4, .mov, .webm)
 - Renders `<video>` with autoplay, muted, loop, playsInline
 - Fallback to `<img>` for images
+
+### About ("Make Code Live") Section
+**Location:** `src/MakeCodeLiveSection.jsx`
+
+**Mobile Behavior:**
+- Portrait, body text, and lists scale down for compact devices.
+- Companies/Certifications lists stay side-by-side on small screens.
+- Footer block is pushed to the bottom of the viewport with `margin-top: auto` when space allows.
 
 ### Stacked Reveal Section
 **Location:** `src/components/StackedRevealSection.jsx`
@@ -238,6 +260,10 @@ box-shadow: 0px 5.469px 5.469px rgba(0, 0, 0, 0.25);
 - Email section (full-width divider)
 - Projects list (numbered)
 - Wordmark + copyright
+
+**Mobile Behavior:**
+- Text sizes and logo height step down at 1023px/767px/360px breakpoints.
+- Small labels and project indices have dedicated classes for tighter scaling.
 
 **Background:** `#6f3c59` (brand purple)
 

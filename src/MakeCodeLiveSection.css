@@ -233,3 +233,109 @@
   outline-offset: 4px;
   border-radius: 6px;
 }
+
+@media (max-width: 420px) {
+  .make-live-section {
+    --make-live-pad-top: 3.25rem;
+    --make-live-pad-bottom: 1.75rem;
+  }
+
+  .make-live-inner {
+    min-height: calc(100vh - var(--make-live-pad-top) - var(--make-live-pad-bottom));
+    justify-content: flex-start;
+    gap: 1.25rem;
+  }
+
+  .make-live-top {
+    gap: 1rem;
+  }
+
+  .make-live-hero {
+    gap: 1rem;
+  }
+
+  .make-live-text h2 {
+    font-size: 1.1875rem;
+    line-height: 1.4375rem;
+  }
+
+  .make-live-portrait {
+    max-width: 13.5rem;
+    height: 13.5rem;
+  }
+
+  .make-live-footer {
+    margin-top: auto;
+    gap: 1rem;
+  }
+
+  .make-live-lists {
+    flex-wrap: nowrap;
+    gap: 0.75rem;
+  }
+
+  .make-live-list {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .make-live-list h3 {
+    font-size: 0.9375rem;
+    line-height: 1.1875rem;
+  }
+
+  .make-live-list-items {
+    font-size: 0.75rem;
+    line-height: 1.0625rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .make-live-section {
+    --make-live-pad-top: 3rem;
+    --make-live-pad-bottom: 1.5rem;
+  }
+
+  .make-live-inner {
+    gap: 1.25rem;
+  }
+
+  .make-live-text h2 {
+    font-size: 1.0625rem;
+    line-height: 1.3125rem;
+  }
+
+  .make-live-portrait {
+    max-width: 12.5rem;
+    height: 12.5rem;
+  }
+
+  .make-live-footer {
+    margin-top: auto;
+    gap: 1rem;
+  }
+
+  .make-live-lists {
+    gap: 0.625rem;
+  }
+
+  .make-live-list h3 {
+    font-size: 0.875rem;
+    line-height: 1.125rem;
+  }
+
+  .make-live-list-items {
+    font-size: 0.6875rem;
+    line-height: 1rem;
+  }
+
+  .make-live-cta {
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+  }
+
+  .make-live-cta-icon {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+}

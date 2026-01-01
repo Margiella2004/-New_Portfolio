@@ -238,6 +238,7 @@ function App() {
   const mouseBloomCurrentRef = useRef({ x: 0.5, y: 0.5 })
   const mouseBloomRafRef = useRef(null)
   const mouseBloomStateRef = useRef({ x: 0.5, y: 0.5 })
+  const defaultFov = typeof window !== 'undefined' && window.innerWidth <= 768 ? 18 : 12
 
   const controls = useControls({
     Gradient: folder(
@@ -306,7 +307,7 @@ function App() {
         targetX: { value: -0.2, min: -10, max: 10, step: 0.05, label: 'target X' },
         targetY: { value: 0.0, min: -10, max: 10, step: 0.05, label: 'target Y' },
         targetZ: { value: -0.8, min: -10, max: 10, step: 0.05, label: 'target Z' },
-        fov: { value: 12, min: 10, max: 120, step: 1 },
+        fov: { value: defaultFov, min: 10, max: 120, step: 1 },
         minDistance: { value: 7.3, min: 0.1, max: 20, step: 0.1 },
         maxDistance: { value: 33.0, min: 0.1, max: 50, step: 0.1 },
         enablePan: { value: true },

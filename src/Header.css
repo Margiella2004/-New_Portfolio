@@ -334,3 +334,22 @@
     font-size: 18px;
   }
 }
+
+@media (max-width: 360px) {
+  .header {
+    top: 0.5rem;
+    padding: 0.625rem 0.875rem;
+    width: min(92vw, var(--page-max-width, 1400px));
+  }
+
+  .logo {
+    font-size: 1.125rem;
+    letter-spacing: -0.0625rem;
+  }
+
+  .menu-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.6875rem;
+    line-height: 0.875rem;
+  }
+}

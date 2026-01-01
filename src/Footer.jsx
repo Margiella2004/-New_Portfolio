@@ -53,16 +53,16 @@ export function Footer({ data = {} }) {
         </div>
 
         <div style={styles.emailRow}>
-          <div style={styles.smallLabel}>EMAIL</div>
+          <div className="footer-small-label" style={styles.smallLabel}>EMAIL</div>
           <div className="footer-email-value" style={styles.emailValue}>{sanitizeText(email)}</div>
         </div>
 
         <div style={styles.projectsRow}>
-          <div style={styles.smallLabel}>PROJECTS</div>
+          <div className="footer-small-label" style={styles.smallLabel}>PROJECTS</div>
           <div style={styles.projectsList}>
             {projects.map((project, index) => (
               <div key={project} style={styles.projectItem}>
-                <span style={styles.projectIndex}>0{index + 1}</span>
+                <span className="footer-project-index" style={styles.projectIndex}>0{index + 1}</span>
                 <span className="footer-project-name" style={styles.projectName}>{sanitizeText(project)}</span>
               </div>
             ))}
@@ -70,8 +70,8 @@ export function Footer({ data = {} }) {
         </div>
 
         <div style={styles.bottomRow}>
-          <img src={logoSvg} alt="Logo" style={styles.logo} />
-          <div style={styles.copyright}>{sanitizeText(copyright)}</div>
+          <img src={logoSvg} alt="Logo" className="footer-logo" style={styles.logo} />
+          <div className="footer-copyright" style={styles.copyright}>{sanitizeText(copyright)}</div>
         </div>
       </div>
     </div>

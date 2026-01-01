@@ -662,3 +662,78 @@
     line-height: 1.25rem;
   }
 }
+
+@media (max-width: 360px) {
+  .projects-container {
+    --projects-intro-padding: 1rem;
+    --projects-cutout-height: 12rem;
+    --projects-cutout-y: 3rem;
+    --projects-cutout-radius: 0.625rem;
+  }
+
+  .projects-intro-content {
+    gap: 0.375rem;
+  }
+
+  .projects-intro-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .polaroid-container {
+    transform: scale(0.45);
+    margin-left: 0;
+    margin-top: 0.25rem;
+  }
+
+  .projects-intro-title-p {
+    font-size: 3.3rem;
+    letter-spacing: -0.07rem;
+  }
+
+  .projects-intro-title-rest {
+    font-size: 2.8rem;
+    letter-spacing: -0.14rem;
+  }
+
+  .projects-intro-description {
+    font-size: 0.8rem;
+    line-height: 1.15rem;
+  }
+
+  .projects-inner {
+    padding: 1rem 0 12rem;
+    gap: 2rem;
+  }
+
+  .projects-item-number {
+    font-size: 0.75rem;
+  }
+
+  .projects-item-title {
+    font-size: 2rem;
+    letter-spacing: -0.09rem;
+  }
+
+  .project-description {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .project-cta {
+    width: 6.5rem;
+    height: 2.5rem;
+    border-radius: 0.75rem;
+  }
+
+  .project-tag {
+    padding: 0.375rem 0.9rem;
+    font-size: 0.5rem;
+    border-radius: 0.625rem;
+  }
+
+  .project-cta-text {
+    font-size: 0.6rem;
+  }
+}

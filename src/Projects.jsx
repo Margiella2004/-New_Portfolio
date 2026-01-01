@@ -87,6 +87,7 @@ export default function Projects() {
   const projectsSectionRef = useRef(null)
   const scrollTriggerRef = useRef(null)
   const cutoutRectRef = useRef(null)
+  const windowFramePlayedRef = useRef(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -124,10 +125,24 @@ export default function Projects() {
       if (!container) return
 
       const styles = getComputedStyle(container)
-      const padding = parseFloat(styles.getPropertyValue('--projects-intro-padding')) || 65
-      const cutoutHeight = parseFloat(styles.getPropertyValue('--projects-cutout-height')) || 300
-      const cutoutY = parseFloat(styles.getPropertyValue('--projects-cutout-y')) || 120
-      const cutoutRadius = parseFloat(styles.getPropertyValue('--projects-cutout-radius')) || 16
+      const parseLength = (value, fallback) => {
+        if (!value) return fallback
+        const trimmed = String(value).trim()
+        const numeric = parseFloat(trimmed)
+        if (Number.isNaN(numeric)) return fallback
+        if (trimmed.endsWith('rem')) {
+          const rootSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16
+          return numeric * rootSize
+        }
+        if (trimmed.endsWith('vw')) return (numeric / 100) * window.innerWidth
+        if (trimmed.endsWith('vh')) return (numeric / 100) * window.innerHeight
+        return numeric
+      }
+
+      const padding = parseLength(styles.getPropertyValue('--projects-intro-padding'), 65)
+      const cutoutHeight = parseLength(styles.getPropertyValue('--projects-cutout-height'), 300)
+      const cutoutY = parseLength(styles.getPropertyValue('--projects-cutout-y'), 120)
+      const cutoutRadius = parseLength(styles.getPropertyValue('--projects-cutout-radius'), 16)
       const containerWidth = container.clientWidth
       const containerHeight = Math.max(container.scrollHeight, container.clientHeight)
       const cutoutWidth = Math.max(0, containerWidth - padding * 2)
@@ -177,23 +192,40 @@ export default function Projects() {
     const fullWidth = cutoutRect.width
     const startX = cutoutRect.x + fullWidth
 
+    let tween
+
+    if (windowFramePlayedRef.current) {
+      gsap.set(cutoutRectRef.current, {
+        attr: { width: fullWidth, x: cutoutRect.x },
+      })
+      return undefined
+    }
+
     // Set initial state - width 0, positioned at right edge
     gsap.set(cutoutRectRef.current, {
-      attr: { width: 0, x: startX }
+      attr: { width: 0, x: startX },
     })
 
-    // Animate to full width, expanding from right to left
-    gsap.to(cutoutRectRef.current, {
+    // Animate to full width once, then keep it there
+    tween = gsap.to(cutoutRectRef.current, {
       attr: { width: fullWidth, x: cutoutRect.x },
       duration: 1,
       ease: 'power2.out',
       scrollTrigger: {
         trigger: introTitleRef.current,
         start: 'top 60%',
-        end: 'top 40%',
-        scrub: 2,
-      }
+        toggleActions: 'play none none none',
+        once: true,
+        onEnter: () => {
+          windowFramePlayedRef.current = true
+        },
+      },
     })
+
+    return () => {
+      if (tween?.scrollTrigger) tween.scrollTrigger.kill()
+      tween?.kill()
+    }
   }, [cutoutRect])
 
   // Intro scroll animations

@@ -5,7 +5,6 @@ import ContentModule from '../components/ContentModule';
 import { projectsData } from '../data/projectsData';
 import SynechronTimeline from '../components/SynechronTimeline';
 import OtherProjects from '../components/OtherProjects';
-import StackedRevealSection from '../components/StackedRevealSection';
 import Footer from '../Footer';
 import { footerData } from '../footerData';
 import './SynechronCubeDetail.css';
@@ -319,12 +318,9 @@ export default function SynechronCubeDetail() {
           )}
 
         </div>
-        <StackedRevealSection
-          className="synechron-cube-reveal-stage synechron-cube-other-projects-stage"
-          innerClassName="synechron-cube-reveal-inner"
-        >
+        <section className="synechron-cube-other-projects-stage">
           <OtherProjects project={guardianProject} />
-        </StackedRevealSection>
+        </section>
         <div className="footer-layer synechron-cube-footer-layer">
           <Footer data={footerData} />
         </div>
