@@ -233,6 +233,9 @@ function App() {
   const [scrollStopBC, setScrollStopBC] = useState(0)
   const [activeSection, setActiveSection] = useState('home')
   const [mouseBloom, setMouseBloom] = useState({ x: 0.5, y: 0.5 })
+  const [viewportWidth, setViewportWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 1024
+  )
   const textFadeStartedRef = useRef(false)
   const mouseBloomTargetRef = useRef({ x: 0.5, y: 0.5 })
   const mouseBloomCurrentRef = useRef({ x: 0.5, y: 0.5 })
@@ -386,6 +389,11 @@ function App() {
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value))
   const clamp01 = (value) => clamp(value, 0, 1)
 
+  useEffect(() => {
+    const handleResize = () => setViewportWidth(window.innerWidth)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   const handleHeroPointerMove = (event) => {
     // Use window dimensions since projects section covers hero
@@ -565,8 +573,11 @@ function App() {
   console.log('=================================================')
   console.log('App render pipeline: Hero -> Projects -> MakeCodeLiveSection')
 
+  const blurScale = clamp(viewportWidth / 1024, 0.35, 1)
+  const noiseScale = clamp(viewportWidth / 1024, 0.5, 1)
+
   const effectiveFov = introComplete ? controls.fov + scrollFov : animatedFov
-  const effectiveBlur = introComplete ? controls.backdropBlur : animatedBlur
+  const effectiveBlur = (introComplete ? controls.backdropBlur : animatedBlur) * blurScale
   const effectiveBloomThreshold = introComplete ? controls.bloomThreshold : animatedBloomThreshold
 
   const mouseTrackingEnabled = introComplete && activeSection !== 'contact'
@@ -988,7 +999,7 @@ function App() {
           ref={canvasWrapperRef}
           style={{
             '--canvas-blur': `${effectiveBlur}px`,
-            '--noise-opacity': controls.noiseOpacity,
+            '--noise-opacity': controls.noiseOpacity * noiseScale,
             opacity: canvasOpacity,
           }}
         >
