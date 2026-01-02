@@ -8,6 +8,10 @@ const GuardianAppDetail = lazy(() => import('./pages/GuardianAppDetail'))
 const WanderAppDetail = lazy(() => import('./pages/WanderAppDetail'))
 const SynechronCubeDetail = lazy(() => import('./pages/SynechronCubeDetail'))
 
+if (import.meta.env.DEV) {
+  document.documentElement.classList.add('show-leva')
+}
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>

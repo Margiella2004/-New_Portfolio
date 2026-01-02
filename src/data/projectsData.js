@@ -7,6 +7,9 @@ import introMovie from '../../movies_for_portfolio/Intro.gif';
 import secondCubeMovie from '../../movies_for_portfolio/secondcube.gif';
 import thirdCubeMovie from '../../movies_for_portfolio/thirdcube.gif';
 import fourthCubeMovie from '../../movies_for_portfolio/fourthcube.gif';
+import synechronDraftImage from '../../img_assets/synechron_draft-1 1.png';
+import sketchImage from '../../img_assets/sketch 1.png';
+import frame50Image from '../../img_assets/Frame 50.png';
 
 export const projectsData = {
   guardianApp: {
@@ -96,7 +99,7 @@ export const projectsData = {
         layout: 'bento-up-left',
         title: 'Why A Cube?',
         description: 'The 8 faces allowed for 8 diffrent topics to use when presenting wether that be new tools or 8 diffrent marketing slides',
-        images: [frame56Image],
+        images: [frame56AltImage, frame50Image],
         overlayText: '8 faces'
       },
       {
@@ -104,8 +107,8 @@ export const projectsData = {
         title: 'Process Sketches',
         description: 'The 8 faces allowed for 8 diffrent topics to use when presenting wether that be new tools or 8 diffrent marketing slides',
         images: [
-          'https://images.unsplash.com/photo-1612171742307-341fb036ba03?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhcmNoaXRlY3R1cmFsJTIwc2tldGNoJTIwd2lyZWZyYW1lJTIwd2hpdGV8ZW58MXx8fHwxNzY1OTQzNjEyfDA&ixlib=rb-4.1.0&q=80&w=1080',
-          'https://images.unsplash.com/photo-1756051277721-c65cb58fb207?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHwzZCUyMHdpcmVmcmFtZSUyMG1lc2glMjBkYXJrJTIwYmFja2dyb3VuZHxlbnwxfHx8fDE3NjU5NDM2MTJ8MA&ixlib=rb-4.1.0&q=80&w=1080'
+          synechronDraftImage,
+          sketchImage
         ]
       },
       {

@@ -1,47 +1,75 @@
-/* Main Intro Section */
+/* Main Intro Section - CSS GRID */
 .intro-section {
   position: absolute;
   top: 147px;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateZ(0);
   width: var(--content-total-width, var(--page-width, 90vw));
   max-width: var(--page-max-width, 1400px);
+  padding: 0;
   z-index: 100;
 
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto;
   gap: 19px;
+  align-items: start;
+
+  /* Force pixel-perfect rendering across browsers */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  will-change: transform;
 }
 
 /* Horizontal Line Container */
 .intro-line-container {
-  position: relative;
+  grid-column: 1 / -1;
+  grid-row: 1;
   width: 100%;
-  height: 0;
-  flex-shrink: 0;
-}
-
-.intro-line {
-  display: block;
-  width: 100%;
-  max-width: none;
-}
-
-/* Content Container - flexbox with space-between */
-.intro-content {
+  height: auto;
+  align-self: start;
   display: flex;
-  align-items: start;
-  justify-content: space-between;
+  align-items: center;
+}
+
+/* CSS Line - Responsive and Modular */
+.intro-line {
   width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg,
+    rgba(252, 252, 252, 0) 0%,
+    rgba(252, 252, 252, 0.8) 10%,
+    rgba(252, 252, 252, 0.8) 90%,
+    rgba(252, 252, 252, 0) 100%
+  );
+  border: none;
+  margin: 0;
   flex-shrink: 0;
+
+  /* Smooth scaling */
+  transform-origin: center;
+  transition: opacity 0.3s ease;
+}
+
+/* Content Container - Grid Layout */
+.intro-content {
+  grid-column: 1;
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: minmax(0, auto) 1fr;
+  column-gap: clamp(2rem, 5vw, 8rem);
+  row-gap: 0;
+  width: 100%;
+  align-items: baseline;
+  justify-items: start;
 }
 
 /* "who is this guy" section */
 .who-is-this-guy {
+  grid-column: 1;
   display: flex;
-  align-items: center;
-  flex-shrink: 0;
+  align-items: flex-start;
+  align-self: start;
 }
 
 .who-text-wrapper {
@@ -49,7 +77,6 @@
   align-items: flex-start;
   justify-content: flex-start;
   padding: 0;
-  flex-shrink: 0;
 }
 
 .who-text {
@@ -60,15 +87,17 @@
   letter-spacing: -0.36px;
   color: #fcfcfc;
   margin: 0;
-  flex-shrink: 0;
 }
 
 /* Intro Text Container */
 .intro-text-container {
+  grid-column: 2;
   display: flex;
   flex-direction: column;
   gap: 14px;
-  flex-shrink: 0;
+  align-self: baseline;
+  justify-self: end;
+  max-width: 100%;
 }
 
 /* Intro Text */
@@ -142,7 +171,7 @@
     left: 0;
     transform: none;
     width: 100%;
-    gap: 19px;
+    gap: 19px 0;
   }
 
   .intro-line-container {
@@ -150,8 +179,20 @@
   }
 
   .intro-content {
-    flex-direction: column;
-    gap: 20px;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    gap: 20px 0;
+  }
+
+  .who-is-this-guy {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .intro-text-container {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: start;
   }
 
   .intro-text {

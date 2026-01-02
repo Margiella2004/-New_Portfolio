@@ -8,6 +8,25 @@
   background: #ffffff;
 }
 
+.asset-preload {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 16px;
+  letter-spacing: 0.02em;
+}
+
+.asset-preload-inner {
+  padding: 12px 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  background: #f8fafc;
+}
+
 /* Sticky Hero Section */
 .hero-section {
   position: -webkit-sticky; /* Safari */
@@ -55,8 +74,8 @@
 
 canvas {
   display: block;
-  filter: blur(var(--canvas-blur, 0px));
-  -webkit-filter: blur(var(--canvas-blur, 0px));
+  filter: blur(var(--canvas-blur, 0px)) saturate(var(--canvas-saturation, 1));
+  -webkit-filter: blur(var(--canvas-blur, 0px)) saturate(var(--canvas-saturation, 1));
 }
 
 /* Projects Section */
@@ -77,4 +96,23 @@ canvas {
   z-index: 100;
   transform: translateY(100%);
   will-change: transform;
+}
+
+/* Leva Debug Panel - Force Position and Visibility */
+.leva-c-kWgxhW {
+  position: fixed !important;
+  top: 100px !important;
+  right: 20px !important;
+  z-index: 999999 !important;
+  min-width: 280px !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+  pointer-events: auto !important;
+}
+
+/* Make sure Leva content is visible */
+.leva-c-kWgxhW * {
+  visibility: visible !important;
+  opacity: 1 !important;
 }

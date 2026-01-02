@@ -71,8 +71,8 @@ export default function SynechronCubeDetail() {
       bentoGapMobile: { value: 24, min: 0, max: 120, step: 1 },
       bentoGapDesktop: { value: 40, min: 0, max: 200, step: 1 },
       bentoTextWidth: { value: 30, min: 10, max: 50, step: 1 },
-      moduleImageHeightLarge: { value: 560, min: 200, max: 1200, step: 10 },
-      moduleImageHeightBento: { value: 560, min: 200, max: 1200, step: 10 },
+      moduleImageHeightLarge: { value: 728, min: 200, max: 1200, step: 10 },
+      moduleImageHeightBento: { value: 728, min: 200, max: 1200, step: 10 },
       moduleRadiusMobile: { value: 20, min: 0, max: 80, step: 1 },
       moduleRadiusDesktop: { value: 34, min: 0, max: 120, step: 1 }
     })
@@ -218,7 +218,6 @@ export default function SynechronCubeDetail() {
                 description={module.description}
                 images={module.images}
                 overlayContent={module.overlayText}
-                hideTopImage={module.title === 'Why A Cube?'}
                 bentoTextAlign={module.title === 'Model/Texture' ? 'left' : 'right'}
                 className="synechron-cube-content-module"
                 style={moduleStyles}

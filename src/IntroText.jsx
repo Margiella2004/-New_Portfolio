@@ -1,17 +1,12 @@
 import './IntroText.css'
-import lineImage from '../Svg/Line 1.svg'
 import linkArrowImage from '../Svg/material-symbols-light_arrow-back.svg'
 
 export default function IntroText({ paddingX = 72 }) {
-  // Ensure minimum padding on mobile
-  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768
-  const effectivePadding = isMobile ? Math.max(paddingX, 40) : paddingX
-
   return (
-    <div className="intro-section" style={{ paddingLeft: `${effectivePadding}px`, paddingRight: `${effectivePadding}px` }}>
+    <div className="intro-section">
       {/* Horizontal Line */}
       <div className="intro-line-container">
-        <img src={lineImage} alt="" className="intro-line" />
+        <div className="intro-line" />
       </div>
 
       {/* Content Container */}

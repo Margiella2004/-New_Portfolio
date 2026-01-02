@@ -1,11 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useThree } from '@react-three/fiber'
 import { RoundedBox, OrbitControls } from '@react-three/drei'
-import { EffectComposer, Bloom, TiltShift2, Noise, wrapEffect } from '@react-three/postprocessing'
+import { EffectComposer, Bloom, TiltShift2, Noise } from '@react-three/postprocessing'
 import { Perf } from 'r3f-perf'
 import { Leva, useControls, folder } from 'leva'
+
+console.log('🔍 Leva imported:', Leva)
+console.log('🔍 useControls imported:', useControls)
+console.log('🔍 folder imported:', folder)
 import { Color } from 'three'
-import { BlendFunction, KernelSize, KawaseBlurPass } from 'postprocessing'
+import { BlendFunction } from 'postprocessing'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Iridescence } from './IridescenceMaterial'
@@ -18,11 +22,10 @@ import Projects from './Projects'
 import MakeCodeLiveSection from './MakeCodeLiveSection'
 import Footer from './Footer'
 import { footerData } from './footerData'
+import { preloadAssets } from './preloadAssets'
 import './App.css'
 
 gsap.registerPlugin(ScrollTrigger)
-
-const KawaseBlur = wrapEffect(KawaseBlurPass)
 
 function RoundedCube({
   width,
@@ -161,9 +164,6 @@ function Scene({
   bloomMipmapBlur,
   bloomResolutionScale,
   composerMultisampling,
-  postBlurEnabled,
-  postBlurScale,
-  postBlurKernel,
   blurEnabled,
   blurStrength,
   blurTaper,
@@ -220,9 +220,6 @@ function Scene({
           mipmapBlur={bloomMipmapBlur}
           resolutionScale={bloomResolutionScale}
         />
-        {postBlurEnabled ? (
-          <KawaseBlur args={[{ resolutionScale: postBlurScale, kernelSize: postBlurKernel }]} />
-        ) : null}
         {blurEnabled ? (
           <TiltShift2
             blur={blurStrength}
@@ -262,6 +259,7 @@ function App() {
   const [scrollStopBC, setScrollStopBC] = useState(0)
   const [activeSection, setActiveSection] = useState('home')
   const [mouseBloom, setMouseBloom] = useState({ x: 0.5, y: 0.5 })
+  const [assetsReady, setAssetsReady] = useState(false)
   const [viewportWidth, setViewportWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1024
   )
@@ -278,11 +276,37 @@ function App() {
     return Boolean(reducedMotion || lowMemory || lowCores)
   }, [])
   const debugEnabled = import.meta.env.DEV
+  console.log('🔍 Vite Mode:', import.meta.env.MODE)
+  console.log('🔍 Is DEV:', import.meta.env.DEV)
+  console.log('🔍 Is PROD:', import.meta.env.PROD)
   const lowPowerMode = isLowPower
+  const isFirefox = useMemo(() => {
+    if (typeof navigator === 'undefined') return false
+    return /firefox/i.test(navigator.userAgent)
+  }, [])
+  const isSafari = useMemo(() => {
+    if (typeof navigator === 'undefined') return false
+    const ua = navigator.userAgent
+    return /safari/i.test(ua) && !/chrome|chromium|crios|android/i.test(ua)
+  }, [])
+  const preloadBlocking = useMemo(() => {
+    if (typeof window === 'undefined') return false
+    return new URLSearchParams(window.location.search).get('preload') === 'block'
+  }, [])
   const showPerf = useMemo(() => {
     if (typeof window === 'undefined') return false
     const params = new URLSearchParams(window.location.search)
     return import.meta.env.DEV && params.get('perf') === 'true'
+  }, [])
+
+  useEffect(() => {
+    let active = true
+    preloadAssets().then(() => {
+      if (active) setAssetsReady(true)
+    })
+    return () => {
+      active = false
+    }
   }, [])
 
   const controls = useControls({
@@ -304,8 +328,8 @@ function App() {
     Fresnel: folder(
       {
         fresnelColor: { value: '#6dffb1' },
-        fresnelAmount: { value: 2.44, min: 0, max: 8, step: 0.01 },
-        fresnelOffset: { value: 0.29, min: 0, max: 1, step: 0.001 },
+        fresnelAmount: { value: 1.74, min: 0, max: 8, step: 0.01 },
+        fresnelOffset: { value: 0.114, min: 0, max: 1, step: 0.001 },
         fresnelIntensity: { value: 5.58, min: 0, max: 10, step: 0.01 },
         fresnelAlpha: { value: 0.83, min: 0, max: 1, step: 0.01 },
         fresnelOnly: { value: false, label: 'fresnel only' },
@@ -361,13 +385,14 @@ function App() {
     ),
     Background: folder(
       {
-        backdropBlur: { value: 130, min: 0, max: 300, step: 1, label: 'canvas blur' },
+        backdropBlur: { value: 78, min: 0, max: 300, step: 1, label: 'canvas blur' },
         blurMode: {
           value: 'css',
-          options: ['css', 'post', 'none'],
+          options: ['css', 'none'],
           label: 'blur mode',
         },
-        noiseOpacity: { value: 0.10, min: 0, max: 0.5, step: 0.01, label: 'texture' },
+        noiseOpacity: { value: 0.07, min: 0, max: 0.5, step: 0.01, label: 'texture' },
+        saturation: { value: 1.67, min: 0, max: 2, step: 0.01, label: 'saturation' },
       },
       { collapsed: false }
     ),
@@ -482,21 +507,29 @@ function App() {
   const blurModeParam = useMemo(() => {
     if (typeof window === 'undefined') return null
     const value = new URLSearchParams(window.location.search).get('blur')
-    if (value === 'css' || value === 'post' || value === 'none') return value
+    if (value === 'css' || value === 'none') return value
     return null
   }, [])
+  const blurScaleParam = useMemo(() => {
+    if (typeof window === 'undefined') return 1
+    const raw = new URLSearchParams(window.location.search).get('blurScale')
+    const parsed = raw ? Number(raw) : 1
+    return Number.isFinite(parsed) ? parsed : 1
+  }, [])
   const blurMode = lowPowerMode ? 'none' : (blurModeParam ?? controls.blurMode)
-  const postBlurEnabled = blurMode === 'post'
-  const postBlurScale = lowPowerMode ? 0.3 : 0.45
-  const postBlurKernel = lowPowerMode ? KernelSize.SMALL : KernelSize.MEDIUM
+  const browserBlurBoost = isFirefox ? 1.25 : isSafari ? 0.9 : 1.0
+  const browserNoiseBoost = isFirefox || isSafari ? 1 : 1.0
+  const browserSaturation = isFirefox || isSafari ? 1 : 2.5
+  const blurScaleFactor = browserBlurBoost * blurScaleParam
+  const saturationFactor = browserSaturation * controls.saturation
 
   const effectiveFov = controls.fov + scrollFov
   const effectiveBlur = blurMode === 'css'
-    ? controls.backdropBlur * blurScale
+    ? controls.backdropBlur * blurScale * (1 / effectiveDpr) * blurScaleFactor
     : 0
   const effectiveNoiseOpacity = lowPowerMode
     ? 0
-    : controls.noiseOpacity * noiseScale
+    : controls.noiseOpacity * noiseScale * browserNoiseBoost
   const effectiveBloomThreshold = controls.bloomThreshold
 
   const mouseTrackingEnabled = activeSection !== 'contact' && !lowPowerMode
@@ -703,37 +736,44 @@ function App() {
       // FOV animation removed - FOV now stays constant during scroll
 
       if (aboutRef.current && footerRef.current) {
+        const footerEl = footerRef.current
+
         // Pin the about section while footer scrolls over it
-        const footerHeight = footerRef.current.offsetHeight
+        const getHoldDistance = () => {
+          const isMobile = window.matchMedia("(max-width: 767px)").matches
+          const isTablet = window.matchMedia("(min-width: 768px) and (max-width: 1023px)").matches
 
-        // Responsive hold distances
-        const isMobile = window.matchMedia("(max-width: 767px)").matches
-        const isTablet = window.matchMedia("(min-width: 768px) and (max-width: 1023px)").matches
-
-        let holdDistance
-        if (isMobile) {
-          holdDistance = window.innerHeight * 1.5 // Earlier on mobile
-        } else if (isTablet) {
-          holdDistance = window.innerHeight * 2.2 // Earlier on tablet
-        } else {
-          holdDistance = window.innerHeight * 3.2 // Desktop
+          if (isMobile) return window.innerHeight * 1.5
+          if (isTablet) return window.innerHeight * 2.2
+          return window.innerHeight * 3.2
         }
 
-        const footerTotalDistance = holdDistance + footerHeight
+        const getFooterHeight = () => {
+          const height = footerEl.getBoundingClientRect().height || footerEl.offsetHeight || 0
+          return height || window.innerHeight
+        }
+
+        const getFooterTotalDistance = () => getHoldDistance() + getFooterHeight()
+
+        const hideFooter = () => {
+          const footerHeight = getFooterHeight()
+          footerEl.style.transform = `translateY(${footerHeight}px)`
+        }
 
         gsap.set(aboutRef.current, { autoAlpha: 0 })
 
         // Initially hide footer below viewport
-        gsap.set(footerRef.current, { transform: `translateY(${footerHeight}px)` })
+        hideFooter()
 
         ScrollTrigger.create({
           trigger: aboutRef.current,
           start: 'top top',
-          end: () => `+=${footerTotalDistance}`,
+          end: () => `+=${getFooterTotalDistance()}`,
           pin: true,
           pinSpacing: true,
           id: 'about-pin',
           refreshPriority: 1,
+          invalidateOnRefresh: true,
           onEnter: () => gsap.set(aboutRef.current, { autoAlpha: 1 }),
           onLeaveBack: () => gsap.set(aboutRef.current, { autoAlpha: 0 }),
         })
@@ -742,13 +782,16 @@ function App() {
         ScrollTrigger.create({
           trigger: aboutRef.current,
           start: 'top top',
-          end: () => `+=${footerTotalDistance}`,
+          end: () => `+=${getFooterTotalDistance()}`,
           id: 'footer-reveal',
           scrub: true,
           refreshPriority: 1,
+          invalidateOnRefresh: true,
           onUpdate: (self) => {
-            const footerEl = footerRef.current
             if (!footerEl) return
+            const footerHeight = getFooterHeight()
+            const holdDistance = getHoldDistance()
+            const footerTotalDistance = holdDistance + footerHeight
 
             // Keep footer hidden during hold distance, then reveal
             const holdProgress = holdDistance / footerTotalDistance
@@ -764,12 +807,12 @@ function App() {
             }
           },
           onLeave: () => {
-            if (!footerRef.current) return
-            footerRef.current.style.transform = 'translateY(0px)'
+            if (!footerEl) return
+            footerEl.style.transform = 'translateY(0px)'
           },
           onLeaveBack: () => {
-            if (!footerRef.current) return
-            footerRef.current.style.transform = `translateY(${footerHeight}px)`
+            if (!footerEl) return
+            hideFooter()
           }
         })
 
@@ -874,6 +917,14 @@ function App() {
   }, [])
 
 
+  if (preloadBlocking && !assetsReady) {
+    return (
+      <div className="asset-preload">
+        <div className="asset-preload-inner">Loading assets...</div>
+      </div>
+    )
+  }
+
   return (
     <div
       ref={containerRef}
@@ -882,6 +933,16 @@ function App() {
       onPointerMove={handleHeroPointerMove}
       onPointerLeave={handleHeroPointerLeave}
     >
+      {/* Leva Debug Panel - Force Visible */}
+      <Leva
+        collapsed={false}
+        hidden={false}
+        fill={false}
+        flat={false}
+        oneLineLabels={false}
+        hideTitleBar={false}
+      />
+
       <Header innerRef={headerRef} activeSection={activeSection} />
 
       {/* Sticky Hero Section */}
@@ -919,6 +980,7 @@ function App() {
           style={{
             '--canvas-blur': `${effectiveBlur}px`,
             '--noise-opacity': effectiveNoiseOpacity,
+            '--canvas-saturation': saturationFactor,
             opacity: canvasOpacity,
           }}
         >
@@ -938,9 +1000,6 @@ function App() {
             bloomMipmapBlur={bloomMipmapBlur}
             bloomResolutionScale={bloomResolutionScale}
             composerMultisampling={composerMultisampling}
-            postBlurEnabled={postBlurEnabled}
-            postBlurScale={postBlurScale}
-            postBlurKernel={postBlurKernel}
             blurEnabled={blurEnabled}
             blurStrength={controls.blurStrength}
             blurTaper={controls.blurTaper}

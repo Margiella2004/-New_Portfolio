@@ -3,7 +3,6 @@ import ProjectDetailHeader from '../components/ProjectDetailHeader';
 import GuardianTimeline from '../components/GuardianTimeline';
 import ContentModule from '../components/ContentModule';
 import OtherProjects from '../components/OtherProjects';
-import StackedRevealSection from '../components/StackedRevealSection';
 import Footer from '../Footer';
 import { footerData } from '../footerData';
 import { projectsData } from '../data/projectsData';
@@ -287,24 +286,25 @@ export default function GuardianAppDetail() {
           </section>
 
           {/* Image Section */}
-          <section className="guardian-app-reveal-stage">
-            <img
-              src={finalShowcaseImage}
-              alt="Guardian App Section"
-              className="guardian-app-reveal-image"
-              loading="lazy"
-              decoding="async"
+          <section className="guardian-app-bento-section">
+            <ContentModule
+              layout="stacked"
+              title="Final Showcase"
+              description=""
+              images={[finalShowcaseImage]}
+              hideText={true}
+              className="guardian-app-content-module"
+              style={{
+                '--content-module-border-radius-mobile': '20px',
+                '--content-module-border-radius-desktop': '34px'
+              }}
             />
           </section>
 
         </div>
-        <StackedRevealSection
-          className="guardian-app-reveal-stage guardian-app-other-projects-stage"
-          innerClassName="guardian-app-reveal-inner"
-          revealOnce
-        >
+        <section className="guardian-app-other-projects-stage">
           <OtherProjects project={projectsData.synechronCube} />
-        </StackedRevealSection>
+        </section>
         <div className="footer-layer guardian-app-footer-layer">
           <Footer data={footerData} />
         </div>

@@ -465,6 +465,30 @@
   /* Additional spacing for content modules if needed */
 }
 
+/* Bento images: fixed width, flexible height to avoid cropping */
+.synechron-cube-page .content-module-bento-up-left .content-module-image-container-large,
+.synechron-cube-page .content-module-bento-up-right .content-module-image-container-large,
+.synechron-cube-page .content-module-bento-up-left .content-module-image-container-bento,
+.synechron-cube-page .content-module-bento-up-right .content-module-image-container-bento {
+  aspect-ratio: auto;
+}
+
+.synechron-cube-page .content-module-bento-up-left .content-module-image,
+.synechron-cube-page .content-module-bento-up-right .content-module-image {
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .synechron-cube-page .content-module-bento-up-left .content-module-image-container-large,
+  .synechron-cube-page .content-module-bento-up-right .content-module-image-container-large,
+  .synechron-cube-page .content-module-bento-up-left .content-module-image-container-bento,
+  .synechron-cube-page .content-module-bento-up-right .content-module-image-container-bento {
+    height: auto;
+  }
+}
+
 .synechron-cube-module-block {
   display: flex;
   flex-direction: column;
@@ -546,4 +570,29 @@
 .synechron-cube-footer-layer {
   position: relative;
   z-index: 2;
+}
+
+/* Large images: fixed width, flexible height */
+.synechron-cube-hero-image-container {
+  height: auto;
+}
+
+.synechron-cube-hero-image {
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.synechron-cube-feature-image {
+  height: auto;
+  object-fit: contain;
+}
+
+.synechron-cube-bento-pair-image-container {
+  aspect-ratio: auto;
+}
+
+.synechron-cube-bento-pair-image {
+  height: auto;
+  object-fit: contain;
 }

@@ -86,7 +86,7 @@
   max-width: 100%;
   margin: 0 auto;
   padding: var(--guardian-container-padding-top-mobile) var(--guardian-container-padding-mobile);
-  padding-bottom: 0;
+  padding-bottom: var(--guardian-container-padding-bottom);
   display: flex;
   flex-direction: column;
   gap: var(--guardian-section-gap);
@@ -594,12 +594,67 @@
 }
 
 .guardian-app-other-projects-stage {
+  position: relative;
+  width: 100%;
   background: transparent;
   z-index: 0;
-  margin-top: -100vh;
 }
 
 .guardian-app-footer-layer {
   position: relative;
   z-index: 2;
+}
+
+/* Bento images: fixed width, flexible height to avoid cropping */
+.guardian-app-page .content-module-bento-up-left .content-module-image-container-large,
+.guardian-app-page .content-module-bento-up-right .content-module-image-container-large,
+.guardian-app-page .content-module-bento-up-left .content-module-image-container-bento,
+.guardian-app-page .content-module-bento-up-right .content-module-image-container-bento {
+  aspect-ratio: auto;
+}
+
+.guardian-app-page .content-module-bento-up-left .content-module-image,
+.guardian-app-page .content-module-bento-up-right .content-module-image {
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .guardian-app-page .content-module-bento-up-left .content-module-image-container-large,
+  .guardian-app-page .content-module-bento-up-right .content-module-image-container-large,
+  .guardian-app-page .content-module-bento-up-left .content-module-image-container-bento,
+  .guardian-app-page .content-module-bento-up-right .content-module-image-container-bento {
+    height: auto;
+  }
+}
+
+/* Large images: fixed width, flexible height */
+.guardian-app-hero-image-container {
+  height: auto;
+}
+
+.guardian-app-hero-image {
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.guardian-app-section-image {
+  max-height: none;
+  height: auto;
+  object-fit: contain;
+}
+
+.guardian-app-three-image-item,
+.guardian-app-single-image-item,
+.guardian-app-two-image-item {
+  height: auto;
+}
+
+.guardian-app-three-image-item img,
+.guardian-app-single-image-item img,
+.guardian-app-two-image-item img {
+  height: auto;
+  object-fit: contain;
 }

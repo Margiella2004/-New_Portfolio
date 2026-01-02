@@ -1,12 +1,15 @@
-/* Design Engineer Container */
+/* Design Engineer Container - CSS GRID ALIGNED */
 .design-engineer-container {
   position: absolute;
   bottom: 40px;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateZ(0);
   width: min(var(--content-total-width), var(--page-max-width, 1400px));
   margin: 0;
   z-index: 50;
+  display: grid;
+  place-items: center;
+  backface-visibility: hidden;
 }
 
 /* SVG Image */

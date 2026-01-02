@@ -24,9 +24,9 @@ body {
   scroll-behavior: smooth;
 }
 
-/* Hide Leva panel completely */
-.leva-c-hFtYAm,
-.leva__root,
-[class*="leva"] {
+/* Hide Leva panel completely (enable with html.show-leva in dev) */
+html:not(.show-leva) .leva-c-hFtYAm,
+html:not(.show-leva) .leva__root,
+html:not(.show-leva) [class*="leva"] {
   display: none !important;
 }
