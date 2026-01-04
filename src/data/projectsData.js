@@ -10,6 +10,8 @@ import fourthCubeMovie from '../../movies_for_portfolio/fourthcube.gif';
 import synechronDraftImage from '../../img_assets/synechron_draft-1 1.png';
 import sketchImage from '../../img_assets/sketch 1.png';
 import frame50Image from '../../img_assets/Frame 50.png';
+import introGridImage from '../../img_assets/intro.png';
+import cubeSmallImage from '../../img_assets/Screenshot 2025-12-17 at 9.40.00 PM 1.png';
 
 export const projectsData = {
   guardianApp: {
@@ -92,14 +94,14 @@ export const projectsData = {
     ],
 
     // Custom fields for Synechron Cube page
-    numberGridImage: '/Frame 58.png',
+    numberGridImage: introGridImage,
     quote: 'Jonathan Ramesh is a Interdisciplinary Designer focusing on UX Design and Engineering. Jonathan combines his coding experince and design education to create products focused on bringing back human centered design',
     contentModules: [
       {
         layout: 'bento-up-left',
         title: 'Why A Cube?',
         description: 'The 8 faces allowed for 8 diffrent topics to use when presenting wether that be new tools or 8 diffrent marketing slides',
-        images: [frame56AltImage, frame50Image],
+        images: [frame56AltImage, cubeSmallImage],
         overlayText: '8 faces'
       },
       {
