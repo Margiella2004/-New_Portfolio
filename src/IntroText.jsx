@@ -1,5 +1,6 @@
 import './IntroText.css'
 import linkArrowImage from '../Svg/material-symbols-light_arrow-back.svg'
+import resumePdf from '../img_assets/Resume_2.pdf'
 
 export default function IntroText({ paddingX = 72 }) {
   return (
@@ -26,21 +27,26 @@ export default function IntroText({ paddingX = 72 }) {
 
           {/* Link Buttons */}
           <div className="link-buttons">
-            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="link-button">
+            <a
+              href="https://www.linkedin.com/in/jonathan-r-48b13b202/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link-button"
+            >
               <span className="link-button-text">linkedin</span>
               <div className="link-button-arrow">
                 <img src={linkArrowImage} alt="" className="link-arrow-image" />
               </div>
             </a>
 
-            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="link-button">
+            <a href={resumePdf} target="_blank" rel="noopener noreferrer" className="link-button">
               <span className="link-button-text">resume</span>
               <div className="link-button-arrow">
                 <img src={linkArrowImage} alt="" className="link-arrow-image" />
               </div>
             </a>
 
-            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="link-button">
+            <a href="https://github.com/Margiella2004" target="_blank" rel="noopener noreferrer" className="link-button">
               <span className="link-button-text">github</span>
               <div className="link-button-arrow">
                 <img src={linkArrowImage} alt="" className="link-arrow-image" />
