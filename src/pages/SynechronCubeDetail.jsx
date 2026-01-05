@@ -8,7 +8,8 @@ import OtherProjects from '../components/OtherProjects';
 import Footer from '../Footer';
 import { footerData } from '../footerData';
 import './SynechronCubeDetail.css';
-import guardianHeaderImage from '../../img_assets/Frame 56.png';
+import guardianHeaderImage from '../../img_assets/gaurdian.png';
+import navigationDemoClip from '../../img_assets/Screen Recording 2026-01-04 at 9.34.28 PM.mov';
 
 export default function SynechronCubeDetail() {
   const project = projectsData.synechronCube;
@@ -316,6 +317,26 @@ export default function SynechronCubeDetail() {
                   ))}
                 </section>
               )}
+
+              {project.bentoPairQuote && (
+                <section className="synechron-cube-quote">
+                  <p className="synechron-cube-quote-text">{project.bentoPairQuote}</p>
+                </section>
+              )}
+
+              <section className="synechron-cube-feature">
+                <div className="synechron-cube-feature-image-container">
+                  <video
+                    className="synechron-cube-feature-image"
+                    src={navigationDemoClip}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                  />
+                </div>
+              </section>
 
               {project.bentoPairImagesSecondary?.length >= 2 && (
                 <section className="synechron-cube-bento-pair">

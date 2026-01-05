@@ -334,6 +334,16 @@
   object-position: 50% 50%;
 }
 
+.project-image-frame--contain {
+  background: #f4f5f6;
+}
+
+.project-image--contain {
+  object-fit: contain;
+  transform: scale(1.14);
+  transform-origin: center;
+}
+
 .project-meta {
   display: grid;
   grid-template-columns: 1fr auto;

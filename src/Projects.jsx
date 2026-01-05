@@ -84,6 +84,7 @@ export default function Projects() {
     () => projects.find((project) => project.id === activeId) || projects[0],
     [activeId]
   )
+  const isGuardianProject = activeProject.id === 'guardian-app'
   const stride = isMobile ? 65 : 82
 
   useLayoutEffect(() => {
@@ -397,11 +398,13 @@ export default function Projects() {
           </div>
 
           <div ref={previewRef} className="project-preview">
-            <div className="project-image-frame">
+            <div
+              className={`project-image-frame${isGuardianProject ? ' project-image-frame--contain' : ''}`}
+            >
               <img
                 src={activeProject.image}
                 alt={activeProject.title}
-                className="project-image"
+                className={`project-image${isGuardianProject ? ' project-image--contain' : ''}`}
               />
             </div>
 

@@ -141,6 +141,7 @@ export const projectsData = {
       }
     },
     bentoPairImages: [thirdCubeMovie, fourthCubeMovie],
+    bentoPairQuote: "This project reshaped how I think about interactive systems. As a designer and engineer, I built the cube experience, tested it on the 32-panel touch wall, and presented the iteration story to leadership with clear user feedback. It earned me a contract extension and a part-time role, and reinforced that clarity and usability must lead every decision.",
     bentoPairImagesSecondary: [cubeDetailImageOne, cubeDetailImageTwo]
   }
 };
