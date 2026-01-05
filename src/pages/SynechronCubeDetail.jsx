@@ -16,6 +16,8 @@ export default function SynechronCubeDetail() {
     ...projectsData.guardianApp,
     heroImage: guardianHeaderImage
   };
+  const quotePrimary = project.quotes?.[0] ?? project.quote;
+  const quoteSecondary = project.quotes?.[1] ?? project.quote;
   const {
     containerPadding,
     containerPaddingTopMobile,
@@ -206,7 +208,7 @@ export default function SynechronCubeDetail() {
 
             {/* Centered Quote */}
             <section className="synechron-cube-quote">
-              <p className="synechron-cube-quote-text">{project.quote}</p>
+              <p className="synechron-cube-quote-text">{quotePrimary}</p>
             </section>
 
             {/* Content Modules */}
@@ -234,12 +236,13 @@ export default function SynechronCubeDetail() {
 
           {/* Centered Quote (between legacy and new sections) */}
           <section className="synechron-cube-quote">
-            <p className="synechron-cube-quote-text">{project.quote}</p>
+            <p className="synechron-cube-quote-text">{quoteSecondary}</p>
           </section>
 
           {(project.featureBlock?.bigImage ||
             project.featureBlock?.bentoLeft ||
-            project.bentoPairImages?.length >= 2) && (
+            project.bentoPairImages?.length >= 2 ||
+            project.bentoPairImagesSecondary?.length >= 2) && (
             <section className="synechron-cube-new-sections">
               {/* Added: Big image + Bento Left (single block) */}
               {(project.featureBlock?.bigImage || project.featureBlock?.bentoLeft) && (
@@ -289,6 +292,34 @@ export default function SynechronCubeDetail() {
               {project.bentoPairImages?.length >= 2 && (
                 <section className="synechron-cube-bento-pair">
                   {project.bentoPairImages.slice(0, 2).map((img, index) => (
+                    <div key={index} className="synechron-cube-bento-pair-image-container">
+                      {isVideoSrc(img) ? (
+                        <video
+                          className="synechron-cube-bento-pair-image"
+                          src={img}
+                          autoPlay
+                          muted
+                          loop
+                          playsInline
+                          preload="metadata"
+                        />
+                      ) : (
+                        <img
+                          src={img}
+                          alt={`Synechron Cube Bento ${index + 1}`}
+                          className="synechron-cube-bento-pair-image"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      )}
+                    </div>
+                  ))}
+                </section>
+              )}
+
+              {project.bentoPairImagesSecondary?.length >= 2 && (
+                <section className="synechron-cube-bento-pair">
+                  {project.bentoPairImagesSecondary.slice(0, 2).map((img, index) => (
                     <div key={index} className="synechron-cube-bento-pair-image-container">
                       {isVideoSrc(img) ? (
                         <video

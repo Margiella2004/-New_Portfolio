@@ -12,6 +12,8 @@ import sketchImage from '../../img_assets/sketch 1.png';
 import frame50Image from '../../img_assets/Frame 50.png';
 import introGridImage from '../../img_assets/intro.png';
 import cubeSmallImage from '../../img_assets/Screenshot 2025-12-17 at 9.40.00 PM 1.png';
+import cubeDetailImageOne from '../../img_assets/IMG_4585.png';
+import cubeDetailImageTwo from '../../img_assets/IMG_4586.png';
 
 export const projectsData = {
   guardianApp: {
@@ -95,19 +97,23 @@ export const projectsData = {
 
     // Custom fields for Synechron Cube page
     numberGridImage: introGridImage,
-    quote: 'Jonathan Ramesh is a Interdisciplinary Designer focusing on UX Design and Engineering. Jonathan combines his coding experince and design education to create products focused on bringing back human centered design',
+    quote: 'During my second internship, I had to build a flashy but lightweight 3D interface that ran on a 32-panel touch wall and on laptops. The touch wall drove everything-big gestures, fast response, and clarity from across the room-while still holding up in close-up demos. When the first version felt unclear, I stepped back, watched real client walkthroughs, and reworked the object metaphor so it made sense at a glance.',
+    quotes: [
+      'During my second internship, I had to build a flashy but lightweight 3D interface that ran on a 32-panel touch wall and on laptops. The touch wall drove everything-big gestures, fast response, and clarity from across the room-while still holding up in close-up demos. When the first version felt unclear, I stepped back, watched real client walkthroughs, and reworked the object metaphor so it made sense at a glance.',
+      'Once the assets were ready, I moved into interaction design in Babylon. I prototyped motion and interaction ideas in Blender, then rebuilt them in Babylon for real-time testing. We brought colleagues to the touch wall to run through tasks and navigation, captured their feedback, and iterated until the flow felt clear and confident.'
+    ],
     contentModules: [
       {
         layout: 'bento-up-left',
         title: 'Why A Cube?',
-        description: 'The 8 faces allowed for 8 diffrent topics to use when presenting wether that be new tools or 8 diffrent marketing slides',
+        description: "During my second internship, the 3D interface had to run on a 32-panel touch wall and laptops, so clarity and speed were everything. A Rubik's Cube clicked: six sides, nine tiles each, a structure that felt playful and familiar to engineering-heavy clients. We built the interface around rotating and tapping faces to pull up content fast.",
         images: [frame56AltImage, cubeSmallImage],
         overlayText: '8 faces'
       },
       {
         layout: 'bento-up-left',
         title: 'Process Sketches',
-        description: 'The 8 faces allowed for 8 diffrent topics to use when presenting wether that be new tools or 8 diffrent marketing slides',
+        description: 'I planned the cube navigation on paper first, sketching camera paths, touch gestures, and face transitions before touching 3D. Early iterations tried faces sliding out like drawers; another used a fixed cube with a moving camera orbit; and a third kept the camera steady while the cube rotated to the active side. I mapped each flow to quick pencil storyboards to test clarity, speed, and how it would read on a 32-panel wall versus a laptop, then refined the route that kept orientation and context intact.',
         images: [
           synechronDraftImage,
           sketchImage
@@ -129,12 +135,13 @@ export const projectsData = {
       bigImage: introMovie,
       bentoLeft: {
         layout: 'bento-up-left',
-        title: 'Prototype Flow',
-        description: 'The 8 faces allowed for 8 diffrent topics to use when presenting wether that be new tools or 8 diffrent marketing slides',
+        title: 'Navigation Flow',
+        description: 'Navigation centers on rotating the cube and guiding the camera with a soft bounce and brief zoom to confirm focus. We tested whether the camera should orbit or the cube should turn and chose the approach that kept users oriented with the fewest gestures. Lighting shifts to illuminate the active face while keeping adjacent sides visible, so users always understand context and can move confidently to the next side.',
         images: [secondCubeMovie]
       }
     },
-    bentoPairImages: [thirdCubeMovie, fourthCubeMovie]
+    bentoPairImages: [thirdCubeMovie, fourthCubeMovie],
+    bentoPairImagesSecondary: [cubeDetailImageOne, cubeDetailImageTwo]
   }
 };
 
