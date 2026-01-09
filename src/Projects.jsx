@@ -85,6 +85,19 @@ export default function Projects() {
     [activeId]
   )
   const isGuardianProject = activeProject.id === 'guardian-app'
+  const isWanderProject = activeProject.id === 'wander-app'
+  const isImageClickable = Boolean(activeProject?.id)
+  const handleImageClick = () => {
+    if (!isImageClickable) return
+    navigate(`/project/${activeProject.id}`)
+  }
+  const handleImageKeyDown = (event) => {
+    if (!isImageClickable) return
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      handleImageClick()
+    }
+  }
   const stride = isMobile ? 65 : 82
 
   useLayoutEffect(() => {
@@ -397,9 +410,19 @@ export default function Projects() {
             </div>
           </div>
 
-          <div ref={previewRef} className="project-preview">
+          <div
+            ref={previewRef}
+            className={`project-preview${isWanderProject ? ' is-muted' : ''}`}
+          >
             <div
-              className={`project-image-frame${isGuardianProject ? ' project-image-frame--contain' : ''}`}
+              className={`project-image-frame${isGuardianProject ? ' project-image-frame--contain' : ''}${
+                isImageClickable ? ' is-clickable' : ''
+              }`}
+              onClick={isImageClickable ? handleImageClick : undefined}
+              onKeyDown={isImageClickable ? handleImageKeyDown : undefined}
+              role={isImageClickable ? 'button' : undefined}
+              tabIndex={isImageClickable ? 0 : undefined}
+              aria-label={isImageClickable ? `Open ${activeProject.title} project` : undefined}
             >
               <img
                 src={activeProject.image}
@@ -419,9 +442,12 @@ export default function Projects() {
 
               <button
                 type="button"
-                className="project-cta"
-                onClick={() => navigate(`/project/${activeProject.id}`)}
+                className={`project-cta${isWanderProject ? ' is-disabled' : ''}`}
+                onClick={() => {
+                  if (!isWanderProject) navigate(`/project/${activeProject.id}`)
+                }}
                 aria-label={`View work for ${activeProject.title}`}
+                disabled={isWanderProject}
               >
                 <span className="project-cta-text">view work</span>
                 <ArrowUpRightIcon className="project-cta-icon" />

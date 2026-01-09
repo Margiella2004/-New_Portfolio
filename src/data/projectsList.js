@@ -26,8 +26,7 @@ export const projects = [
     title: 'Wander App',
     image:
       'https://images.unsplash.com/photo-1461183479101-6c14cd5299c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMG1hcCUyMG5hdmlnYXRpb24lMjB0cmF2ZWwlMjBzaW1wbGlzdGljfGVufDF8fHx8MTc2NjE3Mjc2NXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    tags: ['Travel', 'Discovery', 'Social'],
-    description:
-      'Wander helps travelers discover hidden gems and connect with local communities. By leveraging AI-driven recommendations, it curates personalized itineraries that go beyond the typical tourist traps.',
+    tags: ['Travel', 'Discovery', 'Social', 'Under Construction'],
+    description: '',
   },
 ]

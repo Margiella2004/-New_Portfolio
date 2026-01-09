@@ -289,6 +289,7 @@ function App() {
     const ua = navigator.userAgent
     return /safari/i.test(ua) && !/chrome|chromium|crios|android/i.test(ua)
   }, [])
+  const isChromium = !isFirefox && !isSafari
   const preloadBlocking = useMemo(() => {
     if (typeof window === 'undefined') return false
     return new URLSearchParams(window.location.search).get('preload') === 'block'
@@ -309,6 +310,8 @@ function App() {
     }
   }, [])
 
+  const defaultBackdropBlur = isChromium ? 87 : 128
+  const defaultSaturation = isChromium ? 0.79 : 1.55
   const controls = useControls({
     Gradient: folder(
       {
@@ -385,14 +388,14 @@ function App() {
     ),
     Background: folder(
       {
-        backdropBlur: { value: 78, min: 0, max: 300, step: 1, label: 'canvas blur' },
+        backdropBlur: { value: defaultBackdropBlur, min: 0, max: 300, step: 1, label: 'canvas blur' },
         blurMode: {
           value: 'css',
           options: ['css', 'none'],
           label: 'blur mode',
         },
         noiseOpacity: { value: 0.07, min: 0, max: 0.5, step: 0.01, label: 'texture' },
-        saturation: { value: 1.67, min: 0, max: 2, step: 0.01, label: 'saturation' },
+        saturation: { value: defaultSaturation, min: 0, max: 2, step: 0.01, label: 'saturation' },
       },
       { collapsed: false }
     ),

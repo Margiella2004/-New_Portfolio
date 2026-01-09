@@ -53,7 +53,7 @@ export const projectsData = {
     },
     title: 'Wander App',
     heroImage: 'https://images.unsplash.com/photo-1692681157014-2f7ee75c0ea0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
-    description: 'Jonathan Ramesh is a Interdisciplinary Designer focusing on UX Design and Engineering. Jonathan combines his coding experince and design education to create products focused on bringing back human centered design',
+    description: '',
     skills: [
       'User Research',
       'Interaction Design',
