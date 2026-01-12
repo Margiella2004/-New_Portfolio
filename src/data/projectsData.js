@@ -3,6 +3,8 @@ import frame56Image from '../../img_assets/Frame 56.png';
 import frame56AltImage from '../../img_assets/Frame 56-1.png';
 import rubixModelImage from '../../img_assets/RUBIX_MODEL.png';
 import synechronCubeHeaderImage from '../../img_assets/Synechron Cube  header.png';
+import guardianCardImage from '../../img_assets/gaurdian.png';
+import wanderHeroImage from '../../img_assets/wander_app/Container.png';
 import introMovie from '../../movies_for_portfolio/Intro.gif';
 import secondCubeMovie from '../../movies_for_portfolio/secondcube.gif';
 import thirdCubeMovie from '../../movies_for_portfolio/thirdcube.gif';
@@ -24,7 +26,7 @@ export const projectsData = {
       category: 'Healthcare'
     },
     title: 'Guardian App',
-    heroImage: 'https://images.unsplash.com/photo-1533234944761-2f5337579079?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
+    heroImage: guardianCardImage,
     description: 'Jonathan Ramesh is a Interdisciplinary Designer focusing on UX Design and Engineering. Jonathan combines his coding experince and design education to create products focused on bringing back human centered design',
     skills: [
       'User Research',
@@ -52,7 +54,8 @@ export const projectsData = {
       category: 'Travel'
     },
     title: 'Wander App',
-    heroImage: 'https://images.unsplash.com/photo-1692681157014-2f7ee75c0ea0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
+    heroImage: wanderHeroImage,
+    featureImage: wanderHeroImage,
     description: '',
     skills: [
       'User Research',

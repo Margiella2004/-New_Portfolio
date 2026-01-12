@@ -1,0 +1,357 @@
+/* ===========================
+   Wander App Page CSS Variables
+   =========================== */
+.wander-app-page {
+  /* Colors */
+  --wander-page-bg: #ffffff;
+  --wander-title-color: #000000;
+  --wander-metadata-primary-color: #363636;
+  --wander-metadata-secondary-color: #919191;
+  --wander-description-color: #3c3c3c;
+  --wander-skill-color: #3c3c3c;
+  --wander-quote-color: #3c3c3c;
+  --wander-hero-bg: #000000;
+
+  /* Spacing */
+  --wander-container-padding-mobile: 20px;
+  --wander-container-padding-desktop: 20px;
+  --wander-container-padding-top-mobile: 80px;
+  --wander-container-padding-top-desktop: 112px;
+  --wander-container-padding-bottom: 96px;
+  --wander-section-gap: 20px;
+
+  /* Header Section */
+  --wander-header-gap: 80px;
+  --wander-title-section-gap: 16px;
+  --wander-metadata-gap-mobile: 12px;
+  --wander-metadata-gap-desktop: 16px;
+
+  /* Hero Image */
+  --wander-hero-height-mobile: 400px;
+  --wander-hero-height-md: 600px;
+  --wander-hero-height-lg: 700px;
+  --wander-hero-border-radius-mobile: 20px;
+  --wander-hero-border-radius-desktop: 35px;
+
+  /* Bio & Skills */
+  --wander-bio-skills-gap-mobile: 32px;
+  --wander-bio-skills-gap-lg: 48px;
+  --wander-description-max-width: 660px;
+  --wander-skills-gap: 4px;
+
+  /* Quote Section */
+  --wander-quote-padding-mobile: 24px;
+  --wander-quote-padding-desktop: 208px;
+  --wander-quote-max-width: 800px;
+
+  /* Typography */
+  --wander-metadata-font-size-mobile: 18px;
+  --wander-metadata-font-size-desktop: 21.801px;
+  --wander-metadata-font-weight-medium: 500;
+  --wander-metadata-letter-spacing: -0.03em;
+  --wander-metadata-line-height: 3.106;
+
+  --wander-title-font-size-mobile: 60px;
+  --wander-title-font-size-md: 80px;
+  --wander-title-font-size-lg: 55.076px;
+  --wander-title-line-height: 0.75;
+  --wander-title-letter-spacing: -0.03em;
+
+  --wander-description-font-size-mobile: 24px;
+  --wander-description-font-size-md: 26px;
+  --wander-description-font-size-lg: 26px;
+  --wander-description-font-weight: 300;
+  --wander-description-line-height: 1.269;
+  --wander-description-letter-spacing: -0.03em;
+
+  --wander-skill-font-size-mobile: 24px;
+  --wander-skill-font-size-md: 26px;
+  --wander-skill-font-size-lg: 26px;
+  --wander-skill-font-weight: 300;
+  --wander-skill-letter-spacing: -0.03em;
+  --wander-skill-line-height: 1.269;
+}
+
+/* ===========================
+   Page Container
+   =========================== */
+.wander-app-page {
+  min-height: 100vh;
+  background: var(--wander-page-bg);
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.wander-app-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: var(--wander-container-padding-top-mobile) var(--wander-container-padding-mobile);
+  padding-bottom: var(--wander-container-padding-bottom);
+  display: flex;
+  flex-direction: column;
+  gap: var(--wander-section-gap);
+  background: var(--wander-page-bg);
+  position: relative;
+  z-index: 2;
+}
+
+@media (min-width: 768px) {
+  .wander-app-container {
+    padding-top: var(--wander-container-padding-top-desktop);
+  }
+}
+
+/* ===========================
+   Header Section
+   =========================== */
+.wander-app-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--wander-header-gap);
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.wander-app-title-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--wander-title-section-gap);
+  text-align: center;
+}
+
+.wander-app-metadata {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--wander-metadata-gap-mobile);
+  font-family: 'Pangea Afrikan VAR 2.003', sans-serif;
+  font-weight: var(--wander-metadata-font-weight-medium);
+  font-size: var(--wander-metadata-font-size-mobile);
+  text-transform: capitalize;
+  letter-spacing: var(--wander-metadata-letter-spacing);
+  line-height: var(--wander-metadata-line-height);
+}
+
+@media (min-width: 768px) {
+  .wander-app-metadata {
+    gap: var(--wander-metadata-gap-desktop);
+    font-size: var(--wander-metadata-font-size-desktop);
+  }
+}
+
+.wander-app-metadata-item {
+  color: var(--wander-metadata-primary-color);
+}
+
+.wander-app-metadata-secondary {
+  color: var(--wander-metadata-secondary-color);
+}
+
+.wander-app-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: var(--wander-title-font-size-mobile);
+  line-height: var(--wander-title-line-height);
+  letter-spacing: var(--wander-title-letter-spacing);
+  color: var(--wander-title-color);
+  margin: 0.5rem 0 0 0;
+  font-weight: 400;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .wander-app-title {
+    font-size: var(--wander-title-font-size-md);
+    line-height: 1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .wander-app-title {
+    font-size: var(--wander-title-font-size-lg);
+    line-height: var(--wander-title-line-height);
+  }
+}
+
+/* ===========================
+   Hero Image
+   =========================== */
+.wander-app-hero-image-container {
+  width: 100%;
+  height: var(--wander-hero-height-mobile);
+  background: var(--wander-hero-bg);
+  border-radius: var(--wander-hero-border-radius-mobile);
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 768px) {
+  .wander-app-hero-image-container {
+    height: var(--wander-hero-height-md);
+    border-radius: var(--wander-hero-border-radius-desktop);
+  }
+}
+
+@media (min-width: 1024px) {
+  .wander-app-hero-image-container {
+    height: var(--wander-hero-height-lg);
+  }
+}
+
+.wander-app-hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ===========================
+   Bio & Skills Section
+   =========================== */
+.wander-app-bio-skills {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wander-bio-skills-gap-mobile);
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .wander-app-bio-skills {
+    gap: var(--wander-bio-skills-gap-lg);
+  }
+}
+
+.wander-app-description {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.wander-app-description-text {
+  max-width: var(--wander-description-max-width);
+  font-family: 'Pangea Afrikan VAR 2.003', sans-serif;
+  font-weight: var(--wander-description-font-weight);
+  font-size: var(--wander-description-font-size-mobile);
+  color: var(--wander-description-color);
+  line-height: var(--wander-description-line-height);
+  letter-spacing: var(--wander-description-letter-spacing);
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .wander-app-description-text {
+    font-size: var(--wander-description-font-size-md);
+  }
+}
+
+@media (min-width: 1024px) {
+  .wander-app-description-text {
+    font-size: var(--wander-description-font-size-lg);
+  }
+}
+
+.wander-app-skills {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--wander-skills-gap);
+}
+
+.wander-app-skill {
+  font-family: 'Pangea Afrikan VAR 2.003', sans-serif;
+  font-weight: var(--wander-skill-font-weight);
+  font-size: var(--wander-skill-font-size-mobile);
+  color: var(--wander-skill-color);
+  letter-spacing: var(--wander-skill-letter-spacing);
+  line-height: var(--wander-skill-line-height);
+}
+
+@media (min-width: 768px) {
+  .wander-app-skill {
+    font-size: var(--wander-skill-font-size-md);
+  }
+}
+
+@media (min-width: 1024px) {
+  .wander-app-skill {
+    font-size: var(--wander-skill-font-size-lg);
+  }
+}
+
+/* ===========================
+   Quote Section
+   =========================== */
+.wander-app-quote {
+  width: 100%;
+  padding: var(--wander-quote-padding-mobile) 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .wander-app-quote {
+    padding: var(--wander-quote-padding-desktop) 0;
+  }
+}
+
+.wander-app-quote-text {
+  margin: 0;
+  max-width: var(--wander-quote-max-width);
+  text-align: center;
+  font-family: 'Pangea Afrikan VAR 2.003', -apple-system, system-ui, sans-serif;
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--wander-quote-color);
+}
+
+@media (min-width: 768px) {
+  .wander-app-quote-text {
+    font-size: 30px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .wander-app-quote-text {
+    font-size: 34px;
+  }
+}
+
+.wander-app-bento-section {
+  width: 100%;
+}
+
+.wander-app-content-module .content-module-image {
+  object-fit: contain;
+  display: block;
+}
+
+.wander-app-content-module {
+  --content-module-image-bg-dark: #ffffff;
+  --content-module-image-opacity-dark: 1;
+}
+
+@media (min-width: 768px) {
+  .wander-app-content-module-right .content-module-bento-bottom {
+    flex-direction: row-reverse;
+  }
+
+  .wander-app-content-module-right .content-module-bento-bottom .content-module-bento-text {
+    justify-content: flex-start;
+  }
+}
+
+.wander-app-other-projects-stage {
+  position: relative;
+  width: 100%;
+  background: transparent;
+  z-index: 0;
+}
+
+.wander-app-footer-layer {
+  position: relative;
+  z-index: 2;
+}

@@ -85,7 +85,6 @@ export default function Projects() {
     [activeId]
   )
   const isGuardianProject = activeProject.id === 'guardian-app'
-  const isWanderProject = activeProject.id === 'wander-app'
   const isImageClickable = Boolean(activeProject?.id)
   const handleImageClick = () => {
     if (!isImageClickable) return
@@ -412,7 +411,7 @@ export default function Projects() {
 
           <div
             ref={previewRef}
-            className={`project-preview${isWanderProject ? ' is-muted' : ''}`}
+            className="project-preview"
           >
             <div
               className={`project-image-frame${isGuardianProject ? ' project-image-frame--contain' : ''}${
@@ -442,12 +441,9 @@ export default function Projects() {
 
               <button
                 type="button"
-                className={`project-cta${isWanderProject ? ' is-disabled' : ''}`}
-                onClick={() => {
-                  if (!isWanderProject) navigate(`/project/${activeProject.id}`)
-                }}
+                className="project-cta"
+                onClick={() => navigate(`/project/${activeProject.id}`)}
                 aria-label={`View work for ${activeProject.title}`}
-                disabled={isWanderProject}
               >
                 <span className="project-cta-text">view work</span>
                 <ArrowUpRightIcon className="project-cta-icon" />
