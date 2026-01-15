@@ -4,10 +4,6 @@ import { RoundedBox, OrbitControls } from '@react-three/drei'
 import { EffectComposer, Bloom, TiltShift2, Noise } from '@react-three/postprocessing'
 import { Perf } from 'r3f-perf'
 import { Leva, useControls, folder } from 'leva'
-
-console.log('🔍 Leva imported:', Leva)
-console.log('🔍 useControls imported:', useControls)
-console.log('🔍 folder imported:', folder)
 import { Color } from 'three'
 import { BlendFunction } from 'postprocessing'
 import gsap from 'gsap'
@@ -276,9 +272,6 @@ function App() {
     return Boolean(reducedMotion || lowMemory || lowCores)
   }, [])
   const debugEnabled = import.meta.env.DEV
-  console.log('🔍 Vite Mode:', import.meta.env.MODE)
-  console.log('🔍 Is DEV:', import.meta.env.DEV)
-  console.log('🔍 Is PROD:', import.meta.env.PROD)
   const lowPowerMode = isLowPower
   const isFirefox = useMemo(() => {
     if (typeof navigator === 'undefined') return false

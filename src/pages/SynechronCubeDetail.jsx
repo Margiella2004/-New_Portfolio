@@ -338,6 +338,12 @@ export default function SynechronCubeDetail() {
                 </div>
               </section>
 
+              {project.bentoPairQuoteSecondary && (
+                <section className="synechron-cube-quote">
+                  <p className="synechron-cube-quote-text">{project.bentoPairQuoteSecondary}</p>
+                </section>
+              )}
+
               {project.bentoPairImagesSecondary?.length >= 2 && (
                 <section className="synechron-cube-bento-pair">
                   {project.bentoPairImagesSecondary.slice(0, 2).map((img, index) => (

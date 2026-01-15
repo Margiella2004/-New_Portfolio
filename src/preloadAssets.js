@@ -31,13 +31,15 @@ const collectRemoteUrls = (value, urls) => {
   }
 }
 
-const getAssetUrls = () => {
+const getAssetUrls = ({ includeRemote = false } = {}) => {
   const urls = new Set()
   Object.values(localImages).forEach((src) => urls.add(src))
   Object.values(localMedia).forEach((src) => urls.add(src))
   Object.values(srcAssets).forEach((src) => urls.add(src))
-  collectRemoteUrls(projectsData, urls)
-  collectRemoteUrls(projects, urls)
+  if (includeRemote) {
+    collectRemoteUrls(projectsData, urls)
+    collectRemoteUrls(projects, urls)
+  }
   return Array.from(urls)
 }
 
@@ -66,7 +68,9 @@ const preloadVideo = (src) =>
 
 export const preloadAssets = () => {
   if (typeof window === 'undefined') return Promise.resolve([])
-  const assets = getAssetUrls()
+  const includeRemote =
+    new URLSearchParams(window.location.search).get('preloadRemote') === 'true'
+  const assets = getAssetUrls({ includeRemote })
   return Promise.all(
     assets.map((src) => (isVideo(src) ? preloadVideo(src) : preloadImage(src)))
   )
