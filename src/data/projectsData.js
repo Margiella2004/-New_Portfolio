@@ -4,7 +4,7 @@ import frame56AltImage from '../../img_assets/Frame 56-1.png';
 import rubixModelImage from '../../img_assets/RUBIX_MODEL.png';
 import synechronCubeHeaderImage from '../../img_assets/Synechron Cube  header.png';
 import guardianCardImage from '../../img_assets/gaurdian.png';
-import wanderHeroImage from '../../img_assets/wander_app/Container.png';
+import wanderHeroImage from '../../img_assets/wander_app/Wander_App.png';
 import introMovie from '../../movies_for_portfolio/Intro.gif';
 import secondCubeMovie from '../../movies_for_portfolio/secondcube.gif';
 import thirdCubeMovie from '../../movies_for_portfolio/thirdcube.gif';

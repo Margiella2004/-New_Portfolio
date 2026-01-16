@@ -31,13 +31,13 @@ function PolaroidImages() {
   return (
     <div className="polaroid-container">
       <div className="polaroid polaroid-1">
-        <img src={projects[0].image} alt="" />
+        <img src={projects[0].image} alt="" loading="lazy" decoding="async" />
       </div>
       <div className="polaroid polaroid-2">
-        <img src={projects[1].image} alt="" />
+        <img src={projects[1].image} alt="" loading="lazy" decoding="async" />
       </div>
       <div className="polaroid polaroid-3">
-        <img src={projects[2].image} alt="" />
+        <img src={projects[2].image} alt="" loading="lazy" decoding="async" />
       </div>
     </div>
   )
@@ -427,6 +427,8 @@ export default function Projects() {
                 src={activeProject.image}
                 alt={activeProject.title}
                 className={`project-image${isGuardianProject ? ' project-image--contain' : ''}`}
+                loading="lazy"
+                decoding="async"
               />
             </div>
 

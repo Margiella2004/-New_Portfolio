@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { Canvas, useThree } from '@react-three/fiber'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { RoundedBox, OrbitControls } from '@react-three/drei'
 import { EffectComposer, Bloom, TiltShift2, Noise } from '@react-three/postprocessing'
 import { Perf } from 'r3f-perf'
@@ -22,6 +22,77 @@ import { preloadAssets } from './preloadAssets'
 import './App.css'
 
 gsap.registerPlugin(ScrollTrigger)
+
+function ScrollStopBCUpdater({
+  materialRef,
+  scrollStopBCRef,
+  scrollStopBCTargetRef,
+  scrollStopBCBaseRef,
+  scrollStopBCBaselinePendingRef,
+  baseStopBC,
+  lowPowerMode,
+  mouseActivityRef,
+}) {
+  const lastStopBCRef = useRef(null)
+
+  useFrame(() => {
+    if (!materialRef.current) return
+    if (lowPowerMode) {
+      if (lastStopBCRef.current !== baseStopBC) {
+        materialRef.current.uStopBC = baseStopBC
+        lastStopBCRef.current = baseStopBC
+      }
+      return
+    }
+
+    const now = typeof performance !== 'undefined' ? performance.now() : Date.now()
+    const lastMouse = mouseActivityRef?.current ?? 0
+    const recentMouse = now - lastMouse < 220
+    const scrollInfluence = recentMouse ? 0.6 : 1
+    const target = scrollStopBCTargetRef?.current ?? 0
+    const pendingBaseline = scrollStopBCBaselinePendingRef?.current
+    if (scrollStopBCBaseRef?.current === null && pendingBaseline !== null) {
+      const currentUniform = materialRef.current.uStopBC ?? baseStopBC
+      scrollStopBCBaseRef.current = currentUniform + pendingBaseline * scrollInfluence
+      scrollStopBCRef.current = pendingBaseline
+      scrollStopBCBaselinePendingRef.current = null
+      lastStopBCRef.current = currentUniform
+      return
+    }
+
+    const current = scrollStopBCRef?.current ?? 0
+    const nextCurrent = current + (target - current) * 0.12
+    scrollStopBCRef.current = nextCurrent
+
+    if (
+      scrollStopBCBaseRef?.current !== null &&
+      target === 0 &&
+      Math.abs(nextCurrent) < 0.001
+    ) {
+      scrollStopBCBaseRef.current = null
+      scrollStopBCRef.current = 0
+      scrollStopBCBaselinePendingRef.current = null
+      if (lastStopBCRef.current !== baseStopBC) {
+        materialRef.current.uStopBC = baseStopBC
+        lastStopBCRef.current = baseStopBC
+      }
+      return
+    }
+
+    const baseline = scrollStopBCBaseRef?.current ?? baseStopBC
+    const nextStopBC = baseline - nextCurrent * scrollInfluence
+    const lastStopBC = lastStopBCRef.current
+
+    if (lastStopBC !== null && Math.abs(nextStopBC - lastStopBC) < 0.001) {
+      return
+    }
+
+    materialRef.current.uStopBC = nextStopBC
+    lastStopBCRef.current = nextStopBC
+  })
+
+  return null
+}
 
 function RoundedCube({
   width,
@@ -47,6 +118,7 @@ function RoundedCube({
   emissiveStrength,
   radius,
   smoothness,
+  materialRef,
 }) {
   const colorAArray = useMemo(() => new Color(colorA).toArray(), [colorA])
   const colorBArray = useMemo(() => new Color(colorB).toArray(), [colorB])
@@ -59,6 +131,7 @@ function RoundedCube({
   return (
     <RoundedBox args={args} radius={safeRadius} smoothness={smoothness}>
       <Iridescence
+        ref={materialRef}
         colorA={colorAArray}
         colorB={colorBArray}
         colorC={colorCArray}
@@ -152,6 +225,11 @@ function ControlsRig({
 
 function Scene({
   cubeProps,
+  scrollStopBCRef,
+  scrollStopBCTargetRef,
+  scrollStopBCBaseRef,
+  scrollStopBCBaselinePendingRef,
+  mouseActivityRef,
   bloomIntensity,
   bloomThreshold,
   bloomSmoothing,
@@ -181,6 +259,8 @@ function Scene({
   lowPowerMode,
   showPerf,
 }) {
+  const materialRef = useRef(null)
+
   return (
     <Canvas
       camera={{ position: [camX, camY, camZ], fov }}
@@ -204,8 +284,27 @@ function Scene({
         enablePan={enablePan}
         enableDamping={!lowPowerMode}
       />
-      {showPerf ? <Perf position="top-left" /> : null}
-      <RoundedCube {...cubeProps} />
+      {showPerf ? (
+        <Perf
+          position="top-left"
+          style={{
+            zIndex: 2147483647,
+            transform: 'scale(1.5)',
+            transformOrigin: 'top left',
+          }}
+        />
+      ) : null}
+      <RoundedCube {...cubeProps} materialRef={materialRef} />
+      <ScrollStopBCUpdater
+        materialRef={materialRef}
+        scrollStopBCRef={scrollStopBCRef}
+        scrollStopBCTargetRef={scrollStopBCTargetRef}
+        scrollStopBCBaseRef={scrollStopBCBaseRef}
+        scrollStopBCBaselinePendingRef={scrollStopBCBaselinePendingRef}
+        baseStopBC={cubeProps.stopBC ?? 0}
+        lowPowerMode={lowPowerMode}
+        mouseActivityRef={mouseActivityRef}
+      />
       <EffectComposer multisampling={composerMultisampling} disableNormalPass>
         <Bloom
           intensity={bloomIntensity}
@@ -252,7 +351,11 @@ function App() {
   const canvasOpacity = 1
   const introTextOpacity = 0
   const scrollFov = 0
-  const [scrollStopBC, setScrollStopBC] = useState(0)
+  const scrollStopBCRef = useRef(0)
+  const scrollStopBCTargetRef = useRef(0)
+  const scrollStopBCBaseRef = useRef(null)
+  const scrollStopBCBaselinePendingRef = useRef(null)
+  const scrollStopBCMetaRef = useRef({ time: 0, value: 0 })
   const [activeSection, setActiveSection] = useState('home')
   const [mouseBloom, setMouseBloom] = useState({ x: 0.5, y: 0.5 })
   const [assetsReady, setAssetsReady] = useState(false)
@@ -262,7 +365,9 @@ function App() {
   const mouseBloomTargetRef = useRef({ x: 0.5, y: 0.5 })
   const mouseBloomCurrentRef = useRef({ x: 0.5, y: 0.5 })
   const mouseBloomRafRef = useRef(null)
+  const mouseBloomLastTimeRef = useRef(0)
   const mouseBloomStateRef = useRef({ x: 0.5, y: 0.5 })
+  const mouseActivityRef = useRef(0)
   const defaultFov = typeof window !== 'undefined' && window.innerWidth <= 768 ? 22 : 12
   const isLowPower = useMemo(() => {
     if (typeof window === 'undefined' || typeof navigator === 'undefined') return false
@@ -290,8 +395,43 @@ function App() {
   const showPerf = useMemo(() => {
     if (typeof window === 'undefined') return false
     const params = new URLSearchParams(window.location.search)
-    return import.meta.env.DEV && params.get('perf') === 'true'
+    if (import.meta.env.DEV) return true
+    const perfEnabled = import.meta.env.VITE_ENABLE_PERF === 'true'
+    return perfEnabled && params.get('perf') === 'true'
   }, [])
+  const updateScrollStopBC = useCallback(
+    (value) => {
+      if (lowPowerMode) return
+      const step = 0.002
+      const minInterval = 1000 / 30
+      const quantized = Math.round(value / step) * step
+      const now = typeof performance !== 'undefined' ? performance.now() : Date.now()
+      const last = scrollStopBCMetaRef.current
+
+      if (quantized === last.value && now - last.time < minInterval) return
+
+      if (scrollStopBCBaseRef.current === null) {
+        scrollStopBCBaselinePendingRef.current = quantized
+      }
+      scrollStopBCTargetRef.current = quantized
+      scrollStopBCMetaRef.current = { time: now, value: quantized }
+    },
+    [lowPowerMode]
+  )
+  const resetScrollStopBC = useCallback(() => {
+    scrollStopBCTargetRef.current = 0
+    scrollStopBCMetaRef.current = { time: 0, value: 0 }
+    scrollStopBCBaselinePendingRef.current = null
+  }, [])
+
+  useEffect(() => {
+    if (!lowPowerMode) return
+    scrollStopBCRef.current = 0
+    scrollStopBCTargetRef.current = 0
+    scrollStopBCBaseRef.current = null
+    scrollStopBCBaselinePendingRef.current = null
+    scrollStopBCMetaRef.current = { time: 0, value: 0 }
+  }, [lowPowerMode])
 
   useEffect(() => {
     let active = true
@@ -416,7 +556,16 @@ function App() {
 
   useEffect(() => {
     if (lowPowerMode) return undefined
+    const frameInterval = 1000 / 30
+
     const tick = () => {
+      const now = performance.now()
+      if (now - mouseBloomLastTimeRef.current < frameInterval) {
+        mouseBloomRafRef.current = requestAnimationFrame(tick)
+        return
+      }
+      mouseBloomLastTimeRef.current = now
+
       const current = mouseBloomCurrentRef.current
       const target = mouseBloomTargetRef.current
       const nextX = current.x + (target.x - current.x) * 0.08
@@ -460,11 +609,15 @@ function App() {
     const x = clamp01(event.clientX / window.innerWidth)
     const y = clamp01(event.clientY / window.innerHeight)
     mouseBloomTargetRef.current = { x, y }
+    mouseActivityRef.current = typeof performance !== 'undefined'
+      ? performance.now()
+      : Date.now()
   }
 
   const handleHeroPointerLeave = () => {
     if (lowPowerMode) return
     mouseBloomTargetRef.current = { x: 0.5, y: 0.5 }
+    mouseActivityRef.current = 0
   }
 
   // Debug logging for Design Engineer width calculation
@@ -588,21 +741,19 @@ function App() {
           })
 
           // Animate stopBC gradient value to 0
-          const stopBCObj = { value: 0 }
-          gsap.to(stopBCObj, {
-            value: 0.76,
-            ease: 'none',
-            scrollTrigger: {
+          if (!lowPowerMode) {
+            ScrollTrigger.create({
               trigger: projectsRef.current,
               start: 'top top',
-              end: '+=1400',
-              scrub: 1,
+              end: '+=900',
               invalidateOnRefresh: true,
-            },
-            onUpdate: () => {
-              setScrollStopBC(stopBCObj.value)
-            }
-          })
+              onUpdate: (self) => {
+                updateScrollStopBC(self.progress * 0.76)
+              },
+              onLeave: resetScrollStopBC,
+              onLeaveBack: resetScrollStopBC,
+            })
+          }
 
           const projectsContainer = projectsRef.current.querySelector('.projects-container')
           if (projectsContainer) {
@@ -640,21 +791,19 @@ function App() {
           })
 
           // Animate stopBC gradient value to 0
-          const stopBCObj = { value: 0 }
-          gsap.to(stopBCObj, {
-            value: 0.76,
-            ease: 'none',
-            scrollTrigger: {
+          if (!lowPowerMode) {
+            ScrollTrigger.create({
               trigger: projectsRef.current,
               start: 'top top',
-              end: '+=1400',
-              scrub: 1,
+              end: '+=700',
               invalidateOnRefresh: true,
-            },
-            onUpdate: () => {
-              setScrollStopBC(stopBCObj.value)
-            }
-          })
+              onUpdate: (self) => {
+                updateScrollStopBC(self.progress * 0.76)
+              },
+              onLeave: resetScrollStopBC,
+              onLeaveBack: resetScrollStopBC,
+            })
+          }
 
           const projectsContainer = projectsRef.current.querySelector('.projects-container')
           if (projectsContainer) {
@@ -692,21 +841,19 @@ function App() {
           })
 
           // Animate stopBC gradient value to 0
-          const stopBCObj = { value: 0 }
-          gsap.to(stopBCObj, {
-            value: 0.76,
-            ease: 'none',
-            scrollTrigger: {
+          if (!lowPowerMode) {
+            ScrollTrigger.create({
               trigger: projectsRef.current,
               start: 'top top',
-              end: '+=1400',
-              scrub: 1,
+              end: '+=500',
               invalidateOnRefresh: true,
-            },
-            onUpdate: () => {
-              setScrollStopBC(stopBCObj.value)
-            }
-          })
+              onUpdate: (self) => {
+                updateScrollStopBC(self.progress * 0.76)
+              },
+              onLeave: resetScrollStopBC,
+              onLeaveBack: resetScrollStopBC,
+            })
+          }
 
           const projectsContainer = projectsRef.current.querySelector('.projects-container')
           if (projectsContainer) {
@@ -983,11 +1130,16 @@ function App() {
           <Scene
             cubeProps={{
               ...controls,
-              stopBC: controls.stopBC - scrollStopBC,
+              stopBC: controls.stopBC,
               softness: dynamicSoftness,
               fresnelOffset: dynamicFresnelOffset,
               smoothness: effectiveSmoothness,
             }}
+            scrollStopBCRef={scrollStopBCRef}
+            scrollStopBCTargetRef={scrollStopBCTargetRef}
+            scrollStopBCBaseRef={scrollStopBCBaseRef}
+            scrollStopBCBaselinePendingRef={scrollStopBCBaselinePendingRef}
+            mouseActivityRef={mouseActivityRef}
             bloomIntensity={dynamicBloomIntensity}
             bloomThreshold={dynamicBloomThreshold}
             bloomSmoothing={dynamicBloomSmoothing}

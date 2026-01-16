@@ -5,7 +5,7 @@ import OtherProjects from '../components/OtherProjects';
 import Footer from '../Footer';
 import { footerData } from '../footerData';
 import { projectsData } from '../data/projectsData';
-import heroImage from '../../img_assets/wander_app/PersonaShowcase.png';
+import heroImage from '../../img_assets/wander_app/Wander_App.png';
 import problemStatementImage from '../../img_assets/wander_app/ProblemStatement.png';
 import affinityMapImage from '../../img_assets/wander_app/AffinityMap.png';
 import affinityInsightsImage from '../../img_assets/wander_app/AffinityMap-1.png';

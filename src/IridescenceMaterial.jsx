@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react'
+import { forwardRef, useMemo } from 'react'
 import { shaderMaterial } from '@react-three/drei'
 import { extend } from '@react-three/fiber'
 import { Color, Vector3 } from 'three'
@@ -91,10 +91,11 @@ const IridescenceMaterial = shaderMaterial(
 
 extend({ IridescenceMaterial })
 
-export function Iridescence({
-  colorA = [1, 0.85, 0.86],
-  colorB = [0.68, 0.91, 0.72],
-  colorC = [0.96, 0.8, 1.0],
+export const Iridescence = forwardRef(function Iridescence(
+  {
+    colorA = [1, 0.85, 0.86],
+    colorB = [0.68, 0.91, 0.72],
+    colorC = [0.96, 0.8, 1.0],
   stopAB = 0.4,
   stopBC = 0.8,
   softness = 0.08,
@@ -109,8 +110,9 @@ export function Iridescence({
   emissiveColor = '#ffffff',
   emissiveStrength = 0.0,
   ...props
-}) {
-  const materialRef = useRef()
+  },
+  ref
+) {
 
   const colorValueA = useMemo(() => new Color(...colorA), [colorA])
   const colorValueB = useMemo(() => new Color(...colorB), [colorB])
@@ -127,7 +129,7 @@ export function Iridescence({
 
   return (
     <iridescenceMaterial
-      ref={materialRef}
+      ref={ref}
       uColorA={colorValueA}
       uColorB={colorValueB}
       uColorC={colorValueC}
@@ -147,4 +149,4 @@ export function Iridescence({
       {...props}
     />
   )
-}
+})
