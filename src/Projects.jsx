@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import './Projects.css'
@@ -28,17 +28,25 @@ function ArrowUpRightIcon({ className }) {
 
 // Polaroid Images Component
 function PolaroidImages() {
+  const polaroidProjects = projects.slice(0, 3)
+
   return (
     <div className="polaroid-container">
-      <div className="polaroid polaroid-1">
-        <img src={projects[0].image} alt="" loading="lazy" decoding="async" />
-      </div>
-      <div className="polaroid polaroid-2">
-        <img src={projects[1].image} alt="" loading="lazy" decoding="async" />
-      </div>
-      <div className="polaroid polaroid-3">
-        <img src={projects[2].image} alt="" loading="lazy" decoding="async" />
-      </div>
+      {polaroidProjects.map((project, index) => (
+        <Link
+          key={project.id}
+          to={`/project/${project.id}`}
+          className={`polaroid polaroid-${index + 1}`}
+          aria-label={`Open ${project.title} project`}
+        >
+          <img
+            src={project.image}
+            alt={`${project.title} preview`}
+            loading="lazy"
+            decoding="async"
+          />
+        </Link>
+      ))}
     </div>
   )
 }
@@ -46,7 +54,6 @@ function PolaroidImages() {
 export default function Projects() {
   const [activeId, setActiveId] = useState(projects[0].id)
   const [isMobile, setIsMobile] = useState(false)
-  const [hasUserInteracted, setHasUserInteracted] = useState(false)
   const [cutoutRect, setCutoutRect] = useState(null)
   const containerRef = useRef(null)
   const indicatorRef = useRef(null)
@@ -54,7 +61,6 @@ export default function Projects() {
   const introTitleRef = useRef(null)
   const introDescRef = useRef(null)
   const projectsSectionRef = useRef(null)
-  const scrollTriggerRef = useRef(null)
   const cutoutRectRef = useRef(null)
   const windowFramePlayedRef = useRef(false)
   const navigate = useNavigate()
@@ -286,36 +292,22 @@ export default function Projects() {
     }
   }, [])
 
-  // Auto-scroll animation through projects
-  useEffect(() => {
-    if (hasUserInteracted) return
-
-    const tl = gsap.timeline({
-      repeat: -1,
-      repeatDelay: 1,
-    })
-
-    tl.call(() => setActiveId(projects[0].id))
-      .to({}, { duration: 3 })
-      .call(() => setActiveId(projects[1].id))
-      .to({}, { duration: 3 })
-      .call(() => setActiveId(projects[2].id))
-      .to({}, { duration: 3 })
-
-    scrollTriggerRef.current = tl
-
-    return () => {
-      tl.kill()
-    }
-  }, [hasUserInteracted])
-
   // Handle user click - disable scroll animation
   const handleProjectClick = (projectId) => {
-    setHasUserInteracted(true)
-    setActiveId(projectId)
-    if (scrollTriggerRef.current) {
-      scrollTriggerRef.current.kill()
+    if (projectId === activeId) {
+      navigate(`/project/${projectId}`)
+      return
     }
+
+    setActiveId(projectId)
+  }
+
+  const handleProjectFocus = (projectId, event) => {
+    const target = event?.currentTarget
+    const focusVisible = target?.matches?.(':focus-visible')
+    if (!focusVisible) return
+    if (projectId === activeId) return
+    setActiveId(projectId)
   }
 
   return (
@@ -400,6 +392,7 @@ export default function Projects() {
                     activeId === project.id ? ' is-active' : ''
                   }`}
                   onClick={() => handleProjectClick(project.id)}
+                  onFocus={(event) => handleProjectFocus(project.id, event)}
                   aria-pressed={activeId === project.id}
                 >
                   <span className="projects-item-number">{project.number}</span>

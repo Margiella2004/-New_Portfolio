@@ -1,21 +1,53 @@
-import { useState } from 'react'
-import gsap from 'gsap'
-import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
+import { useLayoutEffect, useState } from 'react'
 import './Header.css'
-
-gsap.registerPlugin(ScrollToPlugin)
 
 export default function Header({ innerRef, activeSection }) {
   const [menuOpen, setMenuOpen] = useState(false)
 
+  useLayoutEffect(() => {
+    const updateOffset = () => {
+      const header = innerRef?.current || document.querySelector('.header')
+      if (!header) return
+      const rect = header.getBoundingClientRect()
+      const extraOffset = 8
+      const offset = rect.height + Math.max(rect.top, 0) + extraOffset
+      document.documentElement.style.setProperty('--header-offset', `${offset}px`)
+    }
+
+    updateOffset()
+    window.addEventListener('resize', updateOffset)
+    return () => window.removeEventListener('resize', updateOffset)
+  }, [innerRef])
+
+  const getHeaderOffset = () => {
+    const header = innerRef?.current || document.querySelector('.header')
+    if (!header) return 0
+    const rect = header.getBoundingClientRect()
+    const extraOffset = 8
+    return rect.height + Math.max(rect.top, 0) + extraOffset
+  }
+
+  const scrollToSection = (id) => {
+    const prefersReducedMotion =
+      window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false
+
+    if (id === 'home') {
+      window.scrollTo({ top: 0, left: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' })
+      return
+    }
+
+    const element = document.getElementById(id)
+    if (!element) return
+    element.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'start' })
+    const fallbackOffset = getHeaderOffset()
+    if (fallbackOffset) {
+      window.scrollBy({ top: -fallbackOffset, left: 0, behavior: 'auto' })
+    }
+  }
+
   const handleNavClick = (id) => (event) => {
     event.preventDefault()
-    const target = id === 'home' ? 0 : `#${id}`
-    gsap.to(window, {
-      duration: 0.8,
-      ease: 'power2.out',
-      scrollTo: { y: target, offsetY: 0 },
-    })
+    scrollToSection(id)
     setMenuOpen(false)
   }
 

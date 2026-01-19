@@ -357,16 +357,16 @@ function App() {
   const scrollStopBCBaselinePendingRef = useRef(null)
   const scrollStopBCMetaRef = useRef({ time: 0, value: 0 })
   const [activeSection, setActiveSection] = useState('home')
-  const [mouseBloom, setMouseBloom] = useState({ x: 0.5, y: 0.5 })
+  const [mouseBloom, setMouseBloom] = useState({ x: 1, y: 1 })
   const [assetsReady, setAssetsReady] = useState(false)
   const [viewportWidth, setViewportWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1024
   )
-  const mouseBloomTargetRef = useRef({ x: 0.5, y: 0.5 })
-  const mouseBloomCurrentRef = useRef({ x: 0.5, y: 0.5 })
+  const mouseBloomTargetRef = useRef({ x: 1, y: 1 })
+  const mouseBloomCurrentRef = useRef({ x: 1, y: 1 })
   const mouseBloomRafRef = useRef(null)
   const mouseBloomLastTimeRef = useRef(0)
-  const mouseBloomStateRef = useRef({ x: 0.5, y: 0.5 })
+  const mouseBloomStateRef = useRef({ x: 1, y: 1 })
   const mouseActivityRef = useRef(0)
   const defaultFov = typeof window !== 'undefined' && window.innerWidth <= 768 ? 22 : 12
   const isLowPower = useMemo(() => {
@@ -432,6 +432,105 @@ function App() {
     scrollStopBCBaselinePendingRef.current = null
     scrollStopBCMetaRef.current = { time: 0, value: 0 }
   }, [lowPowerMode])
+
+  useEffect(() => {
+    if (lowPowerMode) return undefined
+
+    let range = {
+      start: 0,
+      end: 0,
+      distance: 0,
+      ready: false,
+    }
+    let heroRange = {
+      start: 0,
+      end: 0,
+      distance: 0,
+      ready: false,
+    }
+    let rafId = 0
+    let ticking = false
+
+    const getDistance = () => {
+      if (window.innerWidth >= 1024) return 900
+      if (window.innerWidth >= 768) return 700
+      return 500
+    }
+
+    const getHeroFadeDistance = () => {
+      if (window.innerWidth >= 1024) return 1400
+      if (window.innerWidth >= 768) return 1400
+      return 1400
+    }
+
+    const computeRange = () => {
+      const distance = getDistance()
+      return {
+        start: 0,
+        end: distance,
+        distance,
+        ready: true,
+      }
+    }
+
+    const computeHeroRange = () => {
+      const distance = getHeroFadeDistance()
+      return {
+        start: 0,
+        end: distance,
+        distance,
+        ready: true,
+      }
+    }
+
+    const update = () => {
+      if (!range.ready || !heroRange.ready) {
+        range = computeRange()
+        heroRange = computeHeroRange()
+        if (!range.ready) return
+      }
+
+      const y = window.scrollY
+      const clampedY = Math.max(range.start, Math.min(y, range.end))
+      const progress = range.distance ? (clampedY - range.start) / range.distance : 0
+      updateScrollStopBC(progress * 0.76)
+
+      if (heroContentRef.current) {
+        const heroClampedY = Math.max(heroRange.start, Math.min(y, heroRange.end))
+        const heroProgress = heroRange.distance
+          ? (heroClampedY - heroRange.start) / heroRange.distance
+          : 0
+        heroContentRef.current.style.opacity = String(1 - heroProgress)
+      }
+    }
+
+    const scheduleUpdate = () => {
+      if (ticking) return
+      ticking = true
+      rafId = requestAnimationFrame(() => {
+        update()
+        ticking = false
+      })
+    }
+
+    const handleResize = () => {
+      range = computeRange()
+      heroRange = computeHeroRange()
+      scheduleUpdate()
+    }
+
+    window.addEventListener('scroll', scheduleUpdate, { passive: true })
+    window.addEventListener('resize', handleResize)
+    range = computeRange()
+    heroRange = computeHeroRange()
+    scheduleUpdate()
+
+    return () => {
+      window.removeEventListener('scroll', scheduleUpdate)
+      window.removeEventListener('resize', handleResize)
+      if (rafId) cancelAnimationFrame(rafId)
+    }
+  }, [lowPowerMode, resetScrollStopBC, updateScrollStopBC])
 
   useEffect(() => {
     let active = true
@@ -616,7 +715,7 @@ function App() {
 
   const handleHeroPointerLeave = () => {
     if (lowPowerMode) return
-    mouseBloomTargetRef.current = { x: 0.5, y: 0.5 }
+    mouseBloomTargetRef.current = { x: 1, y: 1 }
     mouseActivityRef.current = 0
   }
 
@@ -727,34 +826,6 @@ function App() {
       ScrollTrigger.matchMedia({
         // Desktop (1024px and up)
         "(min-width: 1024px)": function() {
-          // Hero content fade during stopBC animation
-          gsap.to(heroContentRef.current, {
-            opacity: 0,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: projectsRef.current,
-              start: 'top top',
-              end: '+=1400',
-              scrub: 1,
-              invalidateOnRefresh: true,
-            }
-          })
-
-          // Animate stopBC gradient value to 0
-          if (!lowPowerMode) {
-            ScrollTrigger.create({
-              trigger: projectsRef.current,
-              start: 'top top',
-              end: '+=900',
-              invalidateOnRefresh: true,
-              onUpdate: (self) => {
-                updateScrollStopBC(self.progress * 0.76)
-              },
-              onLeave: resetScrollStopBC,
-              onLeaveBack: resetScrollStopBC,
-            })
-          }
-
           const projectsContainer = projectsRef.current.querySelector('.projects-container')
           if (projectsContainer) {
             gsap.set(projectsContainer, { xPercent: 100 })
@@ -777,34 +848,6 @@ function App() {
 
         // Tablet (768px - 1023px)
         "(min-width: 768px) and (max-width: 1023px)": function() {
-          // Hero content fade during stopBC animation
-          gsap.to(heroContentRef.current, {
-            opacity: 0,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: projectsRef.current,
-              start: 'top top',
-              end: '+=1400',
-              scrub: 1,
-              invalidateOnRefresh: true,
-            }
-          })
-
-          // Animate stopBC gradient value to 0
-          if (!lowPowerMode) {
-            ScrollTrigger.create({
-              trigger: projectsRef.current,
-              start: 'top top',
-              end: '+=700',
-              invalidateOnRefresh: true,
-              onUpdate: (self) => {
-                updateScrollStopBC(self.progress * 0.76)
-              },
-              onLeave: resetScrollStopBC,
-              onLeaveBack: resetScrollStopBC,
-            })
-          }
-
           const projectsContainer = projectsRef.current.querySelector('.projects-container')
           if (projectsContainer) {
             gsap.set(projectsContainer, { xPercent: 100 })
@@ -827,34 +870,6 @@ function App() {
 
         // Mobile (below 768px)
         "(max-width: 767px)": function() {
-          // Hero content fade during stopBC animation
-          gsap.to(heroContentRef.current, {
-            opacity: 0,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: projectsRef.current,
-              start: 'top top',
-              end: '+=1400',
-              scrub: 1,
-              invalidateOnRefresh: true,
-            }
-          })
-
-          // Animate stopBC gradient value to 0
-          if (!lowPowerMode) {
-            ScrollTrigger.create({
-              trigger: projectsRef.current,
-              start: 'top top',
-              end: '+=500',
-              invalidateOnRefresh: true,
-              onUpdate: (self) => {
-                updateScrollStopBC(self.progress * 0.76)
-              },
-              onLeave: resetScrollStopBC,
-              onLeaveBack: resetScrollStopBC,
-            })
-          }
-
           const projectsContainer = projectsRef.current.querySelector('.projects-container')
           if (projectsContainer) {
             gsap.set(projectsContainer, { xPercent: 100 })
@@ -1182,7 +1197,9 @@ function App() {
         <MakeCodeLiveSection />
       </div>
 
-      <div ref={footerRef} id="contact" className="footer-layer">
+      <div id="contact" className="contact-anchor" aria-hidden="true" />
+
+      <div ref={footerRef} className="footer-layer">
         <Footer data={footerData} />
       </div>
     </div>

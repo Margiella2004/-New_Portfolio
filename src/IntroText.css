@@ -1,18 +1,18 @@
 /* Main Intro Section - CSS GRID */
 .intro-section {
   position: absolute;
-  top: 147px;
+  top: 9.1875rem;
   left: 50%;
   transform: translateX(-50%) translateZ(0);
   width: var(--content-total-width, var(--page-width, 90vw));
-  max-width: var(--page-max-width, 1400px);
+  max-width: var(--page-max-width, 87.5rem);
   padding: 0;
   z-index: 100;
 
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto auto;
-  gap: 19px;
+  gap: 1.1875rem;
   align-items: start;
 
   /* Force pixel-perfect rendering across browsers */
@@ -35,7 +35,7 @@
 /* CSS Line - Responsive and Modular */
 .intro-line {
   width: 100%;
-  height: 1px;
+  height: 0.0625rem;
   background: linear-gradient(90deg,
     rgba(252, 252, 252, 0) 0%,
     rgba(252, 252, 252, 0.8) 10%,
@@ -82,9 +82,9 @@
 .who-text {
   font-family: 'Pangea Afrikan VAR 2.003', -apple-system, system-ui, sans-serif;
   font-weight: 400;
-  font-size: 12px;
-  line-height: 17.731px;
-  letter-spacing: -0.36px;
+  font-size: 0.75rem;
+  line-height: 1.1081875rem;
+  letter-spacing: -0.0225rem;
   color: #fcfcfc;
   margin: 0;
 }
@@ -94,7 +94,7 @@
   grid-column: 2;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 0.875rem;
   align-self: baseline;
   justify-self: end;
   max-width: 100%;
@@ -104,12 +104,12 @@
 .intro-text {
   font-family: 'Pangea Afrikan VAR 2.003', -apple-system, system-ui, sans-serif;
   font-weight: 400;
-  font-size: 30.094px;
-  line-height: 29px;
-  letter-spacing: -0.9028px;
+  font-size: 1.880875rem;
+  line-height: 1.8125rem;
+  letter-spacing: -0.056425rem;
   color: #fcfcfc;
-  width: 572.646px;
-  max-width: 572.646px;
+  width: 35.790375rem;
+  max-width: 35.790375rem;
   margin: 0;
   flex-shrink: 0;
   white-space: pre-wrap;
@@ -119,7 +119,7 @@
 /* Link Buttons Container */
 .link-buttons {
   display: flex;
-  gap: 13px;
+  gap: 0.8125rem;
   align-items: center;
   flex-shrink: 0;
 }
@@ -128,11 +128,11 @@
 .link-button {
   background: white;
   display: flex;
-  gap: 1.391px;
+  gap: 0.0869375rem;
   align-items: center;
   justify-content: center;
-  padding: 7.652px 21.565px;
-  border-radius: 13.217px;
+  padding: 0.47825rem 1.3478125rem;
+  border-radius: 0.8260625rem;
   text-decoration: none;
   cursor: pointer;
   flex-shrink: 0;
@@ -141,9 +141,9 @@
 .link-button-text {
   font-family: 'Pangea Afrikan VAR 2.003', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-weight: 400;
-  font-size: 9.739px;
-  line-height: 11.826px;
-  letter-spacing: -0.1046px;
+  font-size: 0.6086875rem;
+  line-height: 0.739125rem;
+  letter-spacing: -0.0065375rem;
   color: #373743;
   flex-shrink: 0;
 }
@@ -152,8 +152,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 16.696px;
-  height: 16.696px;
+  width: 1.0435rem;
+  height: 1.0435rem;
   flex-shrink: 0;
   transform: rotate(90deg);
 }
@@ -165,13 +165,13 @@
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
+@media (max-width: 48rem) {
   .intro-section {
-    padding: 0 40px;
+    padding: 0 2.5rem;
     left: 0;
     transform: none;
     width: 100%;
-    gap: 19px 0;
+    gap: 1.1875rem 0;
   }
 
   .intro-line-container {
@@ -181,7 +181,7 @@
   .intro-content {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto;
-    gap: 20px 0;
+    gap: 1.25rem 0;
   }
 
   .who-is-this-guy {
@@ -196,30 +196,30 @@
   }
 
   .intro-text {
-    font-size: 26px;
-    line-height: 30px;
+    font-size: 1.625rem;
+    line-height: 1.875rem;
     width: 100%;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 30rem) {
   .intro-section {
-    padding: 0 20px;
-    gap: 19px;
+    padding: 0 1.25rem;
+    gap: 1.1875rem;
     top: 6rem;
   }
 
   .who-text {
-    font-size: 11px;
+    font-size: 0.6875rem;
   }
 
   .intro-text {
-    font-size: 22px;
-    line-height: 26px;
+    font-size: 1.375rem;
+    line-height: 1.625rem;
   }
 }
 
-@media (max-width: 360px) {
+@media (max-width: 22.5rem) {
   .intro-section {
     top: 5.5rem;
     padding: 0 1rem;

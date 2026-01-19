@@ -16,14 +16,14 @@
   justify-content: center;
   background: #ffffff;
   color: #0f172a;
-  font-size: 16px;
+  font-size: 1rem;
   letter-spacing: 0.02em;
 }
 
 .asset-preload-inner {
-  padding: 12px 18px;
-  border: 1px solid #e2e8f0;
-  border-radius: 999px;
+  padding: 0.75rem 1.125rem;
+  border: 0.0625rem solid #e2e8f0;
+  border-radius: 62.4375rem;
   background: #f8fafc;
 }
 
@@ -74,8 +74,8 @@
 
 canvas {
   display: block;
-  filter: blur(var(--canvas-blur, 0px)) saturate(var(--canvas-saturation, 1));
-  -webkit-filter: blur(var(--canvas-blur, 0px)) saturate(var(--canvas-saturation, 1));
+  filter: blur(var(--canvas-blur, 0)) saturate(var(--canvas-saturation, 1));
+  -webkit-filter: blur(var(--canvas-blur, 0)) saturate(var(--canvas-saturation, 1));
 }
 
 /* Projects Section */
@@ -86,6 +86,18 @@ canvas {
   min-height: 100vh;
   overflow: hidden;
   pointer-events: none;
+  scroll-margin-top: var(--header-offset, 0);
+}
+
+#about {
+  scroll-margin-top: var(--header-offset, 0);
+}
+
+.contact-anchor {
+  width: 100%;
+  height: 0.0625rem;
+  pointer-events: none;
+  scroll-margin-top: var(--header-offset, 0);
 }
 
 .stage .footer-layer {
@@ -101,10 +113,10 @@ canvas {
 /* Leva Debug Panel - Force Position and Visibility */
 .leva-c-kWgxhW {
   position: fixed !important;
-  top: 100px !important;
-  right: 20px !important;
+  top: 6.25rem !important;
+  right: 1.25rem !important;
   z-index: 999999 !important;
-  min-width: 280px !important;
+  min-width: 17.5rem !important;
   opacity: 1 !important;
   visibility: visible !important;
   display: block !important;

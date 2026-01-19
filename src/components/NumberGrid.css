@@ -12,22 +12,22 @@
   --number-grid-bracket-color: #ffffff;
 
   /* Spacing */
-  --number-grid-border-radius-mobile: 2.5rem; /* 40px */
-  --number-grid-border-radius-desktop: 3.75rem; /* 60px */
+  --number-grid-border-radius-mobile: 2.5rem; /* 2.5rem */
+  --number-grid-border-radius-desktop: 3.75rem; /* 3.75rem */
   --number-grid-bracket-padding-mobile: 1.5rem;
   --number-grid-bracket-padding-desktop: 2rem;
   --number-grid-content-padding-mobile: 1.5rem;
   --number-grid-content-padding-desktop: 3rem;
-  --number-grid-gap-mobile: 0.75rem; /* 12px */
-  --number-grid-gap-desktop: 1rem; /* 16px */
+  --number-grid-gap-mobile: 0.75rem; /* 0.75rem */
+  --number-grid-gap-desktop: 1rem; /* 1rem */
 
   /* Dimensions */
   --number-grid-height-mobile: auto;
-  --number-grid-height-md: 600px;
-  --number-grid-height-lg: 790px;
+  --number-grid-height-md: 37.5rem;
+  --number-grid-height-lg: 49.375rem;
   --number-grid-aspect-ratio: 16 / 9;
-  --number-grid-max-width: 80rem; /* 1280px */
-  --number-grid-bracket-size: 70px;
+  --number-grid-max-width: 80rem; /* 80rem */
+  --number-grid-bracket-size: 4.375rem;
 
   /* Grid Layout */
   --number-grid-columns-mobile: 4;
@@ -36,14 +36,14 @@
   /* Cell Dimensions */
   --number-grid-cell-aspect-mobile: 2 / 1;
   --number-grid-cell-aspect-desktop: 1 / 1;
-  --number-grid-cell-border-width-mobile: 2px;
-  --number-grid-cell-border-width-desktop: 3px;
-  --number-grid-cell-border-radius-mobile: 0.75rem; /* 12px */
-  --number-grid-cell-border-radius-desktop: 0.9375rem; /* 15px */
+  --number-grid-cell-border-width-mobile: 0.125rem;
+  --number-grid-cell-border-width-desktop: 0.1875rem;
+  --number-grid-cell-border-radius-mobile: 0.75rem; /* 0.75rem */
+  --number-grid-cell-border-radius-desktop: 0.9375rem; /* 0.9375rem */
 
   /* Typography */
-  --number-grid-cell-font-size-mobile: 1.25rem; /* 20px */
-  --number-grid-cell-font-size-desktop: 1.875rem; /* 30px */
+  --number-grid-cell-font-size-mobile: 1.25rem; /* 1.25rem */
+  --number-grid-cell-font-size-desktop: 1.875rem; /* 1.875rem */
   --number-grid-cell-font-weight: 500;
 
   /* Transitions */
@@ -62,7 +62,7 @@
   overflow: hidden;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .number-grid-container {
     aspect-ratio: auto;
     height: var(--number-grid-height-md);
@@ -70,7 +70,7 @@
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .number-grid-container {
     height: var(--number-grid-height-lg);
   }
@@ -107,7 +107,7 @@
   padding: var(--number-grid-bracket-padding-mobile);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .number-grid-brackets {
     padding: var(--number-grid-bracket-padding-desktop);
   }
@@ -160,7 +160,7 @@
   padding: var(--number-grid-content-padding-mobile);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .number-grid-content {
     padding: var(--number-grid-content-padding-desktop);
   }
@@ -174,7 +174,7 @@
   max-width: var(--number-grid-max-width);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .number-grid {
     grid-template-columns: repeat(var(--number-grid-columns-desktop), 1fr);
     gap: var(--number-grid-gap-desktop);
@@ -195,7 +195,7 @@
   cursor: default;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .number-grid-cell {
     aspect-ratio: var(--number-grid-cell-aspect-desktop);
     border-width: var(--number-grid-cell-border-width-desktop);
@@ -214,7 +214,7 @@
   color: var(--number-grid-cell-text-color);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .number-grid-cell-number {
     font-size: var(--number-grid-cell-font-size-desktop);
   }

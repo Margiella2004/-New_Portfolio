@@ -13,60 +13,60 @@
   --wander-hero-bg: #000000;
 
   /* Spacing */
-  --wander-container-padding-mobile: 20px;
-  --wander-container-padding-desktop: 20px;
-  --wander-container-padding-top-mobile: 80px;
-  --wander-container-padding-top-desktop: 112px;
-  --wander-container-padding-bottom: 96px;
-  --wander-section-gap: 20px;
+  --wander-container-padding-mobile: 1.25rem;
+  --wander-container-padding-desktop: 1.25rem;
+  --wander-container-padding-top-mobile: 5rem;
+  --wander-container-padding-top-desktop: 7rem;
+  --wander-container-padding-bottom: 6rem;
+  --wander-section-gap: 1.25rem;
 
   /* Header Section */
-  --wander-header-gap: 80px;
-  --wander-title-section-gap: 16px;
-  --wander-metadata-gap-mobile: 12px;
-  --wander-metadata-gap-desktop: 16px;
+  --wander-header-gap: 5rem;
+  --wander-title-section-gap: 1rem;
+  --wander-metadata-gap-mobile: 0.75rem;
+  --wander-metadata-gap-desktop: 1rem;
 
   /* Hero Image */
-  --wander-hero-height-mobile: 400px;
-  --wander-hero-height-md: 600px;
-  --wander-hero-height-lg: 700px;
-  --wander-hero-border-radius-mobile: 20px;
-  --wander-hero-border-radius-desktop: 35px;
+  --wander-hero-height-mobile: 25rem;
+  --wander-hero-height-md: 37.5rem;
+  --wander-hero-height-lg: 43.75rem;
+  --wander-hero-border-radius-mobile: 1.25rem;
+  --wander-hero-border-radius-desktop: 2.1875rem;
 
   /* Bio & Skills */
-  --wander-bio-skills-gap-mobile: 32px;
-  --wander-bio-skills-gap-lg: 48px;
-  --wander-description-max-width: 660px;
-  --wander-skills-gap: 4px;
+  --wander-bio-skills-gap-mobile: 2rem;
+  --wander-bio-skills-gap-lg: 3rem;
+  --wander-description-max-width: 41.25rem;
+  --wander-skills-gap: 0.25rem;
 
   /* Quote Section */
-  --wander-quote-padding-mobile: 24px;
-  --wander-quote-padding-desktop: 208px;
-  --wander-quote-max-width: 800px;
+  --wander-quote-padding-mobile: 1.5rem;
+  --wander-quote-padding-desktop: 13rem;
+  --wander-quote-max-width: 50rem;
 
   /* Typography */
-  --wander-metadata-font-size-mobile: 18px;
-  --wander-metadata-font-size-desktop: 21.801px;
+  --wander-metadata-font-size-mobile: 1.125rem;
+  --wander-metadata-font-size-desktop: 1.3625625rem;
   --wander-metadata-font-weight-medium: 500;
   --wander-metadata-letter-spacing: -0.03em;
   --wander-metadata-line-height: 3.106;
 
-  --wander-title-font-size-mobile: 60px;
-  --wander-title-font-size-md: 80px;
-  --wander-title-font-size-lg: 80px;
+  --wander-title-font-size-mobile: 3.75rem;
+  --wander-title-font-size-md: 5rem;
+  --wander-title-font-size-lg: 5rem;
   --wander-title-line-height: 0.75;
   --wander-title-letter-spacing: -0.03em;
 
-  --wander-description-font-size-mobile: 24px;
-  --wander-description-font-size-md: 26px;
-  --wander-description-font-size-lg: 26px;
+  --wander-description-font-size-mobile: 1.5rem;
+  --wander-description-font-size-md: 1.625rem;
+  --wander-description-font-size-lg: 1.625rem;
   --wander-description-font-weight: 300;
   --wander-description-line-height: 1.269;
   --wander-description-letter-spacing: -0.03em;
 
-  --wander-skill-font-size-mobile: 24px;
-  --wander-skill-font-size-md: 26px;
-  --wander-skill-font-size-lg: 26px;
+  --wander-skill-font-size-mobile: 1.5rem;
+  --wander-skill-font-size-md: 1.625rem;
+  --wander-skill-font-size-lg: 1.625rem;
   --wander-skill-font-weight: 300;
   --wander-skill-letter-spacing: -0.03em;
   --wander-skill-line-height: 1.269;
@@ -95,7 +95,7 @@
   z-index: 2;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .wander-app-container {
     padding-top: var(--wander-container-padding-top-desktop);
   }
@@ -134,7 +134,7 @@
   line-height: var(--wander-metadata-line-height);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .wander-app-metadata {
     gap: var(--wander-metadata-gap-desktop);
     font-size: var(--wander-metadata-font-size-desktop);
@@ -160,14 +160,14 @@
   text-align: center;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .wander-app-title {
     font-size: var(--wander-title-font-size-md);
     line-height: 1;
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .wander-app-title {
     font-size: var(--wander-title-font-size-lg);
     line-height: var(--wander-title-line-height);
@@ -183,17 +183,17 @@
   background: var(--wander-hero-bg);
   border-radius: var(--wander-hero-border-radius-mobile);
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.1);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .wander-app-hero-image-container {
     height: var(--wander-hero-height-md);
     border-radius: var(--wander-hero-border-radius-desktop);
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .wander-app-hero-image-container {
     height: var(--wander-hero-height-lg);
   }
@@ -215,7 +215,7 @@
   width: 100%;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .wander-app-bio-skills {
     gap: var(--wander-bio-skills-gap-lg);
   }
@@ -238,13 +238,13 @@
   margin: 0;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .wander-app-description-text {
     font-size: var(--wander-description-font-size-md);
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .wander-app-description-text {
     font-size: var(--wander-description-font-size-lg);
   }
@@ -267,13 +267,13 @@
   line-height: var(--wander-skill-line-height);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .wander-app-skill {
     font-size: var(--wander-skill-font-size-md);
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .wander-app-skill {
     font-size: var(--wander-skill-font-size-lg);
   }
@@ -290,7 +290,7 @@
   align-items: center;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .wander-app-quote {
     padding: var(--wander-quote-padding-desktop) 0;
   }
@@ -301,22 +301,22 @@
   max-width: var(--wander-quote-max-width);
   text-align: center;
   font-family: 'Pangea Afrikan VAR 2.003', -apple-system, system-ui, sans-serif;
-  font-size: 24px;
+  font-size: 1.5rem;
   font-weight: 300;
   line-height: 1.2;
   letter-spacing: -0.02em;
   color: var(--wander-quote-color);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .wander-app-quote-text {
-    font-size: 30px;
+    font-size: 1.875rem;
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .wander-app-quote-text {
-    font-size: 34px;
+    font-size: 2.125rem;
   }
 }
 
@@ -334,7 +334,7 @@
   --content-module-image-opacity-dark: 1;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .wander-app-content-module-right .content-module-bento-bottom {
     flex-direction: row-reverse;
   }

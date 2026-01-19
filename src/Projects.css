@@ -7,10 +7,10 @@
   flex-direction: column;
   align-items: center;
   position: relative;
-  --projects-intro-padding: 65px;
-  --projects-cutout-height: 300px;
-  --projects-cutout-y: 120px;
-  --projects-cutout-radius: 16px;
+  --projects-intro-padding: 4.0625rem;
+  --projects-cutout-height: 18.75rem;
+  --projects-cutout-y: 7.5rem;
+  --projects-cutout-radius: 1rem;
 }
 
 .projects-container.has-cutout {
@@ -75,6 +75,11 @@
   box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
   will-change: transform;
+  display: block;
+  padding: 0;
+  cursor: pointer;
+  pointer-events: auto;
+  text-decoration: none;
 }
 
 .polaroid img {
@@ -110,6 +115,11 @@
 .polaroid:hover {
   transform: rotate(0deg) scale(1.05);
   z-index: 10;
+}
+
+.polaroid:focus-visible {
+  outline: 0.125rem solid #6f3d59;
+  outline-offset: 0.25rem;
 }
 
 .projects-intro-title {
@@ -340,6 +350,7 @@
   overflow: hidden;
   background: #000000;
   position: relative;
+  pointer-events: auto;
 }
 
 .project-image {
@@ -467,12 +478,12 @@
     'INKT' 1, 'SS01' 1, 'SS02' 0, 'SS03' 0;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 64rem) {
   .projects-container {
     border-radius: 0;
-    --projects-intro-padding: 40px;
-    --projects-cutout-height: 240px;
-    --projects-cutout-y: 70px;
+    --projects-intro-padding: 2.5rem;
+    --projects-cutout-height: 15rem;
+    --projects-cutout-y: 4.375rem;
   }
 
   .projects-intro-content {
@@ -630,7 +641,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 48rem) {
   .projects-container {
     --projects-intro-padding: 1.5rem;
   }
@@ -666,7 +677,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 30rem) {
   .projects-container {
     --projects-intro-padding: 1.25rem;
   }
@@ -702,7 +713,7 @@
   }
 }
 
-@media (max-width: 360px) {
+@media (max-width: 22.5rem) {
   .projects-container {
     --projects-intro-padding: 1rem;
     --projects-cutout-height: 12rem;

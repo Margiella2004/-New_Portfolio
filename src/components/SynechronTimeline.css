@@ -3,14 +3,14 @@
   --timeline-text: #ffffff;
   --timeline-stroke: rgba(255, 255, 255, 0.2);
   --timeline-border: rgba(255, 255, 255, 0.06);
-  --timeline-shadow: 0 24px 80px rgba(0, 0, 0, 0.24);
+  --timeline-shadow: 0 1.5rem 5rem rgba(0, 0, 0, 0.24);
   --timeline-radius-mobile: var(--content-module-border-radius-mobile, 1.25rem);
   --timeline-radius-desktop: var(--content-module-border-radius-desktop, 2.125rem);
   --timeline-accent: #e1d590;
   --timeline-font-sans: 'Pangea Afrikan VAR 2.003', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  --timeline-icon-size: 18px;
+  --timeline-icon-size: 1.125rem;
   --timeline-icon-center: calc(var(--timeline-icon-size) / 2);
-  --timeline-milestone-width: clamp(170px, 14vw, 220px);
+  --timeline-milestone-width: clamp(10.625rem, 14vw, 13.75rem);
   --timeline-track-right: calc(var(--timeline-milestone-width) - var(--timeline-icon-center));
   width: 100%;
   display: flex;
@@ -25,14 +25,14 @@
   background-color: var(--timeline-bg);
   color: var(--timeline-text);
   border-radius: var(--timeline-radius-mobile);
-  min-height: 520px;
+  min-height: 32.5rem;
   padding: clamp(2.75rem, 5vw, 4.5rem);
   overflow: hidden;
   box-shadow: var(--timeline-shadow);
-  border: 1px solid var(--timeline-border);
+  border: 0.0625rem solid var(--timeline-border);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .synechron-timeline-card {
     border-radius: var(--timeline-radius-desktop);
   }
@@ -61,12 +61,12 @@
 }
 
 .synechron-timeline-track-area::-webkit-scrollbar {
-  height: 8px;
+  height: 0.5rem;
 }
 
 .synechron-timeline-track-area::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.22);
-  border-radius: 999px;
+  border-radius: 62.4375rem;
 }
 
 .synechron-timeline-track-area::-webkit-scrollbar-track {
@@ -76,7 +76,7 @@
 .synechron-timeline-scroll {
   position: relative;
   width: 100%;
-  min-width: 1120px;
+  min-width: 70rem;
 }
 
 .synechron-timeline-track-wrapper {
@@ -152,7 +152,7 @@
   line-height: 1.25;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .synechron-timeline-card {
     border-radius: var(--timeline-radius-mobile);
   }
@@ -162,7 +162,7 @@
   }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 64rem) {
   .synechron-timeline-card {
     min-height: auto;
     padding: clamp(2.25rem, 6vw, 3.5rem);
@@ -197,6 +197,6 @@
 
   .synechron-timeline-icon-wrapper {
     flex: 0 0 var(--timeline-icon-size);
-    margin-top: 2px;
+    margin-top: 0.125rem;
   }
 }

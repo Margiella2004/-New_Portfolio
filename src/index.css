@@ -11,7 +11,11 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   --page-width: 94vw;
-  --page-max-width: 1520px;
+  --page-max-width: 95rem;
+}
+
+html {
+  scroll-padding-top: var(--header-offset, 0);
 }
 
 * {
@@ -20,10 +24,28 @@
 
 body {
   margin: 0;
-  min-width: 320px;
+  min-width: 20rem;
   min-height: 100vh;
   background: #ffffff;
   scroll-behavior: smooth;
+}
+
+.route-preload {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+  z-index: 2000;
+}
+
+.route-preload.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.route-preload-text {
+  font-family: 'Instrument Serif', serif;
+  font-size: 2rem;
+  letter-spacing: 0.02em;
 }
 
 /* Hide Leva panel completely (enable with html.show-leva in dev) */

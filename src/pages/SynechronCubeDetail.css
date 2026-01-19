@@ -16,83 +16,83 @@
 
   /* Spacing */
   --synechron-container-max-width: 100%;
-  --synechron-container-padding-mobile: 1.25rem; /* 20px */
-  --synechron-container-padding-desktop: 1.25rem; /* 20px */
-  --synechron-container-padding-top-mobile: 5rem; /* 80px */
-  --synechron-container-padding-top-desktop: 7rem; /* 112px */
-  --synechron-container-padding-bottom: 6rem; /* 96px */
-  --synechron-section-gap-mobile: 1.25rem; /* 20px */
-  --synechron-section-gap-desktop: 1.25rem; /* 20px */
+  --synechron-container-padding-mobile: 1.25rem; /* 1.25rem */
+  --synechron-container-padding-desktop: 1.25rem; /* 1.25rem */
+  --synechron-container-padding-top-mobile: 5rem; /* 5rem */
+  --synechron-container-padding-top-desktop: 7rem; /* 7rem */
+  --synechron-container-padding-bottom: 6rem; /* 6rem */
+  --synechron-section-gap-mobile: 1.25rem; /* 1.25rem */
+  --synechron-section-gap-desktop: 1.25rem; /* 1.25rem */
 
   /* Header Section */
-  --synechron-header-gap: 7.5rem; /* 120px (40px * 3) */
-  --synechron-title-section-gap: 1rem; /* 16px */
-  --synechron-metadata-gap-mobile: 0.75rem; /* 12px */
-  --synechron-metadata-gap-desktop: 1rem; /* 16px */
+  --synechron-header-gap: 7.5rem; /* 7.5rem (2.5rem * 3) */
+  --synechron-title-section-gap: 1rem; /* 1rem */
+  --synechron-metadata-gap-mobile: 0.75rem; /* 0.75rem */
+  --synechron-metadata-gap-desktop: 1rem; /* 1rem */
 
   /* Hero Image */
-  --synechron-hero-height-mobile: 400px;
-  --synechron-hero-height-md: 600px;
-  --synechron-hero-height-lg: 700px;
-  --synechron-hero-border-radius-mobile: 1.25rem; /* 20px */
-  --synechron-hero-border-radius-desktop: 2.1875rem; /* 35px */
+  --synechron-hero-height-mobile: 25rem;
+  --synechron-hero-height-md: 37.5rem;
+  --synechron-hero-height-lg: 43.75rem;
+  --synechron-hero-border-radius-mobile: 1.25rem; /* 1.25rem */
+  --synechron-hero-border-radius-desktop: 2.1875rem; /* 2.1875rem */
 
   /* Bio & Skills */
-  --synechron-bio-skills-gap-mobile: 2rem; /* 32px */
-  --synechron-bio-skills-gap-lg: 3rem; /* 48px */
-  --synechron-description-max-width: 660px;
-  --synechron-skills-gap: 0.25rem; /* 4px */
+  --synechron-bio-skills-gap-mobile: 2rem; /* 2rem */
+  --synechron-bio-skills-gap-lg: 3rem; /* 3rem */
+  --synechron-description-max-width: 41.25rem;
+  --synechron-skills-gap: 0.25rem; /* 0.25rem */
 
   /* Quote Section */
-  --synechron-quote-padding-mobile: 1.5rem; /* 24px */
-  --synechron-quote-padding-desktop: 13rem; /* 208px */
-  --synechron-quote-max-width: 800px;
+  --synechron-quote-padding-mobile: 1.5rem; /* 1.5rem */
+  --synechron-quote-padding-desktop: 13rem; /* 13rem */
+  --synechron-quote-max-width: 50rem;
 
   /* Added Sections */
-  --synechron-added-block-gap: 1.25rem; /* 20px */
-  --synechron-new-sections-gap: 1.25rem; /* 20px */
-  --synechron-bento-pair-gap: 1.25rem; /* 20px */
+  --synechron-added-block-gap: 1.25rem; /* 1.25rem */
+  --synechron-new-sections-gap: 1.25rem; /* 1.25rem */
+  --synechron-bento-pair-gap: 1.25rem; /* 1.25rem */
 
   /* Other Projects */
-  --synechron-other-projects-gap: 1.5rem; /* 24px */
-  --synechron-other-projects-grid-gap: 1.5rem; /* 24px */
+  --synechron-other-projects-gap: 1.5rem; /* 1.5rem */
+  --synechron-other-projects-grid-gap: 1.5rem; /* 1.5rem */
 
   /* Typography - From Figma */
-  --synechron-metadata-font-size-mobile: 1.125rem; /* 18px */
-  --synechron-metadata-font-size-desktop: 1.3625rem; /* 21.801px from Figma */
+  --synechron-metadata-font-size-mobile: 1.125rem; /* 1.125rem */
+  --synechron-metadata-font-size-desktop: 1.3625rem; /* 1.3625625rem from Figma */
   --synechron-metadata-font-weight-medium: 500;
-  --synechron-metadata-letter-spacing: -0.03em; /* -0.654px / 21.801px from Figma */
-  --synechron-metadata-line-height: 3.106; /* 67.697px / 21.801px from Figma */
+  --synechron-metadata-letter-spacing: -0.03em; /* -0.040875rem / 1.3625625rem from Figma */
+  --synechron-metadata-line-height: 3.106; /* 4.2310625rem / 1.3625625rem from Figma */
 
-  --synechron-title-font-size-mobile: 3.75rem; /* 60px */
-  --synechron-title-font-size-md: 5rem; /* 80px */
-  --synechron-title-font-size-lg: 3.4423rem; /* 55.076px from Figma */
-  --synechron-title-line-height: 0.75; /* 41.307px / 55.076px from Figma */
-  --synechron-title-letter-spacing: -0.03em; /* -1.6523px / 55.076px from Figma */
+  --synechron-title-font-size-mobile: 3.75rem; /* 3.75rem */
+  --synechron-title-font-size-md: 5rem; /* 5rem */
+  --synechron-title-font-size-lg: 3.4423rem; /* 3.44225rem from Figma */
+  --synechron-title-line-height: 0.75; /* 2.5816875rem / 3.44225rem from Figma */
+  --synechron-title-letter-spacing: -0.03em; /* -0.10326875rem / 3.44225rem from Figma */
 
-  --synechron-description-font-size-mobile: 1.5rem; /* 24px */
-  --synechron-description-font-size-md: 1.625rem; /* 26px from Figma */
-  --synechron-description-font-size-lg: 1.625rem; /* 26px from Figma */
+  --synechron-description-font-size-mobile: 1.5rem; /* 1.5rem */
+  --synechron-description-font-size-md: 1.625rem; /* 1.625rem from Figma */
+  --synechron-description-font-size-lg: 1.625rem; /* 1.625rem from Figma */
   --synechron-description-font-weight: 300;
-  --synechron-description-line-height: 1.269; /* 33px / 26px from Figma */
-  --synechron-description-letter-spacing: -0.03em; /* -0.78px / 26px from Figma */
+  --synechron-description-line-height: 1.269; /* 2.0625rem / 1.625rem from Figma */
+  --synechron-description-letter-spacing: -0.03em; /* -0.04875rem / 1.625rem from Figma */
 
-  --synechron-skill-font-size-mobile: 1.5rem; /* 24px */
-  --synechron-skill-font-size-md: 1.625rem; /* 26px from Figma */
-  --synechron-skill-font-size-lg: 1.625rem; /* 26px from Figma */
+  --synechron-skill-font-size-mobile: 1.5rem; /* 1.5rem */
+  --synechron-skill-font-size-md: 1.625rem; /* 1.625rem from Figma */
+  --synechron-skill-font-size-lg: 1.625rem; /* 1.625rem from Figma */
   --synechron-skill-font-weight: 300;
-  --synechron-skill-letter-spacing: -0.03em; /* -0.78px / 26px from Figma */
-  --synechron-skill-line-height: 1.269; /* 33px / 26px from Figma */
+  --synechron-skill-letter-spacing: -0.03em; /* -0.04875rem / 1.625rem from Figma */
+  --synechron-skill-line-height: 1.269; /* 2.0625rem / 1.625rem from Figma */
 
-  --synechron-quote-font-size-mobile: 1.5rem; /* 24px */
-  --synechron-quote-font-size-md: 1.875rem; /* 30px */
-  --synechron-quote-font-size-lg: 2.125rem; /* 34px */
+  --synechron-quote-font-size-mobile: 1.5rem; /* 1.5rem */
+  --synechron-quote-font-size-md: 1.875rem; /* 1.875rem */
+  --synechron-quote-font-size-lg: 2.125rem; /* 2.125rem */
   --synechron-quote-font-weight: 300;
   --synechron-quote-line-height: 1.2;
   --synechron-quote-letter-spacing: -0.02em;
 
-  --synechron-other-projects-title-font-size-mobile: 1.875rem; /* 30px */
-  --synechron-other-projects-title-font-size-desktop: 2rem; /* 32px */
+  --synechron-other-projects-title-font-size-mobile: 1.875rem; /* 1.875rem */
+  --synechron-other-projects-title-font-size-desktop: 2rem; /* 2rem */
   --synechron-other-projects-title-font-weight: 400;
 }
 
@@ -118,7 +118,7 @@
   z-index: 2;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .synechron-cube-container {
     padding-top: var(--synechron-container-padding-top-desktop);
     gap: var(--synechron-section-gap-desktop);
@@ -158,7 +158,7 @@
   line-height: var(--synechron-metadata-line-height);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .synechron-cube-metadata {
     gap: var(--synechron-metadata-gap-desktop);
     font-size: var(--synechron-metadata-font-size-desktop);
@@ -184,14 +184,14 @@
   text-align: center;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .synechron-cube-title {
     font-size: var(--synechron-title-font-size-md);
     line-height: 1;
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .synechron-cube-title {
     font-size: var(--synechron-title-font-size-lg);
     line-height: var(--synechron-title-line-height);
@@ -207,17 +207,17 @@
   background: var(--synechron-hero-bg);
   border-radius: var(--synechron-hero-border-radius-mobile);
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.1);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .synechron-cube-hero-image-container {
     height: var(--synechron-hero-height-md);
     border-radius: var(--synechron-hero-border-radius-desktop);
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .synechron-cube-hero-image-container {
     height: var(--synechron-hero-height-lg);
   }
@@ -240,7 +240,7 @@
   width: 100%;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .synechron-cube-bio-skills {
     gap: var(--synechron-bio-skills-gap-lg);
   }
@@ -264,13 +264,13 @@
   margin: 0;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .synechron-cube-description-text {
     font-size: var(--synechron-description-font-size-md);
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .synechron-cube-description-text {
     font-size: var(--synechron-description-font-size-lg);
   }
@@ -294,13 +294,13 @@
   line-height: var(--synechron-skill-line-height);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .synechron-cube-skill {
     font-size: var(--synechron-skill-font-size-md);
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .synechron-cube-skill {
     font-size: var(--synechron-skill-font-size-lg);
   }
@@ -319,7 +319,7 @@
   overflow: hidden;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .synechron-cube-grid-image-container {
     border-radius: 1.875rem;
   }
@@ -342,7 +342,7 @@
   padding: var(--synechron-quote-padding-mobile) 0;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .synechron-cube-quote {
     padding: var(--synechron-quote-padding-desktop) 0;
   }
@@ -360,13 +360,13 @@
   margin: 0;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .synechron-cube-quote-text {
     font-size: var(--synechron-quote-font-size-md);
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .synechron-cube-quote-text {
     font-size: var(--synechron-quote-font-size-lg);
   }
@@ -385,7 +385,7 @@
   overflow: hidden;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .synechron-cube-feature-image-container {
     border-radius: 1.875rem;
   }
@@ -429,7 +429,7 @@
   gap: var(--synechron-bento-pair-gap);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .synechron-cube-bento-pair {
     grid-template-columns: 1fr 1fr;
     gap: var(--synechron-bento-pair-gap);
@@ -444,7 +444,7 @@
   aspect-ratio: 4 / 3;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .synechron-cube-bento-pair-image-container {
     border-radius: 1.875rem;
   }
@@ -480,7 +480,7 @@
   display: block;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .synechron-cube-page .content-module-bento-up-left .content-module-image-container-large,
   .synechron-cube-page .content-module-bento-up-right .content-module-image-container-large,
   .synechron-cube-page .content-module-bento-up-left .content-module-image-container-bento,
@@ -495,7 +495,7 @@
   gap: 1.25rem;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .synechron-cube-module-block {
     gap: 1.25rem;
   }
@@ -531,7 +531,7 @@
   margin: 0;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .synechron-cube-other-projects-title {
     font-size: var(--synechron-other-projects-title-font-size-desktop);
   }
@@ -544,13 +544,13 @@
   width: 100%;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .synechron-cube-other-projects-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .synechron-cube-other-projects-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 3rem;

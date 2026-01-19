@@ -13,60 +13,60 @@
   --guardian-hero-bg: #000000;
 
   /* Spacing - Matching Synechron */
-  --guardian-container-padding-mobile: 20px;
-  --guardian-container-padding-desktop: 20px;
-  --guardian-container-padding-top-mobile: 80px;
-  --guardian-container-padding-top-desktop: 112px;
-  --guardian-container-padding-bottom: 96px;
-  --guardian-section-gap: 20px;
+  --guardian-container-padding-mobile: 1.25rem;
+  --guardian-container-padding-desktop: 1.25rem;
+  --guardian-container-padding-top-mobile: 5rem;
+  --guardian-container-padding-top-desktop: 7rem;
+  --guardian-container-padding-bottom: 6rem;
+  --guardian-section-gap: 1.25rem;
 
   /* Header Section - Matching Synechron */
-  --guardian-header-gap: 80px;
-  --guardian-title-section-gap: 16px;
-  --guardian-metadata-gap-mobile: 12px;
-  --guardian-metadata-gap-desktop: 16px;
+  --guardian-header-gap: 5rem;
+  --guardian-title-section-gap: 1rem;
+  --guardian-metadata-gap-mobile: 0.75rem;
+  --guardian-metadata-gap-desktop: 1rem;
 
   /* Hero Image - Matching Synechron */
-  --guardian-hero-height-mobile: 400px;
-  --guardian-hero-height-md: 600px;
-  --guardian-hero-height-lg: 700px;
-  --guardian-hero-border-radius-mobile: 20px;
-  --guardian-hero-border-radius-desktop: 35px;
+  --guardian-hero-height-mobile: 25rem;
+  --guardian-hero-height-md: 37.5rem;
+  --guardian-hero-height-lg: 43.75rem;
+  --guardian-hero-border-radius-mobile: 1.25rem;
+  --guardian-hero-border-radius-desktop: 2.1875rem;
 
   /* Bio & Skills - Matching Synechron */
-  --guardian-bio-skills-gap-mobile: 32px;
-  --guardian-bio-skills-gap-lg: 48px;
-  --guardian-description-max-width: 660px;
-  --guardian-skills-gap: 4px;
+  --guardian-bio-skills-gap-mobile: 2rem;
+  --guardian-bio-skills-gap-lg: 3rem;
+  --guardian-description-max-width: 41.25rem;
+  --guardian-skills-gap: 0.25rem;
 
   /* Quote Section */
-  --guardian-quote-padding-mobile: 24px;
-  --guardian-quote-padding-desktop: 208px;
-  --guardian-quote-max-width: 800px;
+  --guardian-quote-padding-mobile: 1.5rem;
+  --guardian-quote-padding-desktop: 13rem;
+  --guardian-quote-max-width: 50rem;
 
   /* Typography - From Synechron/Figma */
-  --guardian-metadata-font-size-mobile: 18px;
-  --guardian-metadata-font-size-desktop: 21.801px;
+  --guardian-metadata-font-size-mobile: 1.125rem;
+  --guardian-metadata-font-size-desktop: 1.3625625rem;
   --guardian-metadata-font-weight-medium: 500;
   --guardian-metadata-letter-spacing: -0.03em;
   --guardian-metadata-line-height: 3.106;
 
-  --guardian-title-font-size-mobile: 60px;
-  --guardian-title-font-size-md: 80px;
-  --guardian-title-font-size-lg: 55.076px;
+  --guardian-title-font-size-mobile: 3.75rem;
+  --guardian-title-font-size-md: 5rem;
+  --guardian-title-font-size-lg: 3.44225rem;
   --guardian-title-line-height: 0.75;
   --guardian-title-letter-spacing: -0.03em;
 
-  --guardian-description-font-size-mobile: 24px;
-  --guardian-description-font-size-md: 26px;
-  --guardian-description-font-size-lg: 26px;
+  --guardian-description-font-size-mobile: 1.5rem;
+  --guardian-description-font-size-md: 1.625rem;
+  --guardian-description-font-size-lg: 1.625rem;
   --guardian-description-font-weight: 300;
   --guardian-description-line-height: 1.269;
   --guardian-description-letter-spacing: -0.03em;
 
-  --guardian-skill-font-size-mobile: 24px;
-  --guardian-skill-font-size-md: 26px;
-  --guardian-skill-font-size-lg: 26px;
+  --guardian-skill-font-size-mobile: 1.5rem;
+  --guardian-skill-font-size-md: 1.625rem;
+  --guardian-skill-font-size-lg: 1.625rem;
   --guardian-skill-font-weight: 300;
   --guardian-skill-letter-spacing: -0.03em;
   --guardian-skill-line-height: 1.269;
@@ -96,7 +96,7 @@
   z-index: 2;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .guardian-app-container {
     padding-top: var(--guardian-container-padding-top-desktop);
   }
@@ -135,7 +135,7 @@
   line-height: var(--guardian-metadata-line-height);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .guardian-app-metadata {
     gap: var(--guardian-metadata-gap-desktop);
     font-size: var(--guardian-metadata-font-size-desktop);
@@ -161,14 +161,14 @@
   text-align: center;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .guardian-app-title {
     font-size: var(--guardian-title-font-size-md);
     line-height: 1;
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .guardian-app-title {
     font-size: var(--guardian-title-font-size-lg);
     line-height: var(--guardian-title-line-height);
@@ -185,14 +185,14 @@
   overflow: hidden;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .guardian-app-hero-image-container {
     height: var(--guardian-hero-height-md);
     border-radius: var(--guardian-hero-border-radius-desktop);
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .guardian-app-hero-image-container {
     height: var(--guardian-hero-height-lg);
   }
@@ -214,7 +214,7 @@
   width: 100%;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .guardian-app-bio-skills {
     gap: var(--guardian-bio-skills-gap-lg);
   }
@@ -238,13 +238,13 @@
   margin: 0;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .guardian-app-description-text {
     font-size: var(--guardian-description-font-size-md);
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .guardian-app-description-text {
     font-size: var(--guardian-description-font-size-lg);
   }
@@ -268,13 +268,13 @@
   line-height: var(--guardian-skill-line-height);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .guardian-app-skill {
     font-size: var(--guardian-skill-font-size-md);
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .guardian-app-skill {
     font-size: var(--guardian-skill-font-size-lg);
   }
@@ -289,22 +289,22 @@
 
 .guardian-app-section-image {
   width: 100%;
-  max-height: 400px;
+  max-height: 25rem;
   display: block;
-  border-radius: 20px;
+  border-radius: 1.25rem;
   object-fit: cover;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .guardian-app-section-image {
-    max-height: 500px;
+    max-height: 31.25rem;
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .guardian-app-section-image {
-    max-height: 600px;
-    border-radius: 34px;
+    max-height: 37.5rem;
+    border-radius: 2.125rem;
   }
 }
 
@@ -326,7 +326,7 @@
   align-items: center;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .guardian-app-quote {
     padding: var(--synechron-quote-padding-desktop, var(--guardian-quote-padding-desktop)) 0;
   }
@@ -337,7 +337,7 @@
   max-width: var(--guardian-quote-max-width);
   text-align: center;
   font-family: 'Pangea Afrikan VAR 2.003', -apple-system, system-ui, sans-serif;
-  font-size: 24px;
+  font-size: 1.5rem;
   font-weight: 300;
   line-height: 1.2;
   letter-spacing: -0.02em;
@@ -345,15 +345,15 @@
   font-variation-settings: 'ital' 0, 'XTDR' 50, 'APRT' 100, 'SPAC' 40, 'INKT' 1, 'SS01' 1, 'SS02' 0, 'SS03' 0;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .guardian-app-quote-text {
-    font-size: 30px;
+    font-size: 1.875rem;
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .guardian-app-quote-text {
-    font-size: 34px;
+    font-size: 2.125rem;
   }
 }
 
@@ -367,16 +367,16 @@
 .guardian-app-phone-grid-container {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 20px;
+  gap: 1.25rem;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .guardian-app-phone-grid-container {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .guardian-app-phone-grid-container {
     grid-template-columns: repeat(4, 1fr);
   }
@@ -384,14 +384,14 @@
 
 .guardian-app-phone-grid-item {
   width: 100%;
-  border-radius: 20px;
+  border-radius: 1.25rem;
   overflow: hidden;
   background: var(--guardian-hero-bg);
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .guardian-app-phone-grid-item {
-    border-radius: 34px;
+    border-radius: 2.125rem;
   }
 }
 
@@ -423,14 +423,14 @@
 .guardian-app-three-image-container {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1.25rem;
   width: 100%;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .guardian-app-three-image-container {
     flex-direction: row;
-    gap: 20px;
+    gap: 1.25rem;
   }
 }
 
@@ -438,21 +438,21 @@
   flex: 1;
   width: 100%;
   background: #000000;
-  border-radius: 20px;
+  border-radius: 1.25rem;
   overflow: hidden;
   height: auto;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .guardian-app-three-image-item {
-    height: 400px;
+    height: 25rem;
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .guardian-app-three-image-item {
-    height: 560px;
-    border-radius: 34px;
+    height: 35rem;
+    border-radius: 2.125rem;
   }
 }
 
@@ -482,22 +482,22 @@
 .guardian-app-single-image-item {
   width: 100%;
   background: #000000;
-  border-radius: 20px;
+  border-radius: 1.25rem;
   overflow: hidden;
   height: auto;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .guardian-app-single-image-item {
-    width: calc((100% - 40px) / 3);
-    height: 400px;
+    width: calc((100% - 2.5rem) / 3);
+    height: 25rem;
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .guardian-app-single-image-item {
-    height: 560px;
-    border-radius: 34px;
+    height: 35rem;
+    border-radius: 2.125rem;
   }
 }
 
@@ -527,36 +527,36 @@
 .guardian-app-two-image-container {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1.25rem;
   width: 100%;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .guardian-app-two-image-container {
     flex-direction: row;
-    gap: 20px;
+    gap: 1.25rem;
   }
 }
 
 .guardian-app-two-image-item {
   width: 100%;
   background: #000000;
-  border-radius: 20px;
+  border-radius: 1.25rem;
   overflow: hidden;
   height: auto;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .guardian-app-two-image-item {
-    width: calc((100% - 40px) / 3);
-    height: 400px;
+    width: calc((100% - 2.5rem) / 3);
+    height: 25rem;
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .guardian-app-two-image-item {
-    height: 560px;
-    border-radius: 34px;
+    height: 35rem;
+    border-radius: 2.125rem;
   }
 }
 
@@ -616,7 +616,7 @@
   display: block;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .guardian-app-page .content-module-bento-up-left .content-module-image-container-large,
   .guardian-app-page .content-module-bento-up-right .content-module-image-container-large,
   .guardian-app-page .content-module-bento-up-left .content-module-image-container-bento,
