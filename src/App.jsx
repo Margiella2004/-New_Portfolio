@@ -23,6 +23,29 @@ import './App.css'
 
 gsap.registerPlugin(ScrollTrigger)
 
+const INTRO_BLOOM_START = {
+  threshold: 1.35,
+  smoothing: 1.65,
+  radius: 3.0,
+}
+const INTRO_BLOOM_PEAK_DELTA = {
+  threshold: 0.3,
+  smoothing: 0.2,
+  radius: 0.6,
+}
+const INTRO_BLOOM_PEAK_DELAY = 0.5
+const INTRO_BLOOM_PEAK_DURATION = 1.8
+const INTRO_BLOOM_RETURN_DURATION = 1.8
+const INTRO_FRESNEL_START = 0.09
+const INTRO_FRESNEL_PEAK_DELTA = 0.3
+const INTRO_FRESNEL_PEAK_DURATION = 1.8
+const INTRO_FRESNEL_RETURN_DURATION = 1.8
+const INTRO_TEXT_START_DELAY = 0
+const INTRO_TEXT_FADE_DURATION = 0.25
+const INTRO_TEXT_VISIBLE_DURATION = 2.5
+const INTRO_HEADER_FADE_START = 2.6
+const INTRO_HEADER_FADE_DURATION = 0.4
+
 function ScrollStopBCUpdater({
   materialRef,
   scrollStopBCRef,
@@ -347,9 +370,15 @@ function App() {
   const canvasWrapperRef = useRef(null)
   const footerRef = useRef(null)
   const aboutRef = useRef(null)
+  const introTimelineRef = useRef(null)
+  const introHasRunRef = useRef(false)
+  const introActiveRef = useRef(false)
 
   const canvasOpacity = 1
-  const introTextOpacity = 0
+  const [introTextOpacity, setIntroTextOpacity] = useState(0)
+  const [introBloom, setIntroBloom] = useState({ ...INTRO_BLOOM_START })
+  const [introFresnelOffset, setIntroFresnelOffset] = useState(INTRO_FRESNEL_START)
+  const [introActive, setIntroActive] = useState(true)
   const scrollFov = 0
   const scrollStopBCRef = useRef(0)
   const scrollStopBCTargetRef = useRef(0)
@@ -357,16 +386,16 @@ function App() {
   const scrollStopBCBaselinePendingRef = useRef(null)
   const scrollStopBCMetaRef = useRef({ time: 0, value: 0 })
   const [activeSection, setActiveSection] = useState('home')
-  const [mouseBloom, setMouseBloom] = useState({ x: 1, y: 1 })
+  const [mouseBloom, setMouseBloom] = useState({ x: 0.5, y: 0.5 })
   const [assetsReady, setAssetsReady] = useState(false)
   const [viewportWidth, setViewportWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1024
   )
-  const mouseBloomTargetRef = useRef({ x: 1, y: 1 })
-  const mouseBloomCurrentRef = useRef({ x: 1, y: 1 })
+  const mouseBloomTargetRef = useRef({ x: 0.5, y: 0.5 })
+  const mouseBloomCurrentRef = useRef({ x: 0.5, y: 0.5 })
   const mouseBloomRafRef = useRef(null)
   const mouseBloomLastTimeRef = useRef(0)
-  const mouseBloomStateRef = useRef({ x: 1, y: 1 })
+  const mouseBloomStateRef = useRef({ x: 0.5, y: 0.5 })
   const mouseActivityRef = useRef(0)
   const defaultFov = typeof window !== 'undefined' && window.innerWidth <= 768 ? 22 : 12
   const isLowPower = useMemo(() => {
@@ -496,11 +525,15 @@ function App() {
       updateScrollStopBC(progress * 0.76)
 
       if (heroContentRef.current) {
-        const heroClampedY = Math.max(heroRange.start, Math.min(y, heroRange.end))
-        const heroProgress = heroRange.distance
-          ? (heroClampedY - heroRange.start) / heroRange.distance
-          : 0
-        heroContentRef.current.style.opacity = String(1 - heroProgress)
+        if (introActiveRef.current) {
+          heroContentRef.current.style.opacity = '0'
+        } else {
+          const heroClampedY = Math.max(heroRange.start, Math.min(y, heroRange.end))
+          const heroProgress = heroRange.distance
+            ? (heroClampedY - heroRange.start) / heroRange.distance
+            : 0
+          heroContentRef.current.style.opacity = String(1 - heroProgress)
+        }
       }
     }
 
@@ -542,7 +575,7 @@ function App() {
     }
   }, [])
 
-  const defaultBackdropBlur = isChromium ? 87 : 128
+  const defaultBackdropBlur = isChromium ? 73 : 128
   const defaultSaturation = isChromium ? 0.79 : 1.55
   const controls = useControls({
     Gradient: folder(
@@ -575,10 +608,10 @@ function App() {
     ),
     Effects: folder(
       {
-        bloomIntensity: { value: 0.21, min: 0, max: 5, step: 0.01 },
-        bloomThreshold: { value: 0.94, min: 0, max: 2, step: 0.01 },
-        bloomSmoothing: { value: 1.46, min: 0, max: 2, step: 0.01 },
-        bloomRadius: { value: 2.12, min: 0, max: 5, step: 0.01 },
+        bloomIntensity: { value: 0.3, min: 0, max: 5, step: 0.01 },
+        bloomThreshold: { value: 0.98, min: 0, max: 2, step: 0.01 },
+        bloomSmoothing: { value: 1.49, min: 0, max: 2, step: 0.01 },
+        bloomRadius: { value: 2.26, min: 0, max: 5, step: 0.01 },
         blurEnabled: { value: false, label: 'blur on' },
         blurStrength: { value: 0.4, min: 0, max: 4, step: 0.01, label: 'blur' },
         blurTaper: { value: 1.0, min: 0, max: 4, step: 0.01, label: 'taper' },
@@ -611,7 +644,7 @@ function App() {
         targetX: { value: -0.2, min: -10, max: 10, step: 0.05, label: 'target X' },
         targetY: { value: 0.0, min: -10, max: 10, step: 0.05, label: 'target Y' },
         targetZ: { value: -0.8, min: -10, max: 10, step: 0.05, label: 'target Z' },
-        fov: { value: defaultFov, min: 10, max: 120, step: 1 },
+        fov: { value: defaultFov, min: 5, max: 120, step: 1 },
         minDistance: { value: 7.3, min: 0.1, max: 20, step: 0.1 },
         maxDistance: { value: 33.0, min: 0.1, max: 50, step: 0.1 },
         enablePan: { value: true },
@@ -654,11 +687,208 @@ function App() {
   })
 
   useEffect(() => {
+    introActiveRef.current = introActive
+  }, [introActive])
+
+  useEffect(() => {
+    if (introHasRunRef.current) return undefined
+    introHasRunRef.current = true
+
+    const body = document.body
+    const html = document.documentElement
+    const previousBodyOverflow = body.style.overflow
+    const previousHtmlOverflow = html.style.overflow
+    const clampValue = (value, min, max) => Math.min(max, Math.max(min, value))
+    const bloomStart = {
+      threshold: INTRO_BLOOM_START.threshold,
+      smoothing: INTRO_BLOOM_START.smoothing,
+      radius: INTRO_BLOOM_START.radius,
+    }
+    const bloomBase = {
+      threshold: controls.bloomThreshold,
+      smoothing: controls.bloomSmoothing,
+      radius: controls.bloomRadius,
+    }
+    const bloomPeak = {
+      threshold: clampValue(
+        bloomBase.threshold - INTRO_BLOOM_PEAK_DELTA.threshold,
+        0,
+        2
+      ),
+      smoothing: clampValue(
+        bloomBase.smoothing - INTRO_BLOOM_PEAK_DELTA.smoothing,
+        0,
+        2
+      ),
+      radius: clampValue(
+        bloomBase.radius - INTRO_BLOOM_PEAK_DELTA.radius,
+        0,
+        5
+      ),
+    }
+    const bloomState = { ...bloomStart }
+    const fresnelBase = controls.fresnelOffset
+    const fresnelPeak = clampValue(
+      fresnelBase - INTRO_FRESNEL_PEAK_DELTA,
+      0,
+      1
+    )
+    const fresnelState = { offset: INTRO_FRESNEL_START }
+    const textState = { opacity: 0 }
+
+    setIntroActive(true)
+    setIntroBloom({ ...bloomStart })
+    setIntroFresnelOffset(INTRO_FRESNEL_START)
+    setIntroTextOpacity(0)
+
+    if (headerRef.current) {
+      gsap.set(headerRef.current, { opacity: 0, y: -10, pointerEvents: 'none' })
+    }
+    if (heroContentRef.current) {
+      gsap.set(heroContentRef.current, { opacity: 0, pointerEvents: 'none' })
+    }
+
+    body.style.overflow = 'hidden'
+    html.style.overflow = 'hidden'
+
+    const tl = gsap.timeline({
+      defaults: { ease: 'power2.inOut' },
+      onComplete: () => {
+        setIntroBloom({
+          threshold: controls.bloomThreshold,
+          smoothing: controls.bloomSmoothing,
+          radius: controls.bloomRadius,
+        })
+        setIntroFresnelOffset(controls.fresnelOffset)
+        setIntroActive(false)
+        setIntroTextOpacity(0)
+        body.style.overflow = previousBodyOverflow
+        html.style.overflow = previousHtmlOverflow
+      },
+    })
+    introTimelineRef.current = tl
+
+    tl.to(
+      bloomState,
+      {
+        threshold: bloomPeak.threshold,
+        smoothing: bloomPeak.smoothing,
+        radius: bloomPeak.radius,
+        duration: INTRO_BLOOM_PEAK_DURATION,
+        ease: 'power2.inOut',
+        onUpdate: () => setIntroBloom({ ...bloomState }),
+      },
+      INTRO_BLOOM_PEAK_DELAY
+    ).to(
+      bloomState,
+      {
+        threshold: bloomBase.threshold,
+        smoothing: bloomBase.smoothing,
+        radius: bloomBase.radius,
+        duration: INTRO_BLOOM_RETURN_DURATION,
+        ease: 'power2.inOut',
+        onUpdate: () => setIntroBloom({ ...bloomState }),
+      },
+      '>'
+    )
+
+    tl.to(
+      fresnelState,
+      {
+        offset: fresnelPeak,
+        duration: INTRO_FRESNEL_PEAK_DURATION,
+        ease: 'power2.inOut',
+        onUpdate: () => setIntroFresnelOffset(fresnelState.offset),
+      },
+      INTRO_BLOOM_PEAK_DELAY
+    ).to(
+      fresnelState,
+      {
+        offset: fresnelBase,
+        duration: INTRO_FRESNEL_RETURN_DURATION,
+        ease: 'power2.inOut',
+        onUpdate: () => setIntroFresnelOffset(fresnelState.offset),
+      },
+      '>'
+    )
+
+    tl.to(
+      textState,
+      {
+        opacity: 1,
+        duration: INTRO_TEXT_FADE_DURATION,
+        ease: 'power2.inOut',
+        onUpdate: () => setIntroTextOpacity(textState.opacity),
+      },
+      INTRO_TEXT_START_DELAY
+    ).to(
+      textState,
+      {
+        opacity: 0,
+        duration: INTRO_TEXT_FADE_DURATION,
+        ease: 'power2.inOut',
+        onUpdate: () => setIntroTextOpacity(textState.opacity),
+      },
+      INTRO_TEXT_START_DELAY + INTRO_TEXT_VISIBLE_DURATION
+    )
+
+    if (headerRef.current) {
+      tl.to(
+        headerRef.current,
+        {
+          opacity: 1,
+          y: 0,
+          duration: INTRO_HEADER_FADE_DURATION,
+          ease: 'power2.inOut',
+          onStart: () => {
+            headerRef.current.style.pointerEvents = 'auto'
+          },
+        },
+        INTRO_HEADER_FADE_START
+      )
+    }
+
+    if (heroContentRef.current) {
+      tl.to(
+        heroContentRef.current,
+        {
+          opacity: 1,
+          duration: INTRO_HEADER_FADE_DURATION,
+          ease: 'power2.inOut',
+          onStart: () => {
+            heroContentRef.current.style.pointerEvents = 'auto'
+          },
+        },
+        INTRO_HEADER_FADE_START
+      )
+    }
+
+    return () => {
+      tl.kill()
+      body.style.overflow = previousBodyOverflow
+      html.style.overflow = previousHtmlOverflow
+      if (import.meta.env.DEV) {
+        introHasRunRef.current = false
+      }
+    }
+  }, [
+    controls.bloomRadius,
+    controls.bloomSmoothing,
+    controls.bloomThreshold,
+    controls.fresnelOffset,
+  ])
+
+  useEffect(() => {
     if (lowPowerMode) return undefined
     const frameInterval = 1000 / 30
 
     const tick = () => {
       const now = performance.now()
+      const lastMouse = mouseActivityRef.current
+      if (lastMouse && now - lastMouse > 500) {
+        mouseBloomTargetRef.current = { x: 0.5, y: 0.5 }
+        mouseActivityRef.current = 0
+      }
       if (now - mouseBloomLastTimeRef.current < frameInterval) {
         mouseBloomRafRef.current = requestAnimationFrame(tick)
         return
@@ -715,7 +945,7 @@ function App() {
 
   const handleHeroPointerLeave = () => {
     if (lowPowerMode) return
-    mouseBloomTargetRef.current = { x: 1, y: 1 }
+    mouseBloomTargetRef.current = { x: 0.5, y: 0.5 }
     mouseActivityRef.current = 0
   }
 
@@ -778,9 +1008,21 @@ function App() {
   const effectiveNoiseOpacity = lowPowerMode
     ? 0
     : controls.noiseOpacity * noiseScale * browserNoiseBoost
-  const effectiveBloomThreshold = controls.bloomThreshold
+  const introBloomActive = introActive
+  const baseBloomThreshold = introBloomActive
+    ? introBloom?.threshold ?? controls.bloomThreshold
+    : controls.bloomThreshold
+  const baseBloomSmoothing = introBloomActive
+    ? introBloom?.smoothing ?? controls.bloomSmoothing
+    : controls.bloomSmoothing
+  const baseBloomRadius = introBloomActive
+    ? introBloom?.radius ?? controls.bloomRadius
+    : controls.bloomRadius
+  const baseFresnelOffset = introBloomActive
+    ? introFresnelOffset ?? controls.fresnelOffset
+    : controls.fresnelOffset
 
-  const mouseTrackingEnabled = activeSection !== 'contact' && !lowPowerMode
+  const mouseTrackingEnabled = activeSection !== 'contact' && !lowPowerMode && !introActive
   const bloomMouseX = mouseTrackingEnabled ? (mouseBloom.x - 0.5) * 2 : 0
   const bloomMouseY = mouseTrackingEnabled ? (mouseBloom.y - 0.5) * 2 : 0
   const dynamicBloomIntensity = clamp(
@@ -789,23 +1031,23 @@ function App() {
     5
   )
   const dynamicBloomThreshold = clamp(
-    effectiveBloomThreshold + bloomMouseY * 0.04,
+    baseBloomThreshold + bloomMouseY * 0.04,
     0,
     2
   )
   const dynamicBloomSmoothing = clamp(
-    controls.bloomSmoothing + bloomMouseX * 0.05 - bloomMouseY * 0.02,
+    baseBloomSmoothing + bloomMouseX * 0.05 - bloomMouseY * 0.02,
     0,
     2
   )
   const bloomRadiusScale = lowPowerMode ? 0.7 : 1
   const dynamicBloomRadius = clamp(
-    controls.bloomRadius + bloomMouseX * 0.14,
+    baseBloomRadius + bloomMouseX * 0.14,
     0,
     5
   ) * bloomRadiusScale
   const dynamicFresnelOffset = clamp(
-    controls.fresnelOffset + bloomMouseX * 0.06 + bloomMouseY * 0.045,
+    baseFresnelOffset + bloomMouseX * 0.06 + bloomMouseY * 0.045,
     0,
     1
   )
@@ -1109,7 +1351,11 @@ function App() {
         id="home"
         className="hero-section"
       >
-        <HeroTextOverlay opacity={introTextOpacity} />
+        <HeroTextOverlay
+          autoplayOverride={true}
+          opacity={introTextOpacity}
+          startDelay={INTRO_TEXT_START_DELAY}
+        />
         <div
           ref={heroContentRef}
           className="hero-overlay"
