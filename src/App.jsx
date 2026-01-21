@@ -29,15 +29,15 @@ const INTRO_BLOOM_START = {
   radius: 3.0,
 }
 const INTRO_BLOOM_PEAK_DELTA = {
-  threshold: 0.3,
-  smoothing: 0.2,
-  radius: 0.6,
+  threshold: 0.5,
+  smoothing: 0.35,
+  radius: 1.2,
 }
 const INTRO_BLOOM_PEAK_DELAY = 0.5
 const INTRO_BLOOM_PEAK_DURATION = 1.8
 const INTRO_BLOOM_RETURN_DURATION = 1.8
 const INTRO_FRESNEL_START = 0.09
-const INTRO_FRESNEL_PEAK_DELTA = 0.3
+const INTRO_FRESNEL_PEAK_DELTA = 0.5
 const INTRO_FRESNEL_PEAK_DURATION = 1.8
 const INTRO_FRESNEL_RETURN_DURATION = 1.8
 const INTRO_TEXT_START_DELAY = 0
@@ -640,7 +640,7 @@ function App() {
       {
         camX: { value: -1.7, min: -20, max: 20, step: 0.1, label: 'pos X' },
         camY: { value: -2.8, min: -20, max: 20, step: 0.1, label: 'pos Y' },
-        camZ: { value: -6.5, min: -20, max: 20, step: 0.1, label: 'pos Z' },
+        camZ: { value: 5.2, min: -20, max: 20, step: 0.1, label: 'pos Z' },
         targetX: { value: -0.2, min: -10, max: 10, step: 0.05, label: 'target X' },
         targetY: { value: 0.0, min: -10, max: 10, step: 0.05, label: 'target Y' },
         targetZ: { value: -0.8, min: -10, max: 10, step: 0.05, label: 'target Z' },
