@@ -8,7 +8,7 @@ export const projects = [
     number: '01',
     title: 'Synechron Cube',
     image: synechronIntroImage,
-    tags: ['3D Interface', 'Interaction Design', 'Babylon.js'],
+    tags: ['3D Interface', 'Interaction Design', 'Three.js'],
     description:
       'Synechron Cube is a 3D presentation interface designed for both laptops and a 32-panel touch wall. I defined the object metaphor, built and iterated the interaction system in Babylon.js, and tuned animations to keep the experience clear, fast, and engaging on a fragmented display. The final system let teams customize faces for their department, surface content quickly, and keep the cube in an ambient state between demos.',
   },

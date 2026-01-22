@@ -60,12 +60,41 @@ export function Footer({ data = {} }) {
         <div style={styles.projectsRow}>
           <div className="footer-small-label" style={styles.smallLabel}>PROJECTS</div>
           <div style={styles.projectsList}>
-            {projects.map((project, index) => (
-              <div key={project} style={styles.projectItem}>
-                <span className="footer-project-index" style={styles.projectIndex}>0{index + 1}</span>
-                <span className="footer-project-name" style={styles.projectName}>{sanitizeText(project)}</span>
-              </div>
-            ))}
+            {projects.map((project, index) => {
+              const projectLabel =
+                typeof project === 'string'
+                  ? sanitizeText(project)
+                  : sanitizeText(project?.label || '')
+              const projectUrl = typeof project === 'string' ? null : project?.url
+              const safeUrl = projectUrl ? sanitizeUrl(projectUrl) : null
+              const projectKey = `${projectLabel}-${index}`
+
+              const projectContent = (
+                <>
+                  <span className="footer-project-index" style={styles.projectIndex}>0{index + 1}</span>
+                  <span className="footer-project-name" style={styles.projectName}>{projectLabel}</span>
+                </>
+              )
+
+              if (!safeUrl) {
+                return (
+                  <div key={projectKey} style={styles.projectItem}>
+                    {projectContent}
+                  </div>
+                )
+              }
+
+              return (
+                <a
+                  key={projectKey}
+                  href={safeUrl}
+                  className="footer-project-link"
+                  style={styles.projectLink}
+                >
+                  {projectContent}
+                </a>
+              )
+            })}
           </div>
         </div>
 
@@ -150,6 +179,13 @@ const styles = {
     display: 'flex',
     gap: '8.938px',
     alignItems: 'flex-start',
+  },
+  projectLink: {
+    display: 'flex',
+    gap: '8.938px',
+    alignItems: 'flex-start',
+    textDecoration: 'none',
+    color: 'inherit',
   },
   projectIndex: {
     fontFamily: 'Pangea Afrikan, sans-serif',

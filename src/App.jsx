@@ -1100,6 +1100,18 @@ function App() {
     const ctx = gsap.context(() => {
       if (!heroContentRef.current || !projectsRef.current) return
 
+      if (heroSectionRef.current) {
+        ScrollTrigger.create({
+          trigger: heroSectionRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          pin: true,
+          pinSpacing: false,
+          id: 'hero-pin',
+          invalidateOnRefresh: true,
+        })
+      }
+
       // Use matchMedia for responsive scroll triggers
       ScrollTrigger.matchMedia({
         // Desktop (1024px and up)
@@ -1114,10 +1126,14 @@ function App() {
               scrollTrigger: {
                 trigger: projectsRef.current,
                 start: 'top top',
-                end: '+=1000',
+                end: () => {
+                  const width = projectsRef.current?.offsetWidth || window.innerWidth
+                  return `+=${Math.max(width, 1000)}`
+                },
                 scrub: true,
                 pin: true,
                 pinSpacing: true,
+                anticipatePin: 1,
                 invalidateOnRefresh: true,
               },
             })
@@ -1136,10 +1152,14 @@ function App() {
               scrollTrigger: {
                 trigger: projectsRef.current,
                 start: 'top top',
-                end: '+=700',
+                end: () => {
+                  const width = projectsRef.current?.offsetWidth || window.innerWidth
+                  return `+=${Math.max(width, 700)}`
+                },
                 scrub: true,
                 pin: true,
                 pinSpacing: true,
+                anticipatePin: 1,
                 invalidateOnRefresh: true,
               },
             })
@@ -1158,10 +1178,14 @@ function App() {
               scrollTrigger: {
                 trigger: projectsRef.current,
                 start: 'top top',
-                end: '+=500',
+                end: () => {
+                  const width = projectsRef.current?.offsetWidth || window.innerWidth
+                  return `+=${Math.max(width, 500)}`
+                },
                 scrub: true,
                 pin: true,
                 pinSpacing: true,
+                anticipatePin: 1,
                 invalidateOnRefresh: true,
               },
             })
@@ -1499,6 +1523,7 @@ function App() {
       </div>
 
       {/* Projects Section - Slides up */}
+      <div id="projects" className="scroll-anchor" aria-hidden="true" />
       <div ref={projectsRef} id="projects-section" className="projects-wrapper">
         <Projects />
       </div>

@@ -1,10 +1,16 @@
+import resumePdf from './img_assets/Resume_2.pdf'
+
 export const footerData = {
   email: 'jonathanrameshdesign@gmail.com',
-  projects: ['Synechron Cube', 'Guardian App', 'Wander App'],
+  projects: [
+    { label: 'Synechron Cube', url: '/project/synechron-cube' },
+    { label: 'Guardian App', url: '/project/guardian-app' },
+    { label: 'Wander App', url: '/project/wander-app' },
+  ],
   social: [
-    { label: 'RESUME', url: '/texture/resume.pdf' },
-    { label: 'GITHUB', url: 'https://github.com/jonathanramesh' },
-    { label: 'LINKEDIN', url: 'https://linkedin.com/in/jonathanramesh' },
+    { label: 'RESUME', url: resumePdf },
+    { label: 'GITHUB', url: 'https://github.com/Margiella2004' },
+    { label: 'LINKEDIN', url: 'https://www.linkedin.com/in/jonathan-r-48b13b202/' },
   ],
   copyright: '©2025',
 }
