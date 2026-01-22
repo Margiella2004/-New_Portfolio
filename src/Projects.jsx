@@ -396,7 +396,12 @@ export default function Projects() {
                   aria-pressed={activeId === project.id}
                 >
                   <span className="projects-item-number">{project.number}</span>
-                  <span className="projects-item-title">{project.title}</span>
+                  <span
+                    className="projects-item-title"
+                    id={project.id === 'synechron-cube' ? 'projects' : undefined}
+                  >
+                    {project.title}
+                  </span>
                 </button>
               ))}
             </div>

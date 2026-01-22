@@ -11,6 +11,7 @@ const milestones = [
 ];
 
 export default function SynechronTimeline() {
+  const cardRef = useRef(null);
   const scrollRef = useRef(null);
   const trackWrapperRef = useRef(null);
   const lineRef = useRef(null);
@@ -18,7 +19,12 @@ export default function SynechronTimeline() {
   const circlesRef = useRef([]);
 
   useEffect(() => {
-    if (!scrollRef.current || !trackWrapperRef.current || !lineRef.current) {
+    if (
+      !cardRef.current ||
+      !scrollRef.current ||
+      !trackWrapperRef.current ||
+      !lineRef.current
+    ) {
       return undefined;
     }
 
@@ -110,7 +116,7 @@ export default function SynechronTimeline() {
 
     const progress = { value: 0 };
     const triggered = new Array(milestones.length).fill(false);
-    const tl = gsap.timeline();
+    const tl = gsap.timeline({ paused: true });
 
     tl.to(progress, {
       value: 1,
@@ -149,7 +155,20 @@ export default function SynechronTimeline() {
       }
     });
 
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          tl.play();
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.35 }
+    );
+
+    observer.observe(cardRef.current);
+
     return () => {
+      observer.disconnect();
       window.removeEventListener('resize', layoutTrack);
       tl.kill();
     };
@@ -157,7 +176,7 @@ export default function SynechronTimeline() {
 
   return (
     <div className="synechron-timeline">
-      <div className="synechron-timeline-card">
+      <div ref={cardRef} className="synechron-timeline-card">
         <div className="synechron-timeline-title-wrapper">
           <h3 className="synechron-timeline-title">
             Progress Timeline - 6 weeks

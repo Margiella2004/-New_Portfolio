@@ -27,7 +27,7 @@ body {
   min-width: 20rem;
   min-height: 100vh;
   background: #ffffff;
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
 }
 
 .route-preload {

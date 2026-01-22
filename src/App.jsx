@@ -46,6 +46,8 @@ const INTRO_TEXT_VISIBLE_DURATION = 2.5
 const INTRO_HEADER_FADE_START = 2.6
 const INTRO_HEADER_FADE_DURATION = 0.4
 
+let introHasRunOnce = false
+
 function ScrollStopBCUpdater({
   materialRef,
   scrollStopBCRef,
@@ -370,6 +372,7 @@ function App() {
   const canvasWrapperRef = useRef(null)
   const footerRef = useRef(null)
   const aboutRef = useRef(null)
+  const contactRef = useRef(null)
   const introTimelineRef = useRef(null)
   const introHasRunRef = useRef(false)
   const introActiveRef = useRef(false)
@@ -691,8 +694,40 @@ function App() {
   }, [introActive])
 
   useEffect(() => {
-    if (introHasRunRef.current) return undefined
+    const skipIntro =
+      typeof window !== 'undefined' &&
+      window.sessionStorage?.getItem('skipIntro') === '1'
+
+    if (skipIntro) {
+      window.sessionStorage?.removeItem('skipIntro')
+      introHasRunRef.current = true
+      introHasRunOnce = true
+      setIntroActive(false)
+      setIntroTextOpacity(0)
+      setIntroBloom({
+        threshold: controls.bloomThreshold,
+        smoothing: controls.bloomSmoothing,
+        radius: controls.bloomRadius,
+      })
+      setIntroFresnelOffset(controls.fresnelOffset)
+      return undefined
+    }
+
+    if (introHasRunRef.current || introHasRunOnce) {
+      introHasRunRef.current = true
+      setIntroActive(false)
+      setIntroTextOpacity(0)
+      setIntroBloom({
+        threshold: controls.bloomThreshold,
+        smoothing: controls.bloomSmoothing,
+        radius: controls.bloomRadius,
+      })
+      setIntroFresnelOffset(controls.fresnelOffset)
+      return undefined
+    }
+
     introHasRunRef.current = true
+    introHasRunOnce = true
 
     const body = document.body
     const html = document.documentElement
@@ -869,6 +904,7 @@ function App() {
       html.style.overflow = previousHtmlOverflow
       if (import.meta.env.DEV) {
         introHasRunRef.current = false
+        introHasRunOnce = false
       }
     }
   }, [
@@ -1258,46 +1294,9 @@ function App() {
         }
 
         ScrollTrigger.refresh()
-      }
-
-      if (heroSectionRef.current) {
-        ScrollTrigger.create({
-          trigger: heroSectionRef.current,
-          start: 'top top',
-          end: 'bottom center',
-          onEnter: () => setActiveSection('home'),
-          onEnterBack: () => setActiveSection('home'),
-        })
-      }
-
-      if (projectsRef.current) {
-        ScrollTrigger.create({
-          trigger: projectsRef.current,
-          start: 'top center',
-          end: 'bottom center',
-          onEnter: () => setActiveSection('projects'),
-          onEnterBack: () => setActiveSection('projects'),
-        })
-      }
-
-      if (aboutRef.current) {
-        ScrollTrigger.create({
-          trigger: aboutRef.current,
-          start: 'top center',
-          end: 'bottom center',
-          onEnter: () => setActiveSection('about'),
-          onEnterBack: () => setActiveSection('about'),
-        })
-      }
-
-      if (footerRef.current) {
-        ScrollTrigger.create({
-          trigger: footerRef.current,
-          start: 'top center',
-          end: 'bottom center',
-          onEnter: () => setActiveSection('contact'),
-          onEnterBack: () => setActiveSection('contact'),
-        })
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('scrolltrigger-ready'))
+        }
       }
 
       if (canvasWrapperRef.current && footerRef.current) {
@@ -1316,6 +1315,72 @@ function App() {
     return () => ctx.revert()
   }, [])
 
+  useEffect(() => {
+    if (!heroSectionRef.current || !projectsRef.current || !aboutRef.current) {
+      return undefined
+    }
+
+    const getAbsoluteTop = (element) => {
+      let top = 0
+      let node = element
+      while (node) {
+        top += node.offsetTop || 0
+        node = node.offsetParent
+      }
+      return top
+    }
+
+    const getHeaderOffset = () => {
+      const header = headerRef.current || document.querySelector('.header')
+      if (!header) return 0
+      const rect = header.getBoundingClientRect()
+      const extraOffset = 8
+      return rect.height + Math.max(rect.top, 0) + extraOffset
+    }
+
+    const sections = [
+      { id: 'home', element: heroSectionRef.current },
+      { id: 'projects', element: projectsRef.current },
+      { id: 'about', element: aboutRef.current },
+      { id: 'contact', element: contactRef.current },
+    ].filter((section) => section.element)
+
+    let rafId = null
+
+    const updateActiveSection = () => {
+      const offset = getHeaderOffset() + 4
+      const scrollPosition = window.scrollY + offset
+      let nextSection = sections[0]?.id || 'home'
+
+      for (const section of sections) {
+        const sectionTop = getAbsoluteTop(section.element)
+        if (scrollPosition >= sectionTop) {
+          nextSection = section.id
+        } else {
+          break
+        }
+      }
+
+      setActiveSection((current) =>
+        current === nextSection ? current : nextSection
+      )
+    }
+
+    const handleScroll = () => {
+      if (rafId) cancelAnimationFrame(rafId)
+      rafId = requestAnimationFrame(updateActiveSection)
+    }
+
+    updateActiveSection()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', handleScroll)
+
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId)
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleScroll)
+    }
+  }, [])
 
   if (preloadBlocking && !assetsReady) {
     return (
@@ -1434,16 +1499,17 @@ function App() {
       </div>
 
       {/* Projects Section - Slides up */}
-      <div ref={projectsRef} id="projects" className="projects-wrapper">
+      <div ref={projectsRef} id="projects-section" className="projects-wrapper">
         <Projects />
       </div>
 
       {/* Make Code Live content */}
-      <div ref={aboutRef} id="about">
+      <div id="about" className="scroll-anchor" aria-hidden="true" />
+      <div ref={aboutRef} id="about-section">
         <MakeCodeLiveSection />
       </div>
 
-      <div id="contact" className="contact-anchor" aria-hidden="true" />
+      <div ref={contactRef} id="contact" className="contact-anchor" aria-hidden="true" />
 
       <div ref={footerRef} className="footer-layer">
         <Footer data={footerData} />

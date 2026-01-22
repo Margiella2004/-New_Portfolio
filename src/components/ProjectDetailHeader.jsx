@@ -8,12 +8,19 @@ export default function ProjectDetailHeader() {
 
   const handleNavClick = (path) => (event) => {
     event.preventDefault();
+    if (typeof window !== 'undefined' && path.startsWith('/')) {
+      window.sessionStorage?.setItem('skipIntro', '1');
+    }
     navigate(path);
     setMenuOpen(false);
   };
 
   const handleLogoClick = () => {
+    if (typeof window !== 'undefined') {
+      window.sessionStorage?.setItem('skipIntro', '1');
+    }
     navigate('/');
+    setMenuOpen(false);
   };
 
   return (
