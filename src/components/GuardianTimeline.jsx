@@ -3,11 +3,11 @@ import gsap from 'gsap';
 import './GuardianTimeline.css';
 
 const milestones = [
-  { week: 'week 1-2', title: 'Brainstorm/ Sketch' },
-  { week: 'week 3', title: 'User Research' },
-  { week: 'week 4', title: 'Prototype/Iterate' },
-  { week: 'week 5', title: 'User Tests' },
-  { week: 'week 6', title: 'Present Work' }
+  { week: 'hours 1-3', title: 'Brainstorm/ Sketch' },
+  { week: 'hours 5-7', title: 'Ideate' },
+  { week: 'hours 8-10', title: 'Prototype/Iterate' },
+  { week: 'hours 11-16', title: 'Refine Prototype' },
+  { week: 'hours 17-24', title: 'Present Work' }
 ];
 
 export default function GuardianTimeline() {
@@ -160,7 +160,7 @@ export default function GuardianTimeline() {
       <div className="guardian-timeline-card">
         <div className="guardian-timeline-title-wrapper">
           <h3 className="guardian-timeline-title">
-            Progress Timeline - 2 weeks
+            Progress Timeline - 24 hours
           </h3>
         </div>
 
