@@ -673,8 +673,8 @@ function App() {
     'Floating Tabs': folder(
       {
         tabsEnabled: { value: true, label: 'enabled' },
-        tabsFloatAmpX: { value: 6, min: 0, max: 30, step: 0.5, label: 'float X' },
-        tabsFloatAmpY: { value: 10, min: 0, max: 30, step: 0.5, label: 'float Y' },
+        tabsFloatAmpX: { value: 24, min: 0, max: 80, step: 1, label: 'float X' },
+        tabsFloatAmpY: { value: 26, min: 0, max: 80, step: 1, label: 'float Y' },
         tabsFloatSpeedX: { value: 9, min: 1, max: 20, step: 0.5, label: 'speed X' },
         tabsFloatSpeedY: { value: 8, min: 1, max: 20, step: 0.5, label: 'speed Y' },
         tabsHoverScale: { value: 1.05, min: 1, max: 1.6, step: 0.01, label: 'hover scale' },
@@ -1363,20 +1363,20 @@ function App() {
         >
           <IntroText paddingX={controls.introPaddingX} />
           <DesignEngineer />
-          {/*
-            <FloatingTabs
-              enabled={controls.tabsEnabled}
-              floatAmpX={controls.tabsFloatAmpX}
-              floatAmpY={controls.tabsFloatAmpY}
-              floatSpeedX={controls.tabsFloatSpeedX}
-              floatSpeedY={controls.tabsFloatSpeedY}
-              hoverScale={controls.tabsHoverScale}
-              dragScale={controls.tabsDragScale}
-              arrowWiggle={controls.tabsArrowWiggle}
-              arrowDelayOffset={controls.tabsArrowDelayOffset}
-            />
-          */}
         </div>
+
+        <FloatingTabs
+          enabled={controls.tabsEnabled}
+          introActive={introActive}
+          floatAmpX={controls.tabsFloatAmpX}
+          floatAmpY={controls.tabsFloatAmpY}
+          floatSpeedX={controls.tabsFloatSpeedX}
+          floatSpeedY={controls.tabsFloatSpeedY}
+          hoverScale={controls.tabsHoverScale}
+          dragScale={controls.tabsDragScale}
+          arrowWiggle={controls.tabsArrowWiggle}
+          arrowDelayOffset={controls.tabsArrowDelayOffset}
+        />
 
         <div
           className="canvas-wrapper"

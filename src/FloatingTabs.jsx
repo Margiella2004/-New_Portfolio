@@ -15,8 +15,7 @@ const defaultTabs = [
   {
     id: 'ux-research',
     label: 'UX Research',
-    color: '#aaa8d7',
-    position: { left: '8%', top: '18%' },
+    position: { left: '18%', top: '26%' },
     arrowPosition: { left: '32%', bottom: '-24px' },
     baseRotation: -34,
     delay: 0.3,
@@ -24,8 +23,7 @@ const defaultTabs = [
   {
     id: 'branding',
     label: 'Branding',
-    color: '#d7a8a8',
-    position: { left: '46%', top: '62%' },
+    position: { left: '38%', top: '86%' },
     arrowPosition: { left: '52%', top: '96%' },
     baseRotation: 6,
     delay: 1.1,
@@ -33,8 +31,7 @@ const defaultTabs = [
   {
     id: 'creative-direction',
     label: 'Creative Direction',
-    color: '#d7a8cc',
-    position: { left: '56%', top: '18%' },
+    position: { left: '50%', top: '22%' },
     arrowPosition: { right: '14%', top: '96%' },
     baseRotation: 270,
     delay: 0.6,
@@ -42,8 +39,7 @@ const defaultTabs = [
   {
     id: 'typography',
     label: 'Typography',
-    color: '#d7d6a8',
-    position: { left: '72%', top: '66%' },
+    position: { left: '72%', top: '88%' },
     arrowPosition: { left: '50%', top: '-26px' },
     baseRotation: -10,
     delay: 1.5,
@@ -51,16 +47,35 @@ const defaultTabs = [
   {
     id: 'ui-design',
     label: 'UI Design',
-    color: '#bad7a8',
-    position: { left: '84%', top: '30%' },
+    position: { left: '84%', top: '28%' },
     arrowPosition: { left: '14%', top: '102%' },
     baseRotation: -76,
     delay: 0,
   },
+  {
+    id: 'react',
+    label: 'React',
+    position: { left: '54%', top: '92%' },
+    arrowPosition: { left: '50%', top: '-26px' },
+    baseRotation: 20,
+    delay: 0.9,
+  },
+  {
+    id: 'three-d-engineering',
+    label: '3D Engineering',
+    position: { left: '26%', top: '74%' },
+    arrowPosition: { left: '18%', top: '100%' },
+    baseRotation: -18,
+    delay: 0.45,
+  },
 ]
+
+const ARROW_ROTATION_OFFSET = -45
+const INTRO_REVEAL_STAGGER = 0.12
 
 export default function FloatingTabs({
   enabled = true,
+  introActive = false,
   floatAmpX = 6,
   floatAmpY = 10,
   floatSpeedX = 9,
@@ -73,12 +88,14 @@ export default function FloatingTabs({
   const containerRef = useRef(null)
   const tabRefs = useRef([])
   const arrowRefs = useRef([])
+  const targetRef = useRef(null)
 
   const tabs = useMemo(() => defaultTabs, [])
 
   useEffect(() => {
     if (!enabled) return
 
+    targetRef.current = document.querySelector('.design-engineer-container')
     const floatTweens = []
     const arrowTweens = []
     const draggables = []
@@ -89,7 +106,7 @@ export default function FloatingTabs({
       const arrowNode = arrowRefs.current[index]
       if (!node) return
 
-      gsap.set(node, { opacity: 1, scale: 1 })
+      gsap.set(node, { opacity: introActive ? 0 : 1, scale: introActive ? 0.92 : 1 })
 
       const xRange = floatAmpX
       const yRange = floatAmpY
@@ -141,7 +158,6 @@ export default function FloatingTabs({
       const dragInstance = Draggable.create(node, {
         type: 'x,y',
         inertia: false,
-        bounds: containerRef.current,
         onPress() {
           node.style.cursor = 'grabbing'
           node.style.zIndex = '60'
@@ -164,7 +180,6 @@ export default function FloatingTabs({
       node.style.cursor = 'grab'
 
       if (arrowNode) {
-        gsap.set(arrowNode, { rotation: tab.baseRotation || 0 })
         const tl = gsap.timeline({
           repeat: -1,
           defaults: { ease: 'sine.inOut' },
@@ -172,19 +187,16 @@ export default function FloatingTabs({
         })
 
         tl.to(arrowNode, {
-          rotation: (tab.baseRotation || 0) + arrowWiggle,
           x: 2.5,
           y: -2.5,
           duration: 2.25,
         })
           .to(arrowNode, {
-            rotation: (tab.baseRotation || 0) - arrowWiggle,
             x: -2.5,
             y: 2.5,
             duration: 2.25,
           })
           .to(arrowNode, {
-            rotation: tab.baseRotation || 0,
             x: 0,
             y: 0,
             duration: 2,
@@ -194,7 +206,33 @@ export default function FloatingTabs({
       }
     })
 
+    const updateArrowAim = () => {
+      const target = targetRef.current
+      if (!target) return
+      const targetRect = target.getBoundingClientRect()
+      const targetX = targetRect.left + targetRect.width / 2
+      const targetY = targetRect.top + targetRect.height / 2
+
+      tabs.forEach((tab, index) => {
+        const node = tabRefs.current[index]
+        const arrowNode = arrowRefs.current[index]
+        if (!node || !arrowNode) return
+        const rect = node.getBoundingClientRect()
+        const centerX = rect.left + rect.width / 2
+        const centerY = rect.top + rect.height / 2
+        const angle = Math.atan2(targetY - centerY, targetX - centerX) * (180 / Math.PI)
+        gsap.set(arrowNode, { rotation: angle + ARROW_ROTATION_OFFSET })
+      })
+    }
+
+    updateArrowAim()
+    gsap.ticker.add(updateArrowAim)
+    const handleResize = () => updateArrowAim()
+    window.addEventListener('resize', handleResize)
+
     return () => {
+      gsap.ticker.remove(updateArrowAim)
+      window.removeEventListener('resize', handleResize)
       floatTweens.forEach((tween) => tween.kill())
       arrowTweens.forEach((tl) => tl.kill())
       draggables.forEach((drag) => drag?.kill())
@@ -210,8 +248,34 @@ export default function FloatingTabs({
     dragScale,
     arrowWiggle,
     arrowDelayOffset,
+    introActive,
     tabs,
   ])
+
+  useEffect(() => {
+    if (!enabled) return
+    if (introActive) return
+
+    const reveals = []
+    tabs.forEach((tab, index) => {
+      const node = tabRefs.current[index]
+      if (!node) return
+      gsap.set(node, { opacity: 0, scale: 0.92 })
+      reveals.push(
+        gsap.to(node, {
+          opacity: 1,
+          scale: 1,
+          duration: 0.55,
+          ease: 'power2.out',
+          delay: index * INTRO_REVEAL_STAGGER,
+        })
+      )
+    })
+
+    return () => {
+      reveals.forEach((tween) => tween.kill())
+    }
+  }, [enabled, introActive, tabs])
 
   if (!enabled) return null
 
@@ -228,7 +292,6 @@ export default function FloatingTabs({
         >
           <div
             className="floating-tab-inner"
-            style={{ backgroundColor: tab.color }}
           >
             <span className="floating-tab-label">{tab.label}</span>
             <div className="floating-tab-border" />
@@ -244,15 +307,14 @@ export default function FloatingTabs({
           <svg
             viewBox="0 0 20 20"
             className="floating-tab-arrow-icon"
-            style={{ color: tab.color, fill: tab.color }}
           >
-            <path d={svgPaths.arrowFill} fill="currentColor" />
             <path
               d={svgPaths.arrowStroke}
-              stroke="white"
+              stroke="currentColor"
               strokeLinejoin="bevel"
-              strokeOpacity="0.74"
-              strokeWidth="1.09"
+              strokeOpacity="0.9"
+              strokeWidth="1.1"
+              fill="none"
             />
           </svg>
           </div>

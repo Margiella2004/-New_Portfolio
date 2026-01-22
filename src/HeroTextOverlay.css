@@ -35,7 +35,7 @@
 .hto-phrase-em {
   font-family: 'Instrument Serif', serif;
   font-style: italic;
-  font-size: 1.17em;
+  font-size: calc(1.17em + 2px);
 }
 
 .hto-left {

@@ -1,10 +1,10 @@
 .floating-tabs {
   position: absolute;
-  bottom: 0.75rem;
+  bottom: 0.5rem;
   left: 50%;
   transform: translateX(-50%);
-  width: min(var(--content-total-width), var(--page-max-width, 87.5rem));
-  height: 16.25rem;
+  width: min(98vw, var(--page-max-width, 96rem));
+  height: 30rem;
   pointer-events: none;
   z-index: 60;
 }
@@ -15,8 +15,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 8.25rem;
-  height: 2.625rem;
+  min-width: 6.5rem;
+  height: 2.125rem;
   transform: translate(-50%, -50%);
   will-change: transform;
 }
@@ -25,20 +25,20 @@
   position: relative;
   width: 100%;
   height: 100%;
-  padding: 0 4.375rem;
-  border-radius: 1.375rem;
+  padding: 0 2.25rem;
+  border-radius: 999px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.25);
+  background: transparent;
 }
 
 .floating-tab-label {
   font-family: 'Pangea Afrikan VAR 2.003', -apple-system, system-ui, sans-serif;
-  font-weight: 400;
-  font-size: 0.8125rem;
-  line-height: 1.125rem;
-  letter-spacing: -0.01875rem;
+  font-weight: 500;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  letter-spacing: -0.01rem;
   color: white;
   white-space: nowrap;
   position: relative;
@@ -48,15 +48,15 @@
 .floating-tab-border {
   position: absolute;
   inset: 0;
-  border-radius: 1.375rem;
-  border: 0.06875rem solid rgba(255, 255, 255, 0.74);
+  border-radius: 999px;
+  border: 0.0625rem solid rgba(255, 255, 255, 0.7);
   pointer-events: none;
 }
 
 .floating-tab-arrow {
   position: absolute;
-  width: 1.375rem;
-  height: 1.375rem;
+  width: 1rem;
+  height: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -67,47 +67,80 @@
   width: 100%;
   height: 100%;
   display: block;
+  color: #ffffff;
 }
 
 @media (max-width: 64rem) {
   .floating-tabs {
-    height: 12.5rem;
-    bottom: 0.625rem;
+    height: 24rem;
+    bottom: 0.5rem;
   }
 
   .floating-tab {
-    min-width: 6.25rem;
-    height: 2rem;
+    min-width: 5.75rem;
+    height: 1.875rem;
   }
 
   .floating-tab-inner {
-    padding: 0 2.8125rem;
+    padding: 0 2rem;
   }
 
   .floating-tab-label {
-    font-size: 0.65625rem;
+    font-size: 0.6875rem;
   }
 
   .floating-tab-arrow {
-    width: 1rem;
-    height: 1rem;
+    width: 0.875rem;
+    height: 0.875rem;
   }
 }
 
 @media (max-width: 48rem) {
   .floating-tabs {
     width: 94vw;
-    height: 11.25rem;
+    height: 18rem;
     bottom: 0.25rem;
   }
 
   .floating-tab {
-    min-width: 5.625rem;
-    height: 1.875rem;
+    min-width: 5.25rem;
+    height: 1.75rem;
   }
 
   .floating-tab-inner {
-    padding: 0 2.5rem;
+    padding: 0 1.75rem;
+  }
+
+  .floating-tab-label {
+    font-size: 0.625rem;
+  }
+
+  .floating-tab-arrow {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+
+  .floating-tab-ux-research { left: 16% !important; top: 4% !important; }
+  .floating-tab-creative-direction { left: 52% !important; top: 10% !important; }
+  .floating-tab-ui-design { left: 84% !important; top: 16% !important; }
+  .floating-tab-three-d-engineering { left: 28% !important; top: 22% !important; }
+  .floating-tab-typography { left: 70% !important; top: 80% !important; }
+  .floating-tab-branding { left: 42% !important; top: 88% !important; }
+  .floating-tab-react { left: 56% !important; top: 96% !important; }
+}
+
+@media (max-width: 35rem) {
+  .floating-tabs {
+    height: 16rem;
+  }
+
+  .floating-tab {
+    min-width: 4.75rem;
+    height: 1.625rem;
+  }
+
+  .floating-tab-inner {
+    padding: 0 1.6rem;
   }
 
   .floating-tab-label {
@@ -115,43 +148,15 @@
   }
 
   .floating-tab-arrow {
-    width: 0.875rem;
-    height: 0.875rem;
+    width: 0.6875rem;
+    height: 0.6875rem;
   }
 
-  .floating-tab-ux-research { left: 16% !important; top: 24% !important; }
-  .floating-tab-branding { left: 46% !important; top: 68% !important; }
-  .floating-tab-creative-direction { left: 54% !important; top: 26% !important; }
-  .floating-tab-typography { left: 70% !important; top: 72% !important; }
-  .floating-tab-ui-design { left: 82% !important; top: 34% !important; }
-}
-
-@media (max-width: 35rem) {
-  .floating-tabs {
-    height: 10rem;
-  }
-
-  .floating-tab {
-    min-width: 5.3125rem;
-    height: 1.75rem;
-  }
-
-  .floating-tab-inner {
-    padding: 0 2.1875rem;
-  }
-
-  .floating-tab-label {
-    font-size: 0.5625rem;
-  }
-
-  .floating-tab-arrow {
-    width: 0.8125rem;
-    height: 0.8125rem;
-  }
-
-  .floating-tab-ux-research { left: 18% !important; top: 30% !important; }
-  .floating-tab-branding { left: 50% !important; top: 74% !important; }
-  .floating-tab-creative-direction { left: 50% !important; top: 24% !important; }
-  .floating-tab-typography { left: 72% !important; top: 78% !important; }
-  .floating-tab-ui-design { left: 84% !important; top: 40% !important; }
+  .floating-tab-ux-research { left: 14% !important; top: 2% !important; }
+  .floating-tab-creative-direction { left: 50% !important; top: 8% !important; }
+  .floating-tab-ui-design { left: 84% !important; top: 14% !important; }
+  .floating-tab-three-d-engineering { left: 28% !important; top: 20% !important; }
+  .floating-tab-typography { left: 70% !important; top: 82% !important; }
+  .floating-tab-branding { left: 42% !important; top: 90% !important; }
+  .floating-tab-react { left: 56% !important; top: 98% !important; }
 }
