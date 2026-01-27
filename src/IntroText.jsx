@@ -52,6 +52,13 @@ export default function IntroText({ paddingX = 72 }) {
                 <img src={linkArrowImage} alt="" className="link-arrow-image" />
               </div>
             </a>
+
+            <a href="https://medium.com/@jonathanrameshdesign" target="_blank" rel="noopener noreferrer" className="link-button">
+              <span className="link-button-text">medium</span>
+              <div className="link-button-arrow">
+                <img src={linkArrowImage} alt="" className="link-arrow-image" />
+              </div>
+            </a>
           </div>
         </div>
       </div>

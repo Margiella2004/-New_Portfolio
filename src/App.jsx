@@ -1100,17 +1100,7 @@ function App() {
     const ctx = gsap.context(() => {
       if (!heroContentRef.current || !projectsRef.current) return
 
-      if (heroSectionRef.current) {
-        ScrollTrigger.create({
-          trigger: heroSectionRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          pin: true,
-          pinSpacing: false,
-          id: 'hero-pin',
-          invalidateOnRefresh: true,
-        })
-      }
+      // Hero pinning handled by CSS sticky positioning in App.css
 
       // Use matchMedia for responsive scroll triggers
       ScrollTrigger.matchMedia({
