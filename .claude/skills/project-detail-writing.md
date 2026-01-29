@@ -1,3 +1,8 @@
+---
+name: project-detail-writing
+description: Generate new project detail pages using the ContentModule bento box system. Invoke with /project-detail-writing when creating portfolio project pages.
+---
+
 # Project Detail Writing Skill
 
 ## Overview

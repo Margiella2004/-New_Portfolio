@@ -1,4 +1,5 @@
 import './Footer.css'
+import { Link } from 'react-router-dom'
 import logoSvg from '../img_assets/logo.svg'
 import linkArrowImage from '../Svg/material-symbols-light_arrow-back.svg'
 
@@ -19,6 +20,18 @@ const sanitizeUrl = (url) => {
     return parsed.href
   } catch (error) {
     console.warn('[Footer] Skipped unsafe URL', url, error)
+    return null
+  }
+}
+
+const getInternalPath = (url) => {
+  if (!url) return null
+  try {
+    const parsed = new URL(url, baseOrigin)
+    if (parsed.origin !== baseOrigin) return null
+    return `${parsed.pathname}${parsed.search}${parsed.hash}`
+  } catch (error) {
+    console.warn('[Footer] Skipped unsafe internal URL', url, error)
     return null
   }
 }
@@ -66,6 +79,7 @@ export function Footer({ data = {} }) {
                   ? sanitizeText(project)
                   : sanitizeText(project?.label || '')
               const projectUrl = typeof project === 'string' ? null : project?.url
+              const internalPath = projectUrl ? getInternalPath(projectUrl) : null
               const safeUrl = projectUrl ? sanitizeUrl(projectUrl) : null
               const projectKey = `${projectLabel}-${index}`
 
@@ -81,6 +95,19 @@ export function Footer({ data = {} }) {
                   <div key={projectKey} style={styles.projectItem}>
                     {projectContent}
                   </div>
+                )
+              }
+
+              if (internalPath) {
+                return (
+                  <Link
+                    key={projectKey}
+                    to={internalPath}
+                    className="footer-project-link"
+                    style={styles.projectLink}
+                  >
+                    {projectContent}
+                  </Link>
                 )
               }
 
