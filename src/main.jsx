@@ -10,6 +10,7 @@ const App = lazy(() => import('./App.jsx'))
 const GuardianAppDetail = lazy(() => import('./pages/GuardianAppDetail'))
 const WanderAppDetail = lazy(() => import('./pages/WanderAppDetail'))
 const SynechronCubeDetail = lazy(() => import('./pages/SynechronCubeDetail'))
+const IHateMyCommuteDetail = lazy(() => import('./pages/IHateMyCommuteDetail'))
 
 const posthogKey = import.meta.env.VITE_POSTHOG_KEY
 const posthogHost = import.meta.env.VITE_POSTHOG_HOST || 'https://app.posthog.com'
@@ -170,6 +171,7 @@ function AppShell() {
           <Route path="/project/guardian-app" element={<GuardianAppDetail />} />
           <Route path="/project/wander-app" element={<WanderAppDetail />} />
           <Route path="/project/synechron-cube" element={<SynechronCubeDetail />} />
+          <Route path="/project/i-hate-my-commute" element={<IHateMyCommuteDetail />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

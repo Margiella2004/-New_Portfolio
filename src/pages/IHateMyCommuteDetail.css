@@ -1,0 +1,369 @@
+/* ===========================
+   I Hate My Commute Page CSS Variables
+   =========================== */
+.commute-page {
+  /* Colors */
+  --commute-page-bg: #ffffff;
+  --commute-title-color: #000000;
+  --commute-metadata-primary-color: #363636;
+  --commute-metadata-secondary-color: #919191;
+  --commute-description-color: #3c3c3c;
+  --commute-skill-color: #3c3c3c;
+  --commute-quote-color: #3c3c3c;
+  --commute-other-projects-title-color: #323232;
+  --commute-hero-bg: #000000;
+  --commute-hero-image-opacity: 0.9;
+
+  /* Spacing */
+  --commute-container-max-width: 100%;
+  --commute-container-padding-mobile: 1.25rem;
+  --commute-container-padding-desktop: 1.25rem;
+  --commute-container-padding-top-mobile: 5rem;
+  --commute-container-padding-top-desktop: 7rem;
+  --commute-container-padding-bottom: 6rem;
+  --commute-section-gap: 1.25rem;
+
+  /* Header Section */
+  --commute-header-gap: 7.5rem;
+  --commute-title-section-gap: 1rem;
+  --commute-metadata-gap-mobile: 0.75rem;
+  --commute-metadata-gap-desktop: 1rem;
+
+  /* Hero Image */
+  --commute-hero-border-radius-mobile: 1.25rem;
+  --commute-hero-border-radius-desktop: 2.1875rem;
+
+  /* Bio & Skills */
+  --commute-bio-skills-gap-mobile: 2rem;
+  --commute-bio-skills-gap-lg: 3rem;
+  --commute-description-max-width: 41.25rem;
+  --commute-skills-gap: 0.25rem;
+
+  /* Quote Section */
+  --commute-quote-padding-mobile: 1.5rem;
+  --commute-quote-padding-desktop: 13rem;
+  --commute-quote-max-width: 50rem;
+
+  /* Typography */
+  --commute-metadata-font-size-mobile: 1.125rem;
+  --commute-metadata-font-size-desktop: 1.3625rem;
+  --commute-metadata-font-weight-medium: 500;
+  --commute-metadata-letter-spacing: -0.03em;
+  --commute-metadata-line-height: 3.106;
+
+  --commute-title-font-size-mobile: 3.75rem;
+  --commute-title-font-size-md: 5rem;
+  --commute-title-font-size-lg: 3.4423rem;
+  --commute-title-line-height: 0.75;
+  --commute-title-letter-spacing: -0.03em;
+
+  --commute-description-font-size-mobile: 1.5rem;
+  --commute-description-font-size-md: 1.625rem;
+  --commute-description-font-size-lg: 1.625rem;
+  --commute-description-font-weight: 300;
+  --commute-description-line-height: 1.269;
+  --commute-description-letter-spacing: -0.03em;
+
+  --commute-skill-font-size-mobile: 1.5rem;
+  --commute-skill-font-size-md: 1.625rem;
+  --commute-skill-font-size-lg: 1.625rem;
+  --commute-skill-font-weight: 300;
+  --commute-skill-letter-spacing: -0.03em;
+  --commute-skill-line-height: 1.269;
+
+  --commute-quote-font-size-mobile: 1.5rem;
+  --commute-quote-font-size-md: 1.875rem;
+  --commute-quote-font-size-lg: 2.125rem;
+  --commute-quote-font-weight: 300;
+  --commute-quote-line-height: 1.2;
+  --commute-quote-letter-spacing: -0.02em;
+}
+
+/* ===========================
+   Page Container
+   =========================== */
+.commute-page {
+  min-height: 100vh;
+  background: var(--commute-page-bg);
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.commute-container {
+  max-width: var(--commute-container-max-width);
+  margin: 0 auto;
+  padding: var(--commute-container-padding-top-mobile) var(--commute-container-padding-mobile);
+  padding-bottom: var(--commute-container-padding-bottom);
+  display: flex;
+  flex-direction: column;
+  gap: var(--commute-section-gap);
+  position: relative;
+  z-index: 2;
+}
+
+@media (min-width: 48rem) {
+  .commute-container {
+    padding-top: var(--commute-container-padding-top-desktop);
+  }
+}
+
+/* ===========================
+   Header Section
+   =========================== */
+.commute-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--commute-header-gap);
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.commute-title-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--commute-title-section-gap);
+  text-align: center;
+}
+
+.commute-metadata {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--commute-metadata-gap-mobile);
+  font-family: 'Pangea Afrikan VAR 2.003', sans-serif;
+  font-weight: var(--commute-metadata-font-weight-medium);
+  font-size: var(--commute-metadata-font-size-mobile);
+  text-transform: capitalize;
+  letter-spacing: var(--commute-metadata-letter-spacing);
+  line-height: var(--commute-metadata-line-height);
+}
+
+@media (min-width: 48rem) {
+  .commute-metadata {
+    gap: var(--commute-metadata-gap-desktop);
+    font-size: var(--commute-metadata-font-size-desktop);
+  }
+}
+
+.commute-metadata-item {
+  color: var(--commute-metadata-primary-color);
+}
+
+.commute-metadata-secondary {
+  color: var(--commute-metadata-secondary-color);
+}
+
+.commute-title {
+  font-family: 'Instrument Serif', serif;
+  font-size: var(--commute-title-font-size-mobile);
+  line-height: var(--commute-title-line-height);
+  letter-spacing: var(--commute-title-letter-spacing);
+  color: var(--commute-title-color);
+  margin: 0.5rem 0 0 0;
+  font-weight: 400;
+  text-align: center;
+}
+
+@media (min-width: 48rem) {
+  .commute-title {
+    font-size: var(--commute-title-font-size-md);
+    line-height: 1;
+  }
+}
+
+@media (min-width: 64rem) {
+  .commute-title {
+    font-size: var(--commute-title-font-size-lg);
+    line-height: var(--commute-title-line-height);
+  }
+}
+
+/* ===========================
+   Hero Image
+   =========================== */
+.commute-hero-image-container {
+  width: 100%;
+  height: auto;
+  background: var(--commute-hero-bg);
+  border-radius: var(--commute-hero-border-radius-mobile);
+  overflow: hidden;
+  box-shadow: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 48rem) {
+  .commute-hero-image-container {
+    border-radius: var(--commute-hero-border-radius-desktop);
+  }
+}
+
+.commute-hero-image {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  opacity: var(--commute-hero-image-opacity);
+}
+
+/* ===========================
+   Bio & Skills Section
+   =========================== */
+.commute-bio-skills {
+  display: flex;
+  flex-direction: column;
+  gap: var(--commute-bio-skills-gap-mobile);
+  width: 100%;
+}
+
+@media (min-width: 64rem) {
+  .commute-bio-skills {
+    gap: var(--commute-bio-skills-gap-lg);
+  }
+}
+
+.commute-description {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.commute-description-text {
+  max-width: var(--commute-description-max-width);
+  font-family: 'Pangea Afrikan VAR 2.003', sans-serif;
+  font-weight: var(--commute-description-font-weight);
+  font-size: var(--commute-description-font-size-mobile);
+  color: var(--commute-description-color);
+  line-height: var(--commute-description-line-height);
+  letter-spacing: var(--commute-description-letter-spacing);
+  text-align: left;
+  margin: 0;
+}
+
+@media (min-width: 48rem) {
+  .commute-description-text {
+    font-size: var(--commute-description-font-size-md);
+  }
+}
+
+@media (min-width: 64rem) {
+  .commute-description-text {
+    font-size: var(--commute-description-font-size-lg);
+  }
+}
+
+.commute-skills {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--commute-skills-gap);
+}
+
+.commute-skill {
+  font-family: 'Pangea Afrikan VAR 2.003', sans-serif;
+  font-weight: var(--commute-skill-font-weight);
+  font-size: var(--commute-skill-font-size-mobile);
+  color: var(--commute-skill-color);
+  letter-spacing: var(--commute-skill-letter-spacing);
+  text-align: right;
+  line-height: var(--commute-skill-line-height);
+}
+
+@media (min-width: 48rem) {
+  .commute-skill {
+    font-size: var(--commute-skill-font-size-md);
+  }
+}
+
+@media (min-width: 64rem) {
+  .commute-skill {
+    font-size: var(--commute-skill-font-size-lg);
+  }
+}
+
+/* ===========================
+   Quote Section
+   =========================== */
+.commute-quote {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: var(--commute-quote-padding-mobile) 0;
+}
+
+@media (min-width: 48rem) {
+  .commute-quote {
+    padding: var(--commute-quote-padding-desktop) 0;
+  }
+}
+
+.commute-quote-text {
+  font-family: 'Pangea Afrikan VAR 2.003', sans-serif;
+  font-weight: var(--commute-quote-font-weight);
+  font-size: var(--commute-quote-font-size-mobile);
+  color: var(--commute-quote-color);
+  line-height: var(--commute-quote-line-height);
+  letter-spacing: var(--commute-quote-letter-spacing);
+  text-align: center;
+  max-width: var(--commute-quote-max-width);
+  margin: 0;
+}
+
+@media (min-width: 48rem) {
+  .commute-quote-text {
+    font-size: var(--commute-quote-font-size-md);
+  }
+}
+
+@media (min-width: 64rem) {
+  .commute-quote-text {
+    font-size: var(--commute-quote-font-size-lg);
+  }
+}
+
+/* ===========================
+   Bento Sections
+   =========================== */
+.commute-bento-section {
+  width: 100%;
+}
+
+/* Bento images: fixed width, flexible height to avoid cropping */
+.commute-page .content-module-bento-up-left .content-module-image-container-large,
+.commute-page .content-module-bento-up-right .content-module-image-container-large,
+.commute-page .content-module-bento-up-left .content-module-image-container-bento,
+.commute-page .content-module-bento-up-right .content-module-image-container-bento {
+  aspect-ratio: auto;
+}
+
+.commute-page .content-module-bento-up-left .content-module-image,
+.commute-page .content-module-bento-up-right .content-module-image {
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+@media (min-width: 48rem) {
+  .commute-page .content-module-bento-up-left .content-module-image-container-large,
+  .commute-page .content-module-bento-up-right .content-module-image-container-large,
+  .commute-page .content-module-bento-up-left .content-module-image-container-bento,
+  .commute-page .content-module-bento-up-right .content-module-image-container-bento {
+    height: auto;
+  }
+}
+
+/* ===========================
+   Other Projects & Footer
+   =========================== */
+.commute-other-projects-stage {
+  position: relative;
+  width: 100%;
+  background: transparent;
+  z-index: 0;
+}
+
+.commute-footer-layer {
+  position: relative;
+  z-index: 2;
+}

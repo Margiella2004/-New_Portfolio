@@ -4,7 +4,7 @@ import frame56AltImage from '../../img_assets/Frame 56-1.png';
 import rubixModelImage from '../../img_assets/RUBIX_MODEL.png';
 import synechronCubeHeaderImage from '../../img_assets/Synechron Cube  header.png';
 import guardianCardImage from '../../img_assets/gaurdian.png';
-import wanderHeroImage from '../../img_assets/wander_app/Wander_App.png';
+import wanderHeroImage from '../../img_assets/Wander_Screen.png';
 import introMovie from '../../movies_for_portfolio/Intro.gif';
 import secondCubeMovie from '../../movies_for_portfolio/secondcube.gif';
 import thirdCubeMovie from '../../movies_for_portfolio/thirdcube.gif';
@@ -16,8 +16,32 @@ import introGridImage from '../../img_assets/intro.png';
 import cubeSmallImage from '../../img_assets/Screenshot 2025-12-17 at 9.40.00 PM 1.png';
 import cubeDetailImageOne from '../../img_assets/IMG_4585.png';
 import cubeDetailImageTwo from '../../img_assets/IMG_4586.png';
+import commuteHeroImage from '../../img_assets/i_hate_my_commute/image2.png';
 
 export const projectsData = {
+  iHateMyCommute: {
+    id: 'i-hate-my-commute',
+    metadata: {
+      date: 'Jan 2026',
+      company: 'Personal Project',
+      category: 'Speculative Design'
+    },
+    title: 'I Hate My Commute',
+    heroImage: commuteHeroImage,
+    description: 'A vibe-coded visualization exploring the global commute experience, built with React Three Fiber and custom shaders. This project reflects on how AI coding tools shape creative outcomes and where human intention must push back against algorithmic biases.',
+    skills: [
+      'React Three Fiber',
+      'WebGL/Three.js',
+      'Shader Programming',
+      'Leva',
+      'JavaScript'
+    ],
+    tags: [
+      { label: 'Creative Coding', color: '#a8d7c5' },
+      { label: 'Speculative Design', color: '#d7c5a8' }
+    ]
+  },
+
   guardianApp: {
     id: 'guardian-app',
     metadata: {

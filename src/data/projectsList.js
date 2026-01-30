@@ -1,6 +1,6 @@
 import synechronIntroImage from '../../img_assets/Syenchron cube intro.png'
 import guardianIntroImage from '../../img_assets/gaurdian.png'
-import wanderIntroImage from '../../img_assets/wander_app/Wander_App.png'
+import wanderIntroImage from '../../img_assets/Wander_Screen.png'
 
 export const projects = [
   {
