@@ -21,7 +21,7 @@ import cubeSmallImage from '../../img_assets/Screenshot 2025-12-17 at 9.40.00 
 import cubeDetailImageOne from '../../img_assets/IMG_4585.png';
 import cubeDetailImageTwo from '../../img_assets/IMG_4586.png';
 import commuteHeroImage from '../../img_assets/i_hate_my_commute/image2.png';
-import commuteCardSmallVideo from '../../Screen Recording 2026-01-19 at 8.47.31 AM.mov';
+import commuteCardSmallGif from '../../Screen Recording 2026-01-18 at 9.55.45 PM.gif';
 
 export const projectsData = {
   iHateMyCommute: {
@@ -33,7 +33,7 @@ export const projectsData = {
     },
     title: 'I Hate My Commute',
     heroImage: commuteHeroImage,
-    cardFeatureImage: commuteCardSmallVideo,
+    cardFeatureImage: commuteCardSmallGif,
     description: 'A vibe-coded visualization exploring the global commute experience, built with React Three Fiber and custom shaders. This project reflects on how AI coding tools shape creative outcomes and where human intention must push back against algorithmic biases.',
     skills: [
       'React Three Fiber',
