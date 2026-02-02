@@ -7,6 +7,7 @@ import SynechronTimeline from '../components/SynechronTimeline';
 import OtherProjects from '../components/OtherProjects';
 import './SynechronCubeDetail.css';
 import guardianHeaderImage from '../../img_assets/gaurdian.png';
+import synechronHeaderImage from '../../img_assets/Mockup_Cube_Main.png';
 import navigationDemoClip from '../../img_assets/Screen Recording 2026-01-04 at 9.34.28 PM.mov';
 
 export default function SynechronCubeDetail() {
@@ -168,7 +169,7 @@ export default function SynechronCubeDetail() {
             </div>
             <div className="synechron-cube-hero-image-container">
               <img
-                src={project.heroImage}
+                src={synechronHeaderImage}
                 alt={project.title}
                 className="synechron-cube-hero-image"
               />

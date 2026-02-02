@@ -107,7 +107,7 @@ export const projectsData = {
   synechronCube: {
     id: 'synechron-cube',
     metadata: {
-      date: '2024',
+      date: 'May 2024 - Jun 2024',
       company: 'Synechron',
       category: 'Fintech'
     },
