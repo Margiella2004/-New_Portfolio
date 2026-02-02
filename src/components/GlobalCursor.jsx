@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
+import plusIcon from '../../img_assets/plus.svg'
 import './GlobalCursor.css'
 
 const DEFAULT_LABEL = 'View Projects'
@@ -94,7 +95,10 @@ export default function GlobalCursor() {
 
   return (
     <div ref={cursorRef} className={className} aria-hidden="true">
-      <span className="app-cursor-text">{label}</span>
+      <span className="app-cursor-text">
+        <span className="app-cursor-label">{label}</span>
+        <img src={plusIcon} alt="" className="app-cursor-icon" aria-hidden="true" />
+      </span>
     </div>
   )
 }

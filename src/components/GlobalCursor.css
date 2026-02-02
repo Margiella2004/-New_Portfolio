@@ -4,7 +4,7 @@
   left: 0;
   --app-cursor-size: 1.125rem;
   --app-cursor-circle-size: 2.25rem;
-  --app-cursor-expanded-width: 6.8rem;
+  --app-cursor-expanded-width: 8rem;
   --app-cursor-expanded-height: 2.25rem;
   width: var(--app-cursor-size);
   height: var(--app-cursor-size);
@@ -39,12 +39,23 @@
   transform: translateX(-0.35rem);
   transition: opacity 0.16s ease, transform 0.16s ease;
   color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
   font-family: 'Pangea Afrikan VAR 2.003', sans-serif;
   font-size: 1rem;
   font-weight: 300;
   letter-spacing: 0;
   text-transform: none;
   white-space: nowrap;
+}
+
+.app-cursor-icon {
+  width: 1.1rem;
+  height: 1.1rem;
+  display: block;
+  filter: brightness(0) invert(1);
+  flex-shrink: 0;
 }
 
 .app-cursor.is-active .app-cursor-text {
