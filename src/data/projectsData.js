@@ -21,7 +21,7 @@ import cubeSmallImage from '../../img_assets/Screenshot 2025-12-17 at 9.40.00 
 import cubeDetailImageOne from '../../img_assets/IMG_4585.png';
 import cubeDetailImageTwo from '../../img_assets/IMG_4586.png';
 import commuteHeroImage from '../../img_assets/i_hate_my_commute/image2.png';
-import commuteCardSmallGif from '../../Screen Recording 2026-01-18 at 9.55.45 PM.gif';
+import commuteCardSmallGif from '../../img_assets/commute_card_small.gif';
 
 export const projectsData = {
   iHateMyCommute: {
