@@ -3,8 +3,12 @@ import frame56Image from '../../img_assets/Frame 56.png';
 import frame56AltImage from '../../img_assets/Frame 56-1.png';
 import rubixModelImage from '../../img_assets/RUBIX_MODEL.png';
 import synechronCubeHeaderImage from '../../img_assets/Synechron Cube  header.png';
+import synechronCardMainImage from '../../img_assets/Mockup_Cube_Main.png';
+import synechronCardSmallImage from '../../img_assets/Mockup_Cube_Small.png';
 import guardianCardImage from '../../img_assets/gaurdian.png';
+import guardianCardSmallVideo from '../../img_assets/Screen Recording 2026-01-04 at 7.17.25 PM.mov';
 import wanderHeroImage from '../../img_assets/Wander_Screen.png';
+import wanderCardSmallVideo from '../../img_assets/Screen Recording 2026-01-12 at 11.33.39 PM.mov';
 import introMovie from '../../movies_for_portfolio/Intro.gif';
 import secondCubeMovie from '../../movies_for_portfolio/secondcube.gif';
 import thirdCubeMovie from '../../movies_for_portfolio/thirdcube.gif';
@@ -17,6 +21,7 @@ import cubeSmallImage from '../../img_assets/Screenshot 2025-12-17 at 9.40.00 
 import cubeDetailImageOne from '../../img_assets/IMG_4585.png';
 import cubeDetailImageTwo from '../../img_assets/IMG_4586.png';
 import commuteHeroImage from '../../img_assets/i_hate_my_commute/image2.png';
+import commuteCardSmallVideo from '../../Screen Recording 2026-01-19 at 8.47.31 AM.mov';
 
 export const projectsData = {
   iHateMyCommute: {
@@ -28,6 +33,7 @@ export const projectsData = {
     },
     title: 'I Hate My Commute',
     heroImage: commuteHeroImage,
+    cardFeatureImage: commuteCardSmallVideo,
     description: 'A vibe-coded visualization exploring the global commute experience, built with React Three Fiber and custom shaders. This project reflects on how AI coding tools shape creative outcomes and where human intention must push back against algorithmic biases.',
     skills: [
       'React Three Fiber',
@@ -45,7 +51,7 @@ export const projectsData = {
   guardianApp: {
     id: 'guardian-app',
     metadata: {
-      date: 'Jan-Mar 2025',
+      date: 'November 2025 - December 2025',
       company: 'Guardian',
       category: 'Healthcare'
     },
@@ -65,7 +71,7 @@ export const projectsData = {
       { label: 'Engineering', color: '#d7cca8' }
     ],
     images: [
-      'https://images.unsplash.com/photo-1533234944761-2f5337579079?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
+      guardianCardSmallVideo,
       'https://images.unsplash.com/photo-1563013544-824ae1b704d3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080'
     ]
   },
@@ -80,6 +86,7 @@ export const projectsData = {
     title: 'Wander App',
     heroImage: wanderHeroImage,
     featureImage: wanderHeroImage,
+    cardFeatureImage: wanderCardSmallVideo,
     description: '',
     skills: [
       'User Research',
@@ -100,12 +107,14 @@ export const projectsData = {
   synechronCube: {
     id: 'synechron-cube',
     metadata: {
-      date: 'May-June 2025',
+      date: '2024',
       company: 'Synechron',
       category: 'Fintech'
     },
     title: 'Synechron Cube',
     heroImage: synechronCubeHeaderImage,
+    cardImage: synechronCardMainImage,
+    cardFeatureImage: synechronCardSmallImage,
     description: 'Synechron Cube is a 3D presentation interface designed for both laptops and a 32-panel touch wall. I defined the object metaphor, built and iterated the interaction system in Babylon.js, and tuned animations to keep the experience clear, fast, and engaging on a fragmented display. The final system let teams customize faces for their department, surface content quickly, and keep the cube in an ambient state between demos.',
     skills: [
       'Babylon.js',
@@ -170,7 +179,28 @@ export const projectsData = {
     bentoPairImages: [thirdCubeMovie, fourthCubeMovie],
     bentoPairQuote: "There were other behaviors we had to think about as well. Since the cube also acted as decoration, it needed an inactive state where it would slowly rotate on screen and feel ambient.\n\nOn the backend, we developed an application that allowed different employees to customize the cube for their department. Using a provided template, they could create custom graphics and apply them to the cube so it felt like “their” department’s version. They could also customize where the home button was placed.\n\nAnother configurable feature was the “timeout to home” setting. This handled cases where the cube stayed in a clicked (active) state for too long—if someone forgot to exit, it would automatically return to its default, rotating “decoration” state. Presenters could adjust this timeout based on how long each section of the pitch would take.\n\nOne of the biggest benefits of the cube was that clients could walk up and interact with it, rather than just sitting on the couch and listening. It created a more physical, engaging interpretation of the pitches themselves.",
     bentoPairQuoteSecondary: "That project changed how I think about interfaces, and it earned me a contract extension and a part-time role while I finished college. It absolutely blew my mind and reshaped the way I see what interfaces can be. It helped me develop 3D and spatial thinking that let me break away from traditional 2D UI and push forward into something new, experimental, and more immersive.",
-    bentoPairImagesSecondary: [cubeDetailImageOne, cubeDetailImageTwo]
+   bentoPairImagesSecondary: [cubeDetailImageOne, cubeDetailImageTwo]
+  },
+
+  seesawRedesign: {
+    id: 'seesaw-redesign',
+    metadata: {
+      date: 'April 2024 - May 2024',
+      company: 'Personal',
+      category: 'Product Redesign'
+    },
+    title: 'SeeSaw Redesign',
+    heroImage: frame56Image,
+    description: 'A focused UX/UI refresh that rethinks the SeeSaw experience with clearer navigation, calmer visual hierarchy, and faster access to key classroom workflows.',
+    skills: [
+      'UX/UI Design',
+      'Interaction Design',
+      'Prototyping'
+    ],
+    tags: [
+      { label: 'UX/UI Design', color: '#bad7a8' },
+      { label: 'Product Redesign', color: '#d7cca8' }
+    ]
   }
 };
 

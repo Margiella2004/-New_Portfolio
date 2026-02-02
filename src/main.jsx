@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import posthog from 'posthog-js'
 import gsap from 'gsap'
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
+import GlobalCursor from './components/GlobalCursor'
 import './index.css'
 
 const App = lazy(() => import('./App.jsx'))
@@ -162,6 +163,7 @@ function AppShell() {
 
   return (
     <BrowserRouter>
+      <GlobalCursor />
       <PosthogPageView />
       <ScrollToHash />
       <RouteLoadingOverlay active={routeLoading} />

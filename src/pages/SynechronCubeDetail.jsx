@@ -5,8 +5,6 @@ import ContentModule from '../components/ContentModule';
 import { projectsData } from '../data/projectsData';
 import SynechronTimeline from '../components/SynechronTimeline';
 import OtherProjects from '../components/OtherProjects';
-import Footer from '../Footer';
-import { footerData } from '../footerData';
 import './SynechronCubeDetail.css';
 import guardianHeaderImage from '../../img_assets/gaurdian.png';
 import navigationDemoClip from '../../img_assets/Screen Recording 2026-01-04 at 9.34.28 PM.mov';
@@ -378,9 +376,6 @@ export default function SynechronCubeDetail() {
         <section className="synechron-cube-other-projects-stage">
           <OtherProjects project={guardianProject} />
         </section>
-        <div className="footer-layer synechron-cube-footer-layer">
-          <Footer data={footerData} />
-        </div>
       </main>
     </>
   );

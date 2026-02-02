@@ -1,8 +1,6 @@
 import { useEffect } from 'react';
 import ProjectDetailHeader from './ProjectDetailHeader';
 import OtherProjects from './OtherProjects';
-import Footer from '../Footer';
-import { footerData } from '../footerData';
 import { getOtherProjects } from '../data/projectsData';
 import './ProjectDetailTemplate.css';
 
@@ -73,9 +71,6 @@ export default function ProjectDetailTemplate({ project }) {
           </section>
         ) : null}
 
-        <div className="footer-layer project-detail-footer-layer">
-          <Footer data={footerData} />
-        </div>
       </main>
     </>
   );

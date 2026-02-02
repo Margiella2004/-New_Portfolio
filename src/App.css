@@ -12,7 +12,7 @@
   position: fixed;
   inset: 0;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   background: #ffffff;
   color: #0f172a;
@@ -41,6 +41,85 @@
   position: relative;
   width: 100%;
   height: 100%;
+}
+
+.hero-end-callout {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(4.5rem, 12vh, 7rem);
+  transform: translate(-50%, var(--hero-end-offset, 0px));
+  width: var(--content-total-width, var(--page-width, 90vw));
+  max-width: var(--page-max-width, 87.5rem);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 90;
+  color: #ffffff;
+}
+
+.hero-end-logo {
+  width: 3.125rem;
+  height: auto;
+  flex-shrink: 0;
+  display: block;
+  align-self: flex-start;
+}
+
+.hero-end-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  align-self: flex-start;
+  text-align: right;
+  gap: 0.15rem;
+  font-family: 'Pangea Afrikan VAR 2.003', -apple-system, system-ui, sans-serif;
+  width: clamp(14rem, 30vw, 22rem);
+}
+
+.hero-end-title {
+  margin: 0;
+  font-size: 1.8125rem;
+  font-weight: 300;
+  color: #ffffff;
+  letter-spacing: -0.02rem;
+  line-height: 1.1;
+}
+
+.hero-end-email {
+  margin: 0;
+  font-size: 1.8125rem;
+  font-weight: 300;
+  color: #6f3d59;
+  letter-spacing: -0.015rem;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 48rem) {
+  .hero-end-callout {
+    width: 100%;
+    left: 0;
+    transform: translateY(var(--hero-end-offset, 0px));
+    padding: 0 2.5rem;
+  }
+}
+
+@media (max-width: 30rem) {
+  .hero-end-callout {
+    padding: 0 1.25rem;
+    gap: 1rem;
+  }
+
+  .hero-end-title {
+    font-size: 1.5rem;
+  }
+
+  .hero-end-email {
+    font-size: 1.5rem;
+  }
 }
 
 /* Canvas container */
@@ -83,14 +162,12 @@ canvas {
   position: relative;
   z-index: 10;
   width: 100%;
-  min-height: 100vh;
   overflow: hidden;
   pointer-events: auto;
   scroll-margin-top: var(--header-offset, 0);
-}
-
-#about {
-  scroll-margin-top: var(--header-offset, 0);
+  padding-bottom: 30vh;
+  will-change: transform;
+  border-radius: 0 0 clamp(0.75rem, 1.5vw, 1.5rem) clamp(0.75rem, 1.5vw, 1.5rem);
 }
 
 .contact-anchor {
@@ -108,13 +185,9 @@ canvas {
 }
 
 .stage .footer-layer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
+  position: relative;
   width: 100%;
-  z-index: 100;
-  transform: translateY(100%);
-  will-change: transform;
+  z-index: 10;
 }
 
 /* Leva Debug Panel - Force Position and Visibility */

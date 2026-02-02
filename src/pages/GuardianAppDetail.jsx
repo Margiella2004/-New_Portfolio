@@ -3,8 +3,6 @@ import ProjectDetailHeader from '../components/ProjectDetailHeader';
 import GuardianTimeline from '../components/GuardianTimeline';
 import ContentModule from '../components/ContentModule';
 import OtherProjects from '../components/OtherProjects';
-import Footer from '../Footer';
-import { footerData } from '../footerData';
 import { projectsData } from '../data/projectsData';
 import './GuardianAppDetail.css';
 
@@ -30,6 +28,7 @@ import affinityMapImage from '../../img_assets/Create Affinity Map.png';
 import interactionPrototypeImage from '../../img_assets/Create Interaction Prototype.png';
 import apiStackImage from '../../img_assets/API_stack.png';
 import detectionFlowImage from '../../img_assets/Screenshot 2026-01-14 at 7.48.02 PM.png';
+import userflowGif from '../../img_assets/Screen Recording 2026-01-04 at 6.31.53 PM.gif';
 import navigationClipPrimary from '../../img_assets/Screen Recording 2026-01-04 at 7.17.25 PM.mov';
 import navigationClipSecondary from '../../img_assets/Screen Recording 2026-01-04 at 7.19.08 PM.mov';
 import presentationPhoto from '../../img_assets/594362318_1134515405160983_6935414773021549184_n.jpg';
@@ -351,7 +350,7 @@ export default function GuardianAppDetail() {
               layout="bento-up-right"
               title={copy.bentoInsertTitle}
               description={copy.userflowDescription}
-              images={[detectionFlowImage]}
+              images={[userflowGif]}
               hideTopImage={true}
               hideText={false}
               bentoTextAlign="right"
@@ -543,9 +542,6 @@ export default function GuardianAppDetail() {
         <section className="guardian-app-other-projects-stage">
           <OtherProjects project={projectsData.synechronCube} />
         </section>
-        <div className="footer-layer guardian-app-footer-layer">
-          <Footer data={footerData} />
-        </div>
       </main>
     </>
   );

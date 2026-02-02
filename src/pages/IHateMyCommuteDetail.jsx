@@ -2,8 +2,6 @@ import { useEffect } from 'react';
 import ProjectDetailHeader from '../components/ProjectDetailHeader';
 import ContentModule from '../components/ContentModule';
 import OtherProjects from '../components/OtherProjects';
-import Footer from '../Footer';
-import { footerData } from '../footerData';
 import { projectsData } from '../data/projectsData';
 import './IHateMyCommuteDetail.css';
 
@@ -22,6 +20,8 @@ import roadAsset from '../../img_assets/i_hate_my_commute/image13.png';
 import environmentView from '../../img_assets/i_hate_my_commute/image14.png';
 import levaPanelFull from '../../img_assets/i_hate_my_commute/image15.png';
 import timesOfDay from '../../img_assets/i_hate_my_commute/image16.png';
+
+const COMMUTE_EMBED_VIDEO = 'https://www.youtube.com/embed/OkNX9vpBE9U';
 
 const bentoStyles = {
   '--content-module-bento-gap': '24px',
@@ -85,6 +85,29 @@ export default function IHateMyCommuteDetail() {
                   {skill}
                 </span>
               ))}
+            </div>
+          </section>
+
+          {/* Video Bento */}
+          <section className="commute-embed-bento">
+            <div className="commute-embed-bento-text">
+              <a
+                href="https://ihatemycommute-hptr1yvuf-jon-rams-projects.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="commute-embed-bento-link"
+              >
+                Play the Game Here
+              </a>
+            </div>
+            <div className="commute-embed-bento-frame">
+              <iframe
+                src={COMMUTE_EMBED_VIDEO}
+                title="I Hate My Commute - Video"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                loading="lazy"
+              />
             </div>
           </section>
 
@@ -213,10 +236,6 @@ export default function IHateMyCommuteDetail() {
           <OtherProjects project={synechronProject} />
         </section>
 
-        {/* Footer */}
-        <div className="footer-layer commute-footer-layer">
-          <Footer data={footerData} />
-        </div>
       </main>
     </>
   );

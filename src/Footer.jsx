@@ -1,248 +1,176 @@
+import { useRef } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useGSAP } from '@gsap/react'
 import './Footer.css'
-import { Link } from 'react-router-dom'
-import logoSvg from '../img_assets/logo.svg'
-import linkArrowImage from '../Svg/material-symbols-light_arrow-back.svg'
 
-const baseOrigin =
-  typeof window !== 'undefined' && window.location?.origin
-    ? window.location.origin
-    : 'https://example.com'
+gsap.registerPlugin(ScrollTrigger)
 
-const sanitizeText = (value) => {
-  if (value === null || value === undefined) return ''
-  return String(value)
-}
+export function Footer() {
+  const sectionRef = useRef(null)
+  const topRef = useRef(null)
+  const para1Ref = useRef(null)
+  const para2Ref = useRef(null)
+  const para3Ref = useRef(null)
 
-const sanitizeUrl = (url) => {
-  if (!url) return null
-  try {
-    const parsed = new URL(url, baseOrigin)
-    return parsed.href
-  } catch (error) {
-    console.warn('[Footer] Skipped unsafe URL', url, error)
-    return null
-  }
-}
+  useGSAP(
+    () => {
+      const section = sectionRef.current
+      if (!section) return
 
-const getInternalPath = (url) => {
-  if (!url) return null
-  try {
-    const parsed = new URL(url, baseOrigin)
-    if (parsed.origin !== baseOrigin) return null
-    return `${parsed.pathname}${parsed.search}${parsed.hash}`
-  } catch (error) {
-    console.warn('[Footer] Skipped unsafe internal URL', url, error)
-    return null
-  }
-}
+      const reducedMotion =
+        typeof window !== 'undefined' &&
+        window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches
 
-export function Footer({ data = {} }) {
-  const { email = '', projects = [], social = [], copyright = '©2025' } = data
+      const targets = [
+        topRef.current,
+        para1Ref.current,
+        para2Ref.current,
+        para3Ref.current,
+      ].filter(Boolean)
+
+      const underlines = section.querySelectorAll('.aboutme-underline')
+      const dot = section.querySelector('.aboutme-status-dot')
+      const statusText = section.querySelector('.aboutme-status-text')
+      const heading = section.querySelector('.aboutme-heading')
+      const paras = section.querySelectorAll('.aboutme-para')
+
+      if (reducedMotion) {
+        const allBgs = [
+          section,
+          document.querySelector('.projects-animate-content'),
+          section.closest('.projects-wrapper'),
+          ...document.querySelectorAll(
+            '.projects-animate-list, .projects-animate-row, .projects-animate-row-overlay, .projects-animate-list-end'
+          ),
+        ].filter(Boolean)
+        allBgs.forEach((el) => gsap.set(el, { backgroundColor: '#6f3d59' }))
+        gsap.set(dot, { backgroundColor: '#e6e6e6' })
+        gsap.set(statusText, { color: '#e6e6e6' })
+        gsap.set(heading, { color: '#ffffff' })
+        gsap.set(paras, { color: '#ffffff' })
+        underlines.forEach((el) => {
+          el.style.backgroundSize = '100% 2px'
+        })
+        return
+      }
+
+      // ── Scroll-scrubbed background + text color tween ──
+      // Animate the projects container + wrapper so the whole page transitions
+      const projectsContent = document.querySelector('.projects-animate-content')
+      const projectsWrapper = section.closest('.projects-wrapper')
+
+      const colorTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 80%',
+          end: 'top 20%',
+          scrub: true,
+        },
+      })
+
+      // Every element with a white background in the projects + about me area
+      const allWhiteBgs = [
+        section,
+        projectsContent,
+        projectsWrapper,
+        ...document.querySelectorAll(
+          '.projects-animate-list, .projects-animate-row, .projects-animate-row-overlay, .projects-animate-list-end'
+        ),
+      ].filter(Boolean)
+
+      allWhiteBgs.forEach((el) => {
+        colorTl.to(el, { backgroundColor: '#6f3d59', ease: 'none' }, 0)
+      })
+      colorTl.to(dot, { backgroundColor: '#e6e6e6', ease: 'none' }, 0)
+      colorTl.to(statusText, { color: '#e6e6e6', ease: 'none' }, 0)
+      colorTl.to(heading, { color: '#ffffff', ease: 'none' }, 0)
+      colorTl.to(paras, { color: '#ffffff', ease: 'none' }, 0)
+
+      // ── Entrance animation (projects-style) ──
+      gsap.set(targets, {
+        opacity: 0,
+        y: -4,
+        filter: 'blur(3px)',
+      })
+
+      gsap.set(underlines, {
+        backgroundSize: '0% 2px',
+      })
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 50%',
+          toggleActions: 'play none none none',
+          once: true,
+        },
+      })
+
+      // Stagger entrance
+      tl.to(targets, {
+        opacity: 1,
+        y: 0,
+        filter: 'blur(0px)',
+        duration: 0.5,
+        ease: 'power2.inOut',
+        stagger: 0.12,
+      })
+
+      // Draw underlines after entrance
+      tl.to(
+        underlines,
+        {
+          backgroundSize: '100% 2px',
+          duration: 0.6,
+          ease: 'power2.out',
+          stagger: 0.1,
+        },
+        '>-0.15'
+      )
+    },
+    { scope: sectionRef }
+  )
 
   return (
-    <div className="module-content module-footer" style={styles.container}>
-      <div className="footer-inner">
-        <div className="footer-social" style={styles.socialRow}>
-          {social.map((link) => {
-            const safeUrl = sanitizeUrl(link.url)
-            if (!safeUrl) return null
-
-            const label = sanitizeText(link.label || '')
-
-            return (
-              <a
-                key={safeUrl}
-                href={safeUrl}
-                className="footer-social-link"
-                style={styles.socialLink}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {label}
-                <img src={linkArrowImage} alt="" style={styles.socialArrow} />
-              </a>
-            )
-          })}
-        </div>
-
-        <div style={styles.emailRow}>
-          <div className="footer-small-label" style={styles.smallLabel}>EMAIL</div>
-          <div className="footer-email-value" style={styles.emailValue}>{sanitizeText(email)}</div>
-        </div>
-
-        <div style={styles.projectsRow}>
-          <div className="footer-small-label" style={styles.smallLabel}>PROJECTS</div>
-          <div style={styles.projectsList}>
-            {projects.map((project, index) => {
-              const projectLabel =
-                typeof project === 'string'
-                  ? sanitizeText(project)
-                  : sanitizeText(project?.label || '')
-              const projectUrl = typeof project === 'string' ? null : project?.url
-              const internalPath = projectUrl ? getInternalPath(projectUrl) : null
-              const safeUrl = projectUrl ? sanitizeUrl(projectUrl) : null
-              const projectKey = `${projectLabel}-${index}`
-
-              const projectContent = (
-                <>
-                  <span className="footer-project-index" style={styles.projectIndex}>0{index + 1}</span>
-                  <span className="footer-project-name" style={styles.projectName}>{projectLabel}</span>
-                </>
-              )
-
-              if (!safeUrl) {
-                return (
-                  <div key={projectKey} style={styles.projectItem}>
-                    {projectContent}
-                  </div>
-                )
-              }
-
-              if (internalPath) {
-                return (
-                  <Link
-                    key={projectKey}
-                    to={internalPath}
-                    className="footer-project-link"
-                    style={styles.projectLink}
-                  >
-                    {projectContent}
-                  </Link>
-                )
-              }
-
-              return (
-                <a
-                  key={projectKey}
-                  href={safeUrl}
-                  className="footer-project-link"
-                  style={styles.projectLink}
-                >
-                  {projectContent}
-                </a>
-              )
-            })}
+    <div ref={sectionRef} className="module-content module-footer">
+      <div className="footer-inner aboutme-inner">
+        {/* Status & Heading */}
+        <div ref={topRef} className="aboutme-top">
+          <div className="aboutme-status">
+            <span className="aboutme-status-dot" />
+            <span className="aboutme-status-text">Looking for work</span>
           </div>
+          <h2 className="aboutme-heading">About Me</h2>
         </div>
 
-        <div style={styles.bottomRow}>
-          <img src={logoSvg} alt="Logo" className="footer-logo" style={styles.logo} />
-          <div className="footer-copyright" style={styles.copyright}>{sanitizeText(copyright)}</div>
+        {/* Bio Paragraphs */}
+        <div className="aboutme-bio">
+          <p ref={para1Ref} className="aboutme-para aboutme-para--large">
+            Hi, I&rsquo;m a{' '}
+            <span className="aboutme-italic aboutme-underline">Ux &amp; 3d Designer</span>{' '}
+            who merges coding with design to create better products, prioritizing{' '}
+            <span className="aboutme-italic aboutme-underline">User-Centric Design</span>{' '}
+            above all.
+          </p>
+
+          <p ref={para2Ref} className="aboutme-para aboutme-para--medium">
+            I am currently a design engineer at{' '}
+            <span className="aboutme-italic aboutme-underline">Sensigo</span>{' '}
+            where I work with AI And Product Design aswell.
+          </p>
+
+          <p ref={para3Ref} className="aboutme-para aboutme-para--medium">
+            My{' '}
+            <span className="aboutme-italic aboutme-underline">art</span>{' '}
+            and{' '}
+            <span className="aboutme-italic aboutme-underline">engineering</span>{' '}
+            background boosts my critical thinking, enabling a logical and abstract approach to product development.
+          </p>
         </div>
       </div>
     </div>
   )
-}
-
-const styles = {
-  container: {
-    background: '#6F3C59',
-    color: '#ffffff',
-    padding: '80px 0',
-  },
-  socialRow: {
-    display: 'flex',
-    gap: '50.04px',
-    justifyContent: 'flex-end',
-    marginBottom: '40px',
-  },
-  socialLink: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    fontFamily: 'Pangea Afrikan, sans-serif',
-    fontWeight: 700,
-    fontSize: '10.725px',
-    color: '#ffffff',
-    letterSpacing: '0.9653px',
-    textTransform: 'uppercase',
-    textDecoration: 'none',
-    opacity: '0.338',
-  },
-  socialArrow: {
-    width: '16.696px',
-    height: '16.696px',
-    transform: 'rotate(-45deg)',
-    display: 'inline-block',
-    filter: 'brightness(0) invert(1)',
-    opacity: '0.338',
-  },
-  smallLabel: {
-    fontFamily: 'Pangea Afrikan, sans-serif',
-    fontWeight: 700,
-    fontSize: '10.725px',
-    letterSpacing: '0.9653px',
-    textTransform: 'uppercase',
-  },
-  emailRow: {
-    borderTop: '0.894px solid #868686',
-    borderBottom: '0.894px solid #868686',
-    padding: '34px 16px',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  emailValue: {
-    fontFamily: 'Instrument Serif, serif',
-    fontSize: '41.381px',
-    lineHeight: '51.48px',
-    letterSpacing: '-1.287px',
-    textAlign: 'right',
-  },
-  projectsRow: {
-    borderBottom: '0.894px solid #868686',
-    padding: '34px 16px',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-  },
-  projectsList: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '15.194px',
-    alignItems: 'flex-end',
-  },
-  projectItem: {
-    display: 'flex',
-    gap: '8.938px',
-    alignItems: 'flex-start',
-  },
-  projectLink: {
-    display: 'flex',
-    gap: '8.938px',
-    alignItems: 'flex-start',
-    textDecoration: 'none',
-    color: 'inherit',
-  },
-  projectIndex: {
-    fontFamily: 'Pangea Afrikan, sans-serif',
-    fontSize: '12px',
-    lineHeight: '16px',
-    letterSpacing: '-0.466px',
-  },
-  projectName: {
-    fontFamily: 'Instrument Serif, serif',
-    fontSize: '40.398px',
-    lineHeight: '51.48px',
-    letterSpacing: '-1.287px',
-  },
-  bottomRow: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    paddingTop: '26.813px',
-  },
-  logo: {
-    height: '200px',
-    width: 'auto',
-    display: 'block',
-  },
-  copyright: {
-    fontFamily: 'Instrument Serif, serif',
-    fontSize: '37.359px',
-    lineHeight: '51.48px',
-    letterSpacing: '-1.287px',
-  },
 }
 
 export default Footer

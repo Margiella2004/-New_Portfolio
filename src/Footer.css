@@ -1,9 +1,13 @@
-.footer-social-link {
-  transition: opacity 0.3s ease;
-}
+/* ── About Me / Footer Module ── */
 
-.footer-social-link:hover {
-  opacity: 1 !important;
+.module-footer {
+  position: relative;
+  z-index: auto;
+  background-color: #ffffff;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 5rem 1.25rem 10rem;
 }
 
 .footer-inner {
@@ -12,138 +16,185 @@
   margin: 0 auto;
 }
 
-.module-footer {
+.aboutme-inner {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
   position: relative;
-  z-index: auto;
-  min-height: 100vh;
+  z-index: 1;
+}
+
+/* ── Top: Status + Heading ── */
+/* Matches .projects-animate-title-group exactly */
+
+.aboutme-top {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.aboutme-status {
   display: flex;
   align-items: center;
+  gap: 0.3125rem;
 }
+
+.aboutme-status-dot {
+  width: 0.5625rem;
+  height: 0.5625rem;
+  background: #6f3d59;
+  border-radius: 62.4375rem;
+  animation: aboutmePulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.aboutme-status-text {
+  font-family: 'Pangea Afrikan VAR 2.003', 'Pangea Afrikan', sans-serif;
+  font-weight: 400;
+  font-size: 0.75rem;
+  color: #967286;
+  letter-spacing: -0.015rem;
+  line-height: normal;
+  margin: 0;
+}
+
+.aboutme-heading {
+  font-family: 'Pangea Afrikan VAR 2.003', 'Pangea Afrikan', sans-serif;
+  font-weight: 300;
+  font-size: 1.8125rem;
+  color: #393939;
+  letter-spacing: -0.03625rem;
+  line-height: normal;
+  margin: 0;
+}
+
+/* ── Bio Paragraphs ── */
+
+.aboutme-bio {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 60rem;
+  padding-bottom: 6rem;
+}
+
+.aboutme-para {
+  font-family: 'Pangea Afrikan VAR 2.003', 'Pangea Afrikan', sans-serif;
+  font-weight: 300;
+  color: #393939;
+  margin: 0;
+}
+
+.aboutme-para--large {
+  font-size: 2.5rem;
+  line-height: 1.15;
+  letter-spacing: -0.8px;
+}
+
+.aboutme-para--medium {
+  font-size: 2.25rem;
+  line-height: 1.28;
+  letter-spacing: -0.72px;
+}
+
+/* ── Italic Emphasis (Instrument Serif) ── */
+
+.aboutme-italic {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.2em;
+}
+
+.aboutme-underline {
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: left bottom 5px;
+  background-size: 100% 2px;
+}
+
+/* ── Pulse animation (matches projectsPulse) ── */
+
+@keyframes aboutmePulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ── Responsive ── */
 
 @media (max-width: 63.9375rem) {
   .module-footer {
-    padding: 2.5rem 1.5rem !important;
-  }
-}
-
-@media (max-width: 63.9375rem) {
-  .footer-social {
-    gap: 1.875rem !important;
+    padding: 6.5rem 1.5rem 8rem;
   }
 
-  .footer-email-value {
-    font-size: 2rem !important;
-    line-height: 2.5rem !important;
+  .aboutme-bio {
+    padding-bottom: 4rem;
   }
 
-  .footer-project-name {
-    font-size: 2rem !important;
-    line-height: 2.5rem !important;
+  .aboutme-para--large {
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+
+  .aboutme-para--medium {
+    font-size: 1.75rem;
+    line-height: 1.3;
   }
 }
 
 @media (max-width: 47.9375rem) {
   .module-footer {
-    padding: 2rem 1rem !important;
+    padding: 5rem 1rem 6rem;
   }
 
-  .footer-social {
-    flex-direction: row !important;
-    gap: 1.25rem !important;
-    align-items: flex-start !important;
-    justify-content: flex-start !important;
+  .aboutme-bio {
+    padding-bottom: 3rem;
+    gap: 0.75rem;
   }
 
-  .footer-email-value {
-    font-size: 1.5rem !important;
-    line-height: 1.875rem !important;
+  .aboutme-heading {
+    font-size: 1.5rem;
   }
 
-  .footer-project-name {
-    font-size: 1.5rem !important;
-    line-height: 1.875rem !important;
+  .aboutme-para--large {
+    font-size: 1.5rem;
+    line-height: 1.25;
   }
 
-  .module-footer > div:nth-child(2),
-  .module-footer > div:nth-child(3) {
-    grid-template-columns: 1fr !important;
-    gap: 1.25rem !important;
-    padding: 1.25rem 0.625rem !important;
-  }
-
-  .module-footer > div:last-child {
-    flex-direction: column !important;
-    gap: 1.25rem !important;
-    align-items: flex-start !important;
-  }
-
-  .footer-social-link {
-    font-size: 0.5625rem !important;
-    letter-spacing: 0.06rem !important;
-  }
-
-  .footer-small-label {
-    font-size: 0.5625rem !important;
-    letter-spacing: 0.05rem !important;
-  }
-
-  .footer-project-index {
-    font-size: 0.625rem !important;
-    line-height: 0.875rem !important;
-  }
-
-  .footer-logo {
-    height: 7rem !important;
-  }
-
-  .footer-copyright {
-    font-size: 1.125rem !important;
-    line-height: 1.5rem !important;
+  .aboutme-para--medium {
+    font-size: 1.25rem;
+    line-height: 1.35;
   }
 }
 
 @media (max-width: 22.5rem) {
   .module-footer {
-    padding: 1.5rem 1rem !important;
+    padding: 4.5rem 1rem 5rem;
   }
 
-  .footer-social {
-    gap: 1rem !important;
+  .aboutme-bio {
+    padding-bottom: 2rem;
   }
 
-  .footer-email-value {
-    font-size: 1.125rem !important;
-    line-height: 1.375rem !important;
-    overflow-wrap: anywhere;
-    word-break: break-word;
+  .aboutme-heading {
+    font-size: 1.25rem;
   }
 
-  .footer-project-name {
-    font-size: 1.125rem !important;
-    line-height: 1.375rem !important;
+  .aboutme-para--large {
+    font-size: 1.25rem;
+    line-height: 1.3;
   }
 
-  .footer-social-link {
-    font-size: 0.5rem !important;
-    letter-spacing: 0.05rem !important;
-  }
-
-  .footer-small-label {
-    font-size: 0.5rem !important;
-    letter-spacing: 0.04rem !important;
-  }
-
-  .footer-project-index {
-    font-size: 0.5625rem !important;
-    line-height: 0.8125rem !important;
-  }
-
-  .footer-logo {
-    height: 5.5rem !important;
-  }
-
-  .footer-copyright {
-    font-size: 1rem !important;
-    line-height: 1.375rem !important;
+  .aboutme-para--medium {
+    font-size: 1.125rem;
+    line-height: 1.35;
   }
 }

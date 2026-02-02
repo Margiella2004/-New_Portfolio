@@ -115,13 +115,6 @@ export default function Header({ innerRef, activeSection }) {
           >
             projects
           </a>
-          <a
-            href="/#about"
-            className={`nav-link${activeSection === 'about' ? ' is-active' : ''}`}
-            onClick={handleNavClick('about')}
-          >
-            about me
-          </a>
         </nav>
 
         <a
@@ -157,13 +150,6 @@ export default function Header({ innerRef, activeSection }) {
               onClick={handleNavClick('projects')}
             >
               projects
-            </a>
-            <a
-              href="/#about"
-              className={`mobile-nav-link${activeSection === 'about' ? ' is-active' : ''}`}
-              onClick={handleNavClick('about')}
-            >
-              about me
             </a>
             <a
               href="/#contact"

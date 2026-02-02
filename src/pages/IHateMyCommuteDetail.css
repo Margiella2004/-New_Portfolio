@@ -323,6 +323,81 @@
 }
 
 /* ===========================
+   Video Bento
+   =========================== */
+.commute-embed-bento {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+@media (min-width: 48rem) {
+  .commute-embed-bento {
+    flex-direction: row;
+    gap: 2.5rem;
+  }
+}
+
+.commute-embed-bento-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+}
+
+@media (min-width: 48rem) {
+  .commute-embed-bento-text {
+    width: 30%;
+    flex-shrink: 0;
+  }
+}
+
+.commute-embed-bento-link {
+  font-family: 'Pangea Afrikan VAR 2.003', sans-serif;
+  font-weight: 400;
+  font-size: 1.5rem;
+  color: #000000;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
+  text-decoration-thickness: 0.0625rem;
+  transition: opacity 0.2s ease;
+}
+
+.commute-embed-bento-link:hover {
+  opacity: 0.6;
+}
+
+@media (min-width: 48rem) {
+  .commute-embed-bento-link {
+    font-size: 1.625rem;
+  }
+}
+
+.commute-embed-bento-frame {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--commute-hero-border-radius-mobile);
+  overflow: hidden;
+}
+
+@media (min-width: 48rem) {
+  .commute-embed-bento-frame {
+    width: 70%;
+    border-radius: var(--commute-hero-border-radius-desktop);
+  }
+}
+
+.commute-embed-bento-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+/* ===========================
    Bento Sections
    =========================== */
 .commute-bento-section {

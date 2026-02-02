@@ -2,8 +2,6 @@ import { useEffect } from 'react';
 import ProjectDetailHeader from '../components/ProjectDetailHeader';
 import ContentModule from '../components/ContentModule';
 import OtherProjects from '../components/OtherProjects';
-import Footer from '../Footer';
-import { footerData } from '../footerData';
 import { projectsData } from '../data/projectsData';
 import heroImage from '../../img_assets/Wander_Screen.png';
 import problemStatementImage from '../../img_assets/wander_app/ProblemStatement.png';
@@ -418,22 +416,6 @@ export default function WanderAppDetail() {
 
           <section className="wander-app-bento-section">
             <ContentModule
-              layout="stacked"
-              title={finalStackedTitle}
-              description={finalStackedDescription}
-              images={[finalSetScreensImage]}
-              hideText={true}
-              className="wander-app-content-module"
-              style={{
-                '--content-module-border-radius-mobile': '20px',
-                '--content-module-border-radius-desktop': '34px',
-                '--content-module-image-height-large': '720px'
-              }}
-            />
-          </section>
-
-          <section className="wander-app-bento-section">
-            <ContentModule
               layout="bento-up-right"
               title={finalRightTitle}
               description={finalRightDescription}
@@ -482,9 +464,6 @@ export default function WanderAppDetail() {
         <section className="wander-app-other-projects-stage">
           <OtherProjects project={projectsData.synechronCube} />
         </section>
-        <div className="footer-layer wander-app-footer-layer">
-          <Footer data={footerData} />
-        </div>
       </main>
     </>
   );

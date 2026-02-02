@@ -8,6 +8,7 @@ import { Color } from 'three'
 import { BlendFunction } from 'postprocessing'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import Lenis from 'lenis'
 import { Iridescence } from './IridescenceMaterial'
 import Header from './Header'
 import IntroText from './IntroText'
@@ -15,11 +16,10 @@ import DesignEngineer from './DesignEngineer'
 import FloatingTabs from './FloatingTabs'
 import HeroTextOverlay from './HeroTextOverlay'
 import Projects from './Projects'
-import MakeCodeLiveSection from './MakeCodeLiveSection'
 import Footer from './Footer'
-import { footerData } from './footerData'
 import { preloadAssets } from './preloadAssets'
 import './App.css'
+import heroLogo from '../img_assets/logo.svg'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -367,17 +367,17 @@ function App() {
   const containerRef = useRef(null)
   const headerRef = useRef(null)
   const heroContentRef = useRef(null)
+  const heroEndRef = useRef(null)
   const heroSectionRef = useRef(null)
   const projectsRef = useRef(null)
   const canvasWrapperRef = useRef(null)
-  const footerRef = useRef(null)
-  const aboutRef = useRef(null)
   const contactRef = useRef(null)
   const introTimelineRef = useRef(null)
   const introHasRunRef = useRef(false)
   const introActiveRef = useRef(false)
 
   const canvasOpacity = 1
+  const enableScrollStopBC = false
   const [introTextOpacity, setIntroTextOpacity] = useState(0)
   const [introBloom, setIntroBloom] = useState({ ...INTRO_BLOOM_START })
   const [introFresnelOffset, setIntroFresnelOffset] = useState(INTRO_FRESNEL_START)
@@ -466,6 +466,33 @@ function App() {
   }, [lowPowerMode])
 
   useEffect(() => {
+    if (typeof window === 'undefined') return undefined
+    if (lowPowerMode) return undefined
+
+    const lenis = new Lenis({
+      duration: 0.5,
+      lerp: 0.32,
+      smoothWheel: true,
+      smoothTouch: false,
+      wheelMultiplier: 0.6,
+    })
+
+    lenis.on('scroll', ScrollTrigger.update)
+
+    const tick = (time) => {
+      lenis.raf(time * 1000)
+    }
+
+    gsap.ticker.add(tick)
+    gsap.ticker.lagSmoothing(0)
+
+    return () => {
+      gsap.ticker.remove(tick)
+      lenis.destroy()
+    }
+  }, [lowPowerMode])
+
+  useEffect(() => {
     if (lowPowerMode) return undefined
 
     let range = {
@@ -525,7 +552,9 @@ function App() {
       const y = window.scrollY
       const clampedY = Math.max(range.start, Math.min(y, range.end))
       const progress = range.distance ? (clampedY - range.start) / range.distance : 0
-      updateScrollStopBC(progress * 0.76)
+      if (enableScrollStopBC) {
+        updateScrollStopBC(progress * 0.76)
+      }
 
       if (heroContentRef.current) {
         if (introActiveRef.current) {
@@ -567,6 +596,89 @@ function App() {
       if (rafId) cancelAnimationFrame(rafId)
     }
   }, [lowPowerMode, resetScrollStopBC, updateScrollStopBC])
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !heroEndRef.current) return undefined
+
+    let heroRange = {
+      start: 0,
+      end: 0,
+      distance: 0,
+      ready: false,
+    }
+    let rafId = 0
+    let ticking = false
+
+    const getHeroFadeDistance = () => {
+      if (window.innerWidth >= 1024) return 1400
+      if (window.innerWidth >= 768) return 1400
+      return 1400
+    }
+
+    const computeHeroRange = () => {
+      const distance = getHeroFadeDistance()
+      return {
+        start: 0,
+        end: distance,
+        distance,
+        ready: true,
+      }
+    }
+
+    const update = () => {
+      if (!heroRange.ready) {
+        heroRange = computeHeroRange()
+      }
+      const y = window.scrollY
+      const heroClampedY = Math.max(heroRange.start, Math.min(y, heroRange.end))
+      const heroProgress = heroRange.distance
+        ? (heroClampedY - heroRange.start) / heroRange.distance
+        : 0
+
+      if (introActiveRef.current) {
+        heroEndRef.current.style.opacity = '0'
+        heroEndRef.current.style.pointerEvents = 'none'
+        return
+      }
+
+      const revealStart = 0.7
+      const revealProgress = Math.min(
+        1,
+        Math.max(0, (heroProgress - revealStart) / (1 - revealStart))
+      )
+      heroEndRef.current.style.opacity = String(revealProgress)
+      heroEndRef.current.style.pointerEvents = revealProgress > 0.1 ? 'auto' : 'none'
+      heroEndRef.current.style.setProperty(
+        '--hero-end-offset',
+        `${(1 - revealProgress) * 16}px`
+      )
+    }
+
+    const scheduleUpdate = () => {
+      if (ticking) return
+      ticking = true
+      rafId = requestAnimationFrame(() => {
+        update()
+        ticking = false
+      })
+    }
+
+    const handleResize = () => {
+      heroRange = computeHeroRange()
+      scheduleUpdate()
+    }
+
+    window.addEventListener('scroll', scheduleUpdate, { passive: true })
+    window.addEventListener('resize', handleResize)
+    heroRange = computeHeroRange()
+    scheduleUpdate()
+
+    return () => {
+      window.removeEventListener('scroll', scheduleUpdate)
+      window.removeEventListener('resize', handleResize)
+      if (rafId) cancelAnimationFrame(rafId)
+    }
+  }, [])
 
   useEffect(() => {
     let active = true
@@ -1102,227 +1214,34 @@ function App() {
 
       // Hero pinning handled by CSS sticky positioning in App.css
 
-      // Use matchMedia for responsive scroll triggers
-      ScrollTrigger.matchMedia({
-        // Desktop (1024px and up)
-        "(min-width: 1024px)": function() {
-          const projectsContainer = projectsRef.current.querySelector('.projects-container')
-          if (projectsContainer) {
-            gsap.set(projectsContainer, { xPercent: 100 })
+      if (projectsRef.current) {
+        gsap.set(projectsRef.current, { clearProps: 'transform' })
+      }
 
-            gsap.to(projectsContainer, {
-              xPercent: 0,
-              ease: 'none',
-              scrollTrigger: {
-                trigger: projectsRef.current,
-                start: 'top top',
-                end: () => {
-                  const width = projectsRef.current?.offsetWidth || window.innerWidth
-                  return `+=${Math.max(width, 1000)}`
-                },
-                scrub: true,
-                pin: true,
-                pinSpacing: true,
-                anticipatePin: 1,
-                invalidateOnRefresh: true,
-              },
-            })
-          }
-        },
+      const reducedMotion =
+        typeof window !== 'undefined' &&
+        window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches
 
-        // Tablet (768px - 1023px)
-        "(min-width: 768px) and (max-width: 1023px)": function() {
-          const projectsContainer = projectsRef.current.querySelector('.projects-container')
-          if (projectsContainer) {
-            gsap.set(projectsContainer, { xPercent: 100 })
-
-            gsap.to(projectsContainer, {
-              xPercent: 0,
-              ease: 'none',
-              scrollTrigger: {
-                trigger: projectsRef.current,
-                start: 'top top',
-                end: () => {
-                  const width = projectsRef.current?.offsetWidth || window.innerWidth
-                  return `+=${Math.max(width, 700)}`
-                },
-                scrub: true,
-                pin: true,
-                pinSpacing: true,
-                anticipatePin: 1,
-                invalidateOnRefresh: true,
-              },
-            })
-          }
-        },
-
-        // Mobile (below 768px)
-        "(max-width: 767px)": function() {
-          const projectsContainer = projectsRef.current.querySelector('.projects-container')
-          if (projectsContainer) {
-            gsap.set(projectsContainer, { xPercent: 100 })
-
-            gsap.to(projectsContainer, {
-              xPercent: 0,
-              ease: 'none',
-              scrollTrigger: {
-                trigger: projectsRef.current,
-                start: 'top top',
-                end: () => {
-                  const width = projectsRef.current?.offsetWidth || window.innerWidth
-                  return `+=${Math.max(width, 500)}`
-                },
-                scrub: true,
-                pin: true,
-                pinSpacing: true,
-                anticipatePin: 1,
-                invalidateOnRefresh: true,
-              },
-            })
-          }
-        },
-      })
+      if (!reducedMotion && projectsRef.current) {
+        const revealAmount = () => window.innerHeight * 0.3
+        gsap.to(projectsRef.current, {
+          y: () => -revealAmount(),
+          ease: 'none',
+          scrollTrigger: {
+            trigger: projectsRef.current,
+            start: 'top top',
+            end: () => `+=${revealAmount()}`,
+            scrub: true,
+            invalidateOnRefresh: true,
+          },
+        })
+      }
 
       // FOV animation removed - FOV now stays constant during scroll
 
-      if (aboutRef.current && footerRef.current) {
-        const footerEl = footerRef.current
-
-        // Pin the about section while footer scrolls over it
-        const getHoldDistance = () => {
-          const isMobile = window.matchMedia("(max-width: 767px)").matches
-          const isTablet = window.matchMedia("(min-width: 768px) and (max-width: 1023px)").matches
-
-          if (isMobile) return window.innerHeight * 1.5
-          if (isTablet) return window.innerHeight * 2.2
-          return window.innerHeight * 3.2
-        }
-
-        const getFooterHeight = () => {
-          const height = footerEl.getBoundingClientRect().height || footerEl.offsetHeight || 0
-          return height || window.innerHeight
-        }
-
-        const getFooterTotalDistance = () => getHoldDistance() + getFooterHeight()
-
-        const hideFooter = () => {
-          const footerHeight = getFooterHeight()
-          footerEl.style.transform = `translateY(${footerHeight}px)`
-        }
-
-        gsap.set(aboutRef.current, { autoAlpha: 0 })
-
-        // Initially hide footer below viewport
-        hideFooter()
-
-        ScrollTrigger.create({
-          trigger: aboutRef.current,
-          start: 'top top',
-          end: () => `+=${getFooterTotalDistance()}`,
-          pin: true,
-          pinSpacing: true,
-          id: 'about-pin',
-          refreshPriority: 1,
-          invalidateOnRefresh: true,
-          onEnter: () => gsap.set(aboutRef.current, { autoAlpha: 1 }),
-          onLeaveBack: () => gsap.set(aboutRef.current, { autoAlpha: 0 }),
-        })
-
-        // Control footer position - scroll it up to reveal
-        ScrollTrigger.create({
-          trigger: aboutRef.current,
-          start: 'top top',
-          end: () => `+=${getFooterTotalDistance()}`,
-          id: 'footer-reveal',
-          scrub: true,
-          refreshPriority: 1,
-          invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            if (!footerEl) return
-            const footerHeight = getFooterHeight()
-            const holdDistance = getHoldDistance()
-            const footerTotalDistance = holdDistance + footerHeight
-
-            // Keep footer hidden during hold distance, then reveal
-            const holdProgress = holdDistance / footerTotalDistance
-
-            if (self.progress < holdProgress) {
-              // Still in hold phase - keep footer below viewport
-              footerEl.style.transform = `translateY(${footerHeight}px)`
-            } else {
-              // Calculate reveal progress after hold
-              const revealProgress = (self.progress - holdProgress) / (1 - holdProgress)
-              const translateY = footerHeight * (1 - revealProgress)
-              footerEl.style.transform = `translateY(${translateY}px)`
-            }
-          },
-          onLeave: () => {
-            if (!footerEl) return
-            footerEl.style.transform = 'translateY(0px)'
-          },
-          onLeaveBack: () => {
-            if (!footerEl) return
-            hideFooter()
-          }
-        })
-
-        const aboutSection = aboutRef.current.querySelector('.make-live-section')
-        const aboutText = aboutRef.current.querySelector('.make-live-text')
-        const aboutPortrait = aboutRef.current.querySelector('.make-live-portrait')
-        const aboutLists = aboutRef.current.querySelector('.make-live-lists')
-        const aboutCta = aboutRef.current.querySelector('.make-live-cta')
-
-        if (aboutSection && aboutText && aboutPortrait && aboutLists && aboutCta) {
-          gsap.set([aboutText, aboutPortrait, aboutLists, aboutCta], { opacity: 0 })
-
-          // Responsive start and end positions
-          let startOffset, endDistance
-          if (isMobile) {
-            startOffset = 150
-            endDistance = 500
-          } else if (isTablet) {
-            startOffset = 200
-            endDistance = 700
-          } else {
-            startOffset = 300
-            endDistance = 900
-          }
-
-          const aboutTimeline = gsap.timeline({
-            scrollTrigger: {
-              trigger: aboutSection,
-              start: `top top+=${startOffset}`,
-              end: `+=${endDistance}`,
-              scrub: true,
-              id: 'about-fadein',
-              invalidateOnRefresh: true,
-              refreshPriority: 0,
-            },
-          })
-
-          aboutTimeline
-            .to(aboutText, { opacity: 1, duration: 0.3 })
-            .to(aboutPortrait, { opacity: 1, duration: 0.3 }, 0.1)
-            .to(aboutLists, { opacity: 1, duration: 0.3 }, 0.2)
-            .to(aboutCta, { opacity: 1, duration: 0.3 }, 0.3)
-        }
-
-        ScrollTrigger.refresh()
-        if (typeof window !== 'undefined') {
-          window.dispatchEvent(new CustomEvent('scrolltrigger-ready'))
-        }
-      }
-
-      if (canvasWrapperRef.current && footerRef.current) {
-        ScrollTrigger.create({
-          trigger: footerRef.current,
-          start: 'top bottom',
-          end: 'bottom top',
-          onEnter: () => canvasWrapperRef.current?.classList.add('canvas-disabled'),
-          onEnterBack: () => canvasWrapperRef.current?.classList.add('canvas-disabled'),
-          onLeaveBack: () => canvasWrapperRef.current?.classList.remove('canvas-disabled'),
-          onLeave: () => canvasWrapperRef.current?.classList.remove('canvas-disabled'),
-        })
+      ScrollTrigger.refresh()
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('scrolltrigger-ready'))
       }
     }, containerRef)
 
@@ -1330,7 +1249,7 @@ function App() {
   }, [])
 
   useEffect(() => {
-    if (!heroSectionRef.current || !projectsRef.current || !aboutRef.current) {
+    if (!heroSectionRef.current || !projectsRef.current) {
       return undefined
     }
 
@@ -1355,7 +1274,6 @@ function App() {
     const sections = [
       { id: 'home', element: heroSectionRef.current },
       { id: 'projects', element: projectsRef.current },
-      { id: 'about', element: aboutRef.current },
       { id: 'contact', element: contactRef.current },
     ].filter((section) => section.element)
 
@@ -1444,6 +1362,14 @@ function App() {
           <DesignEngineer />
         </div>
 
+        <div ref={heroEndRef} className="hero-end-callout" aria-hidden="true">
+          <img src={heroLogo} alt="" className="hero-end-logo" />
+          <div className="hero-end-text">
+            <p className="hero-end-title">Call me beep me if you want to reach me</p>
+            <p className="hero-end-email">jonatharameshdesign@gmail.com</p>
+          </div>
+        </div>
+
         <FloatingTabs
           enabled={controls.tabsEnabled}
           introActive={introActive}
@@ -1516,19 +1442,10 @@ function App() {
       <div id="projects" className="scroll-anchor" aria-hidden="true" />
       <div ref={projectsRef} id="projects-section" className="projects-wrapper">
         <Projects />
-      </div>
-
-      {/* Make Code Live content */}
-      <div id="about" className="scroll-anchor" aria-hidden="true" />
-      <div ref={aboutRef} id="about-section">
-        <MakeCodeLiveSection />
+        <Footer />
       </div>
 
       <div ref={contactRef} id="contact" className="contact-anchor" aria-hidden="true" />
-
-      <div ref={footerRef} className="footer-layer">
-        <Footer data={footerData} />
-      </div>
     </div>
   )
 }

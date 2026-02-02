@@ -1,453 +1,496 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import gsap from 'gsap'
+import { useGSAP } from '@gsap/react'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import './Projects.css'
-import { projects } from './data/projectsList'
+import { projects as baseProjects } from './data/projectsList'
+import { projectsData } from './data/projectsData'
 
 gsap.registerPlugin(ScrollTrigger)
 
+const BG_IMAGE_URL =
+  'https://images.unsplash.com/photo-1769882068890-1a57d4fc5a24?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGFydGlzdGljJTIwc29mdCUyMHRleHR1cmUlMjBiYWNrZ3JvdW5kfGVufDF8fHx8MTc2OTkwODc3NHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
 
-function ArrowUpRightIcon({ className }) {
+const FILTERS = ['All', 'UX/UI Design', 'Creative Coding']
+const PROJECT_ROW_EXPANDED_HEIGHT = 350
+const PROJECT_ROW_COLLAPSED_HEIGHT = 105
+const toRem = (value) => `${value / 16}rem`
+const isVideoSrc = (src = '') => /\.(mp4|webm|ogv|mov)(\?|#|$)/i.test(src)
+
+const projectMetaById = Object.fromEntries(
+  Object.values(projectsData).map((project) => [project.id, project])
+)
+
+const buildProjects = () =>
+  baseProjects.map((project) => {
+    const meta = projectMetaById[project.id]
+    const type = project.tags?.includes('Creative Coding')
+      ? 'Creative Coding'
+      : 'UX/UI Design'
+
+    return {
+      ...project,
+      date: meta?.metadata?.date ?? '',
+      category: meta?.metadata?.company ?? '',
+      type,
+      disabled: Boolean(project.disabled),
+      image1: meta?.cardImage ?? meta?.heroImage ?? project.image,
+      image2:
+        meta?.cardFeatureImage ??
+        meta?.featureImage ??
+        meta?.images?.[0] ??
+        project.image,
+    }
+  })
+
+function ProjectsHeader({ currentFilter, onFilterChange }) {
+  const handleFilterHover = (filterKey) => {
+    if (filterKey !== currentFilter) {
+      onFilterChange(filterKey)
+    }
+  }
+
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M7 17L17 7" />
-      <path d="M7 7h10v10" />
-    </svg>
+    <div className="projects-animate-header">
+      <div className="projects-animate-title-group">
+        <div className="projects-animate-status">
+          <div className="projects-animate-status-dot" />
+          <p className="projects-animate-status-text">2 project underway</p>
+        </div>
+        <h1 className="projects-animate-title">Projects</h1>
+      </div>
+
+      <div className="projects-animate-filters">
+        {FILTERS.map((filter) => {
+          const isSelected = currentFilter === filter
+          const buttonClassName = [
+            'projects-animate-filter',
+            isSelected ? 'is-selected' : '',
+          ]
+            .filter(Boolean)
+            .join(' ')
+
+          return (
+            <button
+              key={filter}
+              type="button"
+              onClick={() => onFilterChange(filter)}
+              className={buttonClassName}
+              onMouseEnter={() => handleFilterHover(filter)}
+              onFocus={() => handleFilterHover(filter)}
+            >
+              <span className="projects-animate-filter-label">{filter}</span>
+            </button>
+          )
+        })}
+      </div>
+    </div>
   )
 }
 
-// Polaroid Images Component
-function PolaroidImages() {
-  const polaroidProjects = projects.slice(0, 3)
+function ProjectRow({
+  index = 0,
+  title,
+  date,
+  category,
+  description,
+  image1,
+  image2,
+  onOpen,
+}) {
+  const isClickable = Boolean(onOpen)
+  const containerRef = useRef(null)
+  const dateRef = useRef(null)
+  const categoryRef = useRef(null)
+  const bgOverlayRef = useRef(null)
+  const titleRef = useRef(null)
+  const descriptionRef = useRef(null)
+  const image1Ref = useRef(null)
+  const image2Ref = useRef(null)
+
+  const PADDING = 30
+  const GAP = 30
+  const EXPANDED_HEIGHT = PROJECT_ROW_EXPANDED_HEIGHT
+  const COLLAPSED_HEIGHT = PROJECT_ROW_COLLAPSED_HEIGHT
+
+  const IMG1_WIDTH = 380
+  const IMG1_HEIGHT = EXPANDED_HEIGHT - PADDING * 2
+  const IMG2_WIDTH = 260
+  const IMG2_HEIGHT = 235
+  const IMG2_TOP = PADDING + IMG1_HEIGHT - IMG2_HEIGHT
+
+  const { contextSafe } = useGSAP({ scope: containerRef })
+
+  const handleMouseEnter = contextSafe(() => {
+    if (!isClickable) return
+    gsap.to(containerRef.current, {
+      height: EXPANDED_HEIGHT,
+      duration: 0.3,
+      ease: 'power2.out',
+      overwrite: true,
+    })
+
+    gsap.to([dateRef.current, categoryRef.current], {
+      y: -20,
+      opacity: 0,
+      duration: 0.15,
+      ease: 'power1.out',
+      overwrite: true,
+    })
+
+    gsap.fromTo(
+      descriptionRef.current,
+      { y: -20, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.25,
+        delay: 0.1,
+        ease: 'power2.out',
+        overwrite: true,
+      }
+    )
+
+    gsap.to(bgOverlayRef.current, {
+      opacity: 0,
+      duration: 0.3,
+      ease: 'power2.out',
+      overwrite: true,
+    })
+
+    gsap.to(titleRef.current, {
+      color: '#ffffff',
+      duration: 0.2,
+      ease: 'power2.out',
+      overwrite: true,
+    })
+
+    gsap.fromTo(
+      [image1Ref.current, image2Ref.current],
+      { y: -50, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.35,
+        stagger: 0.05,
+        ease: 'power2.out',
+        overwrite: true,
+      }
+    )
+  })
+
+  const handleMouseLeave = contextSafe(() => {
+    if (!isClickable) return
+    gsap.to(containerRef.current, {
+      height: COLLAPSED_HEIGHT,
+      duration: 0.3,
+      ease: 'power2.out',
+      overwrite: true,
+    })
+
+    gsap.to([dateRef.current, categoryRef.current], {
+      y: 0,
+      opacity: 1,
+      duration: 0.25,
+      delay: 0.1,
+      ease: 'power2.out',
+      overwrite: true,
+    })
+
+    gsap.to(descriptionRef.current, {
+      y: -20,
+      opacity: 0,
+      duration: 0.15,
+      ease: 'power1.out',
+      overwrite: true,
+    })
+
+    gsap.to(bgOverlayRef.current, {
+      opacity: 1,
+      duration: 0.3,
+      ease: 'power2.out',
+      overwrite: true,
+    })
+
+    gsap.to(titleRef.current, {
+      color: '#393939',
+      duration: 0.2,
+      ease: 'power2.out',
+      overwrite: true,
+    })
+
+    gsap.to([image1Ref.current, image2Ref.current], {
+      y: -50,
+      opacity: 0,
+      duration: 0.2,
+      ease: 'power2.in',
+      overwrite: true,
+    })
+  })
+
+  const handleKeyDown = (event) => {
+    if (!isClickable) return
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      onOpen()
+    }
+  }
+
+  const renderMedia = (src, label) => {
+    if (!src) return null
+    if (isVideoSrc(src)) {
+      return (
+        <video
+          className="projects-animate-row-media"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+        >
+          <source src={src} type="video/mp4" />
+          <source src={src} type="video/quicktime" />
+        </video>
+      )
+    }
+    return (
+      <img
+        className="projects-animate-row-media"
+        src={src}
+        alt={label ?? ''}
+        loading="lazy"
+        decoding="async"
+      />
+    )
+  }
 
   return (
-    <div className="polaroid-container">
-      {polaroidProjects.map((project, index) => (
-        <Link
-          key={project.id}
-          to={`/project/${project.id}`}
-          className={`polaroid polaroid-${index + 1}`}
-          aria-label={`Open ${project.title} project`}
-        >
-          <img
-            src={project.image}
-            alt={`${project.title} preview`}
-            loading="lazy"
-            decoding="async"
-          />
-        </Link>
-      ))}
+    <div
+      ref={containerRef}
+      className={`projects-animate-row${isClickable ? ' is-clickable' : ' is-disabled'}`}
+      onMouseEnter={isClickable ? handleMouseEnter : undefined}
+      onMouseLeave={isClickable ? handleMouseLeave : undefined}
+      onClick={isClickable ? onOpen : undefined}
+      onKeyDown={isClickable ? handleKeyDown : undefined}
+      role={isClickable ? 'link' : undefined}
+      tabIndex={isClickable ? 0 : undefined}
+      aria-label={isClickable ? `Open ${title} project` : undefined}
+      data-cursor={isClickable ? 'expand' : undefined}
+      data-cursor-text={isClickable ? 'View Projects' : undefined}
+      style={{
+        '--row-padding': toRem(PADDING),
+        '--row-image-gap': toRem(GAP),
+        '--row-image1-width': toRem(IMG1_WIDTH),
+        '--row-image1-height': toRem(IMG1_HEIGHT),
+        '--row-image2-width': toRem(IMG2_WIDTH),
+        '--row-image2-height': toRem(IMG2_HEIGHT),
+        '--row-image2-top': toRem(IMG2_TOP),
+        '--row-index': index,
+      }}
+    >
+      <div ref={bgOverlayRef} className="projects-animate-row-overlay" />
+
+      <div
+        ref={image2Ref}
+        className="projects-animate-row-image projects-animate-row-image-small"
+        style={{
+          right: `calc(var(--row-padding) + var(--row-image1-width) + var(--row-image-gap))`,
+          top: 'var(--row-image2-top)',
+        }}
+      >
+        {renderMedia(image2, title)}
+      </div>
+
+      <div
+        ref={image1Ref}
+        className="projects-animate-row-image projects-animate-row-image-large"
+        style={{
+          right: 'var(--row-padding)',
+          top: 'var(--row-padding)',
+        }}
+      >
+        {renderMedia(image1, title)}
+      </div>
+
+      <div className="projects-animate-row-content">
+        <div className="projects-animate-row-title-wrap">
+          <h2 ref={titleRef} className="projects-animate-row-title">
+            {title}
+          </h2>
+        </div>
+
+        <div className="projects-animate-row-meta">
+          <p ref={dateRef} className="projects-animate-row-date">
+            {date}
+          </p>
+          <p ref={descriptionRef} className="projects-animate-row-description">
+            {description}
+          </p>
+        </div>
+
+        <div ref={categoryRef} className="projects-animate-row-category">
+          <p className="projects-animate-row-category-text">{category}</p>
+        </div>
+      </div>
     </div>
   )
 }
 
 export default function Projects() {
-  const [activeId, setActiveId] = useState(projects[0].id)
-  const [isMobile, setIsMobile] = useState(false)
-  const [cutoutRect, setCutoutRect] = useState(null)
-  const containerRef = useRef(null)
-  const indicatorRef = useRef(null)
-  const previewRef = useRef(null)
-  const introTitleRef = useRef(null)
-  const introDescRef = useRef(null)
-  const projectsSectionRef = useRef(null)
-  const cutoutRectRef = useRef(null)
-  const windowFramePlayedRef = useRef(false)
+  const [filter, setFilter] = useState('All')
   const navigate = useNavigate()
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(max-width: 1024px)')
-    const updateMatch = (event) => setIsMobile(event.matches)
-    updateMatch(mediaQuery)
-
-    if (mediaQuery.addEventListener) {
-      mediaQuery.addEventListener('change', updateMatch)
-    } else {
-      mediaQuery.addListener(updateMatch)
-    }
-
-    return () => {
-      if (mediaQuery.removeEventListener) {
-        mediaQuery.removeEventListener('change', updateMatch)
-      } else {
-        mediaQuery.removeListener(updateMatch)
-      }
-    }
-  }, [])
-
-  const activeIndex = projects.findIndex((project) => project.id === activeId)
-  const activeProject = useMemo(
-    () => projects.find((project) => project.id === activeId) || projects[0],
-    [activeId]
+  const sectionRef = useRef(null)
+  const headerRef = useRef(null)
+  const listRef = useRef(null)
+  const hasFilterAnimatedRef = useRef(false)
+  const projects = useMemo(() => buildProjects(), [])
+  const filteredProjects = useMemo(
+    () =>
+      filter === 'All'
+        ? projects
+        : projects.filter((project) => project.type === filter),
+    [filter, projects]
   )
-  const isGuardianProject = activeProject.id === 'guardian-app'
-  const isImageClickable = Boolean(activeProject?.id)
-  const handleImageClick = () => {
-    if (!isImageClickable) return
-    navigate(`/project/${activeProject.id}`)
-  }
-  const handleImageKeyDown = (event) => {
-    if (!isImageClickable) return
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault()
-      handleImageClick()
-    }
-  }
-  const stride = isMobile ? 65 : 82
 
-  useLayoutEffect(() => {
-    if (!containerRef.current) return
 
-    const updateCutout = () => {
-      const container = containerRef.current
-      if (!container) return
+  useGSAP(
+    () => {
+      const headerEl = headerRef.current
+      const listEl = listRef.current
+      const sectionEl = sectionRef.current
+      if (!headerEl || !listEl || !sectionEl) return
 
-      const styles = getComputedStyle(container)
-      const parseLength = (value, fallback) => {
-        if (!value) return fallback
-        const trimmed = String(value).trim()
-        const numeric = parseFloat(trimmed)
-        if (Number.isNaN(numeric)) return fallback
-        if (trimmed.endsWith('rem')) {
-          const rootSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16
-          return numeric * rootSize
-        }
-        if (trimmed.endsWith('vw')) return (numeric / 100) * window.innerWidth
-        if (trimmed.endsWith('vh')) return (numeric / 100) * window.innerHeight
-        return numeric
+      const reducedMotion =
+        typeof window !== 'undefined' &&
+        window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches
+
+      const getTargets = () => [
+        headerEl,
+        ...listEl.querySelectorAll('.projects-animate-row'),
+      ]
+
+      if (reducedMotion) {
+        getTargets().forEach((el) => {
+          el.classList.remove('projects-enter-prepare', 'projects-enter')
+        })
+        return
       }
 
-      const padding = parseLength(styles.getPropertyValue('--projects-intro-padding'), 65)
-      const cutoutHeight = parseLength(styles.getPropertyValue('--projects-cutout-height'), 300)
-      const cutoutY = parseLength(styles.getPropertyValue('--projects-cutout-y'), 120)
-      const cutoutRadius = parseLength(styles.getPropertyValue('--projects-cutout-radius'), 16)
-      const containerWidth = container.clientWidth
-      const containerHeight = Math.max(container.scrollHeight, container.clientHeight)
-      const cutoutWidth = Math.max(0, containerWidth - padding * 2)
-
-      setCutoutRect({
-        x: padding,
-        y: cutoutY,
-        width: cutoutWidth,
-        height: cutoutHeight,
-        radius: cutoutRadius,
-        containerWidth,
-        containerHeight,
+      getTargets().forEach((el) => {
+        el.classList.remove('projects-enter')
+        el.classList.add('projects-enter-prepare')
       })
-    }
 
-    updateCutout()
+      const runIntroAnimation = () => {
+        const targets = getTargets()
+        targets.forEach((el) => {
+          el.classList.remove('projects-enter')
+          el.classList.add('projects-enter-prepare')
+        })
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            targets.forEach((el) => {
+              el.classList.remove('projects-enter-prepare')
+              el.classList.add('projects-enter')
+            })
+          })
+        })
+      }
 
-    const resizeObserver = new ResizeObserver(updateCutout)
-    resizeObserver.observe(containerRef.current)
-
-    return () => resizeObserver.disconnect()
-  }, [])
-
-  useLayoutEffect(() => {
-    if (!indicatorRef.current) return
-    gsap.to(indicatorRef.current, {
-      y: activeIndex * stride,
-      duration: 0.35,
-      ease: 'power2.out',
-    })
-  }, [activeIndex, stride])
-
-  useLayoutEffect(() => {
-    if (!previewRef.current) return
-    gsap.killTweensOf(previewRef.current)
-    gsap.fromTo(
-      previewRef.current,
-      { autoAlpha: 0, x: -60, y: 0 },
-      { autoAlpha: 1, x: 0, y: 0, duration: 0.45, ease: 'power3.out' }
-    )
-  }, [activeId])
-
-  // Window frame expand animation (earlier than other animations)
-  useEffect(() => {
-    if (!cutoutRectRef.current || !cutoutRect || !introTitleRef.current) return
-
-    const fullWidth = cutoutRect.width
-    const startX = cutoutRect.x + fullWidth
-
-    let tween
-
-    if (windowFramePlayedRef.current) {
-      gsap.set(cutoutRectRef.current, {
-        attr: { width: fullWidth, x: cutoutRect.x },
-      })
-      return undefined
-    }
-
-    // Set initial state - width 0, positioned at right edge
-    gsap.set(cutoutRectRef.current, {
-      attr: { width: 0, x: startX },
-    })
-
-    // Animate to full width once, then keep it there
-    tween = gsap.to(cutoutRectRef.current, {
-      attr: { width: fullWidth, x: cutoutRect.x },
-      duration: 1,
-      ease: 'power2.out',
-      scrollTrigger: {
-        trigger: introTitleRef.current,
-        start: 'top 60%',
-        toggleActions: 'play none none none',
-        once: true,
-        onEnter: () => {
-          windowFramePlayedRef.current = true
-        },
-      },
-    })
-
-    return () => {
-      if (tween?.scrollTrigger) tween.scrollTrigger.kill()
-      tween?.kill()
-    }
-  }, [cutoutRect])
-
-  // Intro scroll animations
-  useEffect(() => {
-    if (!introTitleRef.current || !introDescRef.current) return
-
-    // Split description text into words
-    const descText = introDescRef.current.textContent
-    const words = descText.split(' ')
-    introDescRef.current.innerHTML = words
-      .map((word) => `<span class="word-wrapper"><span class="word">${word}</span></span>`)
-      .join(' ')
-
-    const wordElements = introDescRef.current.querySelectorAll('.word')
-    const titleLetters = introTitleRef.current.querySelectorAll('.projects-intro-title-p, .projects-intro-title-rest')
-    const polaroids = document.querySelectorAll('.polaroid')
-
-    // Set initial states - vertical slide up effect for title
-    gsap.set(titleLetters, { yPercent: 100, opacity: 0 })
-    gsap.set(wordElements, { opacity: 0, y: 30 })
-
-    // Set initial states for polaroids - slide from left, already rotated
-    gsap.set(polaroids, {
-      opacity: 0,
-      x: -80,
-      rotation: (index) => index === 0 ? -3.3 : 5.763
-    })
-
-    // Create timeline with ScrollTrigger
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: introTitleRef.current,
+      const trigger = ScrollTrigger.create({
+        trigger: sectionEl,
         start: 'top 30%',
         toggleActions: 'play none none none',
         once: true,
-      },
-    })
+        onEnter: runIntroAnimation,
+      })
 
-    // Vertical slide reveal for title
-    tl.to(titleLetters, {
-      yPercent: 0,
-      opacity: 1,
-      duration: 2,
-      stagger: 0.15,
-      ease: 'expo.out',
-    })
+      return () => {
+        trigger.kill()
+        getTargets().forEach((el) => {
+          el.classList.remove('projects-enter-prepare', 'projects-enter')
+        })
+      }
+    },
+    { scope: sectionRef }
+  )
 
-    // Polaroids slide in from left (subtle, horizontal only)
-    tl.to(
-      polaroids,
-      {
-        opacity: 1,
-        x: 0,
-        duration: 2,
-        stagger: 0.15,
-        ease: 'power2.out',
-      },
-      '-=1.5'
-    )
+  useEffect(() => {
+    if (!listRef.current) return
 
-    // Word reveal animation
-    tl.to(
-      wordElements,
-      {
-        opacity: 1,
-        y: 0,
-        duration: 1.5,
-        stagger: 0.08,
-        ease: 'power2.out',
-      },
-      '-=1.8'
-    )
+    const reducedMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches
 
-    return () => {
-      tl.kill()
-    }
-  }, [])
-
-  // Handle user click - disable scroll animation
-  const handleProjectClick = (projectId) => {
-    if (projectId === activeId) {
-      navigate(`/project/${projectId}`)
+    if (reducedMotion) {
+      hasFilterAnimatedRef.current = true
       return
     }
 
-    setActiveId(projectId)
-  }
+    if (!hasFilterAnimatedRef.current) {
+      hasFilterAnimatedRef.current = true
+      return
+    }
 
-  const handleProjectFocus = (projectId, event) => {
-    const target = event?.currentTarget
-    const focusVisible = target?.matches?.(':focus-visible')
-    if (!focusVisible) return
-    if (projectId === activeId) return
-    setActiveId(projectId)
+    const rows = Array.from(listRef.current.querySelectorAll('.projects-animate-row'))
+    if (!rows.length) return
+
+    rows.forEach((row) => {
+      row.classList.remove('projects-enter')
+      row.classList.add('projects-enter-prepare')
+    })
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        rows.forEach((row) => {
+          row.classList.remove('projects-enter-prepare')
+          row.classList.add('projects-enter')
+        })
+      })
+    })
+  }, [filter, filteredProjects.length])
+
+  const listStyle = {
+    '--projects-row-collapsed-height': toRem(PROJECT_ROW_COLLAPSED_HEIGHT),
+    '--projects-row-expanded-height': toRem(PROJECT_ROW_EXPANDED_HEIGHT),
+    '--projects-row-extra-reserve': toRem(
+      PROJECT_ROW_EXPANDED_HEIGHT - PROJECT_ROW_COLLAPSED_HEIGHT
+    ),
+    '--projects-row-count': Math.max(projects.length, 1),
+    '--projects-list-offset': toRem(PROJECT_ROW_COLLAPSED_HEIGHT),
   }
 
   return (
     <section
-      ref={containerRef}
-      className={`projects-container${cutoutRect ? ' has-cutout' : ''}`}
+      ref={sectionRef}
+      className="projects-animate"
     >
-      <svg
-        className="projects-cutout-defs"
-        aria-hidden="true"
-        focusable="false"
-        width="0"
-        height="0"
-      >
-        <defs>
-          <mask
-            id="projects-cutout-mask"
-            maskUnits="userSpaceOnUse"
-            maskContentUnits="userSpaceOnUse"
-            x="0"
-            y="0"
-            width={cutoutRect?.containerWidth || 0}
-            height={cutoutRect?.containerHeight || 0}
-          >
-            <rect
-              x="0"
-              y="0"
-              width={cutoutRect?.containerWidth || 0}
-              height={cutoutRect?.containerHeight || 0}
-              fill="#ffffff"
+      <div className="projects-animate-content">
+        <div className="projects-animate-inner">
+          <div ref={headerRef}>
+            <ProjectsHeader
+              currentFilter={filter}
+              onFilterChange={setFilter}
             />
-            {cutoutRect && (
-              <rect
-                ref={cutoutRectRef}
-                x={cutoutRect.x}
-                y={cutoutRect.y}
-                width={cutoutRect.width}
-                height={cutoutRect.height}
-                rx={cutoutRect.radius}
-                ry={cutoutRect.radius}
-                fill="#000000"
-              />
-            )}
-          </mask>
-        </defs>
-      </svg>
-      {/* Intro Section - Full Viewport */}
-      <div className="projects-intro">
-        <div className="projects-intro-content">
-          <div className="projects-intro-header">
-            <h1 ref={introTitleRef} className="projects-intro-title">
-              <span className="title-mask">
-                <span className="projects-intro-title-p">P</span>
-              </span>
-              <span className="title-mask">
-                <span className="projects-intro-title-rest">rojects</span>
-              </span>
-            </h1>
-            <PolaroidImages />
-          </div>
-          <p ref={introDescRef} className="projects-intro-description">
-            Jonathan Ramesh is a Interdisciplinary Designer focusing on UX Design and Engineering.
-          </p>
-        </div>
-      </div>
-
-      {/* Original Projects Content */}
-      <div ref={projectsSectionRef} className="projects-inner">
-        <div className="projects-content">
-          <div className="projects-nav">
-            <div className="projects-timeline" aria-hidden="true">
-              <div className="projects-line" />
-              <div ref={indicatorRef} className="projects-indicator" />
-            </div>
-
-            <div className="projects-list">
-              {projects.map((project) => (
-                <button
-                  key={project.id}
-                  type="button"
-                  className={`projects-item${
-                    activeId === project.id ? ' is-active' : ''
-                  }`}
-                  onClick={() => handleProjectClick(project.id)}
-                  onFocus={(event) => handleProjectFocus(project.id, event)}
-                  aria-pressed={activeId === project.id}
-                >
-                  <span className="projects-item-number">{project.number}</span>
-                  <span className="projects-item-title">
-                    {project.title}
-                  </span>
-                </button>
-              ))}
-            </div>
           </div>
 
-          <div
-            ref={previewRef}
-            className="project-preview"
-          >
-            <div
-              className={`project-image-frame${isGuardianProject ? ' project-image-frame--contain' : ''}${
-                isImageClickable ? ' is-clickable' : ''
-              }`}
-              onClick={isImageClickable ? handleImageClick : undefined}
-              onKeyDown={isImageClickable ? handleImageKeyDown : undefined}
-              role={isImageClickable ? 'button' : undefined}
-              tabIndex={isImageClickable ? 0 : undefined}
-              aria-label={isImageClickable ? `Open ${activeProject.title} project` : undefined}
-            >
-              <img
-                src={activeProject.image}
-                alt={activeProject.title}
-                className={`project-image${isGuardianProject ? ' project-image--contain' : ''}`}
-                loading="lazy"
-                decoding="async"
+          <div ref={listRef} className="projects-animate-list" style={listStyle}>
+            {filteredProjects.map((project, index) => (
+              <ProjectRow
+                key={project.id}
+                index={index}
+                title={project.title}
+                date={project.date}
+                category={project.category}
+                description={project.description}
+                image1={project.image1}
+                image2={project.image2}
+                onOpen={project.disabled ? undefined : () => navigate(`/project/${project.id}`)}
               />
-            </div>
-
-            <div className="project-meta">
-              <div className="project-tags">
-                {activeProject.tags.map((tag) => (
-                  <span key={tag} className="project-tag">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
-              <button
-                type="button"
-                className="project-cta"
-                onClick={() => navigate(`/project/${activeProject.id}`)}
-                aria-label={`View work for ${activeProject.title}`}
-              >
-                <span className="project-cta-text">view work</span>
-                <ArrowUpRightIcon className="project-cta-icon" />
-              </button>
-
-              <p className="project-description">{activeProject.description}</p>
-            </div>
+            ))}
+            <div className="projects-animate-list-end" aria-hidden="true" />
           </div>
         </div>
       </div>

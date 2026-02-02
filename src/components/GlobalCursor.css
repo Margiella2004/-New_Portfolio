@@ -1,0 +1,78 @@
+.app-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  --app-cursor-size: 1.125rem;
+  --app-cursor-circle-size: 2.25rem;
+  --app-cursor-expanded-width: 6.8rem;
+  --app-cursor-expanded-height: 2.25rem;
+  width: var(--app-cursor-size);
+  height: var(--app-cursor-size);
+  border-radius: 999rem;
+  background: #0f172a;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0;
+  transform: translate(-50%, -50%);
+  transition: width 0.16s ease, height 0.16s ease, padding 0.16s ease, opacity 0.2s ease,
+    transform 0.18s ease;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 2000;
+  will-change: transform, width, height, opacity, padding;
+}
+
+.app-cursor.is-visible {
+  opacity: 1;
+}
+
+.app-cursor.is-active {
+  animation: cursor-expand 0.26s ease-out forwards;
+}
+
+.app-cursor-text {
+  opacity: 0;
+  transform: translateX(-0.35rem);
+  transition: opacity 0.16s ease, transform 0.16s ease;
+  color: #ffffff;
+  font-family: 'Pangea Afrikan VAR 2.003', sans-serif;
+  font-size: 1rem;
+  font-weight: 300;
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+.app-cursor.is-active .app-cursor-text {
+  opacity: 1;
+  transform: translateX(0);
+  transition-delay: 0.2s;
+}
+
+@media (hover: none) {
+  .app-cursor {
+    display: none;
+  }
+}
+
+@keyframes cursor-expand {
+  0% {
+    width: var(--app-cursor-size);
+    height: var(--app-cursor-size);
+    padding: 0;
+  }
+  60% {
+    width: var(--app-cursor-circle-size);
+    height: var(--app-cursor-circle-size);
+    padding: 0;
+  }
+  100% {
+    width: var(--app-cursor-expanded-width);
+    height: var(--app-cursor-expanded-height);
+    padding: 0 0.05rem;
+  }
+}

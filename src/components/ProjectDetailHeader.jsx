@@ -38,7 +38,6 @@ export default function ProjectDetailHeader() {
         <nav className="nav-links">
           <a href="/" className="nav-link" onClick={handleNavClick('/')}>home</a>
           <a href="/#projects" className="nav-link" onClick={handleNavClick('/#projects')}>projects</a>
-          <a href="/#about" className="nav-link" onClick={handleNavClick('/#about')}>about me</a>
         </nav>
 
         <a href="/#contact" className="contact-button desktop-contact" onClick={handleNavClick('/#contact')}>
@@ -59,7 +58,6 @@ export default function ProjectDetailHeader() {
           <nav className="mobile-nav">
             <a href="/" className="mobile-nav-link" onClick={handleNavClick('/')}>home</a>
             <a href="/#projects" className="mobile-nav-link" onClick={handleNavClick('/#projects')}>projects</a>
-            <a href="/#about" className="mobile-nav-link" onClick={handleNavClick('/#about')}>about me</a>
           </nav>
         </div>
       </div>
