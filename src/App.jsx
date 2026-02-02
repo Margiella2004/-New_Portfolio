@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { RoundedBox, OrbitControls } from '@react-three/drei'
 import { EffectComposer, Bloom, TiltShift2, Noise } from '@react-three/postprocessing'
-import { Perf } from 'r3f-perf'
 import { Leva, useControls, folder } from 'leva'
 import { Color } from 'three'
 import { BlendFunction } from 'postprocessing'
@@ -20,6 +19,7 @@ import Footer from './Footer'
 import { preloadAssets } from './preloadAssets'
 import './App.css'
 import heroLogo from '../img_assets/logo.svg'
+import useHeaderBlend from './hooks/useHeaderBlend'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -282,7 +282,6 @@ function Scene({
   enablePan,
   dpr,
   lowPowerMode,
-  showPerf,
 }) {
   const materialRef = useRef(null)
 
@@ -309,16 +308,6 @@ function Scene({
         enablePan={enablePan}
         enableDamping={!lowPowerMode}
       />
-      {showPerf ? (
-        <Perf
-          position="top-left"
-          style={{
-            zIndex: 2147483647,
-            transform: 'scale(1.5)',
-            transformOrigin: 'top left',
-          }}
-        />
-      ) : null}
       <RoundedCube {...cubeProps} materialRef={materialRef} />
       <ScrollStopBCUpdater
         materialRef={materialRef}
@@ -389,6 +378,7 @@ function App() {
   const scrollStopBCBaselinePendingRef = useRef(null)
   const scrollStopBCMetaRef = useRef({ time: 0, value: 0 })
   const [activeSection, setActiveSection] = useState('home')
+  const headerBlendActive = useHeaderBlend(headerRef)
   const [mouseBloom, setMouseBloom] = useState({ x: 0.5, y: 0.5 })
   const [assetsReady, setAssetsReady] = useState(false)
   const [viewportWidth, setViewportWidth] = useState(
@@ -423,13 +413,6 @@ function App() {
   const preloadBlocking = useMemo(() => {
     if (typeof window === 'undefined') return false
     return new URLSearchParams(window.location.search).get('preload') === 'block'
-  }, [])
-  const showPerf = useMemo(() => {
-    if (typeof window === 'undefined') return false
-    const params = new URLSearchParams(window.location.search)
-    if (import.meta.env.DEV) return true
-    const perfEnabled = import.meta.env.VITE_ENABLE_PERF === 'true'
-    return perfEnabled && params.get('perf') === 'true'
   }, [])
   const updateScrollStopBC = useCallback(
     (value) => {
@@ -679,6 +662,7 @@ function App() {
       if (rafId) cancelAnimationFrame(rafId)
     }
   }, [])
+
 
   useEffect(() => {
     let active = true
@@ -1340,7 +1324,11 @@ function App() {
         hideTitleBar={false}
       />
 
-      <Header innerRef={headerRef} activeSection={activeSection} />
+      <Header
+        innerRef={headerRef}
+        activeSection={activeSection}
+        blendActive={headerBlendActive}
+      />
 
       {/* Sticky Hero Section */}
       <div
@@ -1433,7 +1421,6 @@ function App() {
             enablePan={controls.enablePan}
             dpr={effectiveDpr}
             lowPowerMode={lowPowerMode}
-            showPerf={showPerf}
           />
         </div>
       </div>

@@ -1,9 +1,13 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import logoMark from '../../img_assets/logo.svg';
 import '../Header.css';
+import useHeaderBlend from '../hooks/useHeaderBlend';
 
 export default function ProjectDetailHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const headerRef = useRef(null);
+  const blendActive = useHeaderBlend(headerRef);
   const navigate = useNavigate();
 
   const handleNavClick = (path) => (event) => {
@@ -15,7 +19,8 @@ export default function ProjectDetailHeader() {
     setMenuOpen(false);
   };
 
-  const handleLogoClick = () => {
+  const handleLogoClick = (event) => {
+    event?.preventDefault();
     if (typeof window !== 'undefined') {
       window.sessionStorage?.setItem('skipIntro', '1');
     }
@@ -25,26 +30,23 @@ export default function ProjectDetailHeader() {
 
   return (
     <>
-      <header className="header">
-        <div className="logo" onClick={handleLogoClick} style={{ pointerEvents: 'auto', cursor: 'pointer' }}>
-          <span className="logo-j">J</span>
-          <span className="logo-text">o</span>
-          <span className="logo-text logo-n">n</span>
-          <span className="logo-dot">.</span>
-          <span className="logo-r">R</span>
-          <span className="logo-text">am</span>
-        </div>
+      <header ref={headerRef} className={`header${blendActive ? ' header--blend' : ''}`}>
+        <a href="/" className="brand" onClick={handleLogoClick} aria-label="Go to home">
+          <img src={logoMark} alt="" className="brand-icon" aria-hidden="true" />
+          <span className="brand-name">jon.ram</span>
+        </a>
 
         <nav className="nav-links">
           <a href="/" className="nav-link" onClick={handleNavClick('/')}>home</a>
           <a href="/#projects" className="nav-link" onClick={handleNavClick('/#projects')}>projects</a>
         </nav>
 
-        <a href="/#contact" className="contact-button desktop-contact" onClick={handleNavClick('/#contact')}>
-          contact me
-        </a>
-
-        <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
+        <button
+          className="menu-button"
+          onClick={() => setMenuOpen((open) => !open)}
+          aria-label="Menu"
+          aria-expanded={menuOpen}
+        >
           menu
         </button>
       </header>
@@ -53,7 +55,7 @@ export default function ProjectDetailHeader() {
       <div className={`mobile-menu-overlay ${menuOpen ? 'open' : ''}`} onClick={() => setMenuOpen(false)}>
         <div className={`mobile-menu ${menuOpen ? 'open' : ''}`} onClick={(e) => e.stopPropagation()}>
           <button className="close-button" onClick={() => setMenuOpen(false)} aria-label="Close menu">
-            ✕
+            close
           </button>
           <nav className="mobile-nav">
             <a href="/" className="mobile-nav-link" onClick={handleNavClick('/')}>home</a>

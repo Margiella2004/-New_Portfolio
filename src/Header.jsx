@@ -1,8 +1,9 @@
 import { useLayoutEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import logoMark from '../img_assets/logo.svg'
 import './Header.css'
 
-export default function Header({ innerRef, activeSection }) {
+export default function Header({ innerRef, activeSection, blendActive }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const navigate = useNavigate()
 
@@ -68,37 +69,20 @@ export default function Header({ innerRef, activeSection }) {
     setMenuOpen(false)
   }
 
-  const handleLogoClick = () => {
+  const handleLogoClick = (event) => {
+    event?.preventDefault()
     navigate('/')
     scrollToSection('home')
     setMenuOpen(false)
   }
 
-  const handleLogoKeyDown = (event) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault()
-      handleLogoClick()
-    }
-  }
-
   return (
     <>
-      <header ref={innerRef} className="header">
-        <div
-          className="logo"
-          role="button"
-          tabIndex={0}
-          aria-label="Go to home"
-          onClick={handleLogoClick}
-          onKeyDown={handleLogoKeyDown}
-        >
-          <span className="logo-j">J</span>
-          <span className="logo-text">o</span>
-          <span className="logo-text logo-n">n</span>
-          <span className="logo-dot">.</span>
-          <span className="logo-r">R</span>
-          <span className="logo-text">am</span>
-        </div>
+      <header ref={innerRef} className={`header${blendActive ? ' header--blend' : ''}`}>
+        <a href="/" className="brand" onClick={handleLogoClick} aria-label="Go to home">
+          <img src={logoMark} alt="" className="brand-icon" aria-hidden="true" />
+          <span className="brand-name">jon.ram</span>
+        </a>
 
         <nav className="nav-links">
           <a
@@ -117,15 +101,12 @@ export default function Header({ innerRef, activeSection }) {
           </a>
         </nav>
 
-        <a
-          href="/#contact"
-          className="contact-button desktop-contact"
-          onClick={handleNavClick('contact')}
+        <button
+          className="menu-button"
+          onClick={() => setMenuOpen((open) => !open)}
+          aria-label="Menu"
+          aria-expanded={menuOpen}
         >
-          contact me
-        </a>
-
-        <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
           menu
         </button>
       </header>
@@ -134,7 +115,7 @@ export default function Header({ innerRef, activeSection }) {
       <div className={`mobile-menu-overlay ${menuOpen ? 'open' : ''}`} onClick={() => setMenuOpen(false)}>
         <div className={`mobile-menu ${menuOpen ? 'open' : ''}`} onClick={(e) => e.stopPropagation()}>
           <button className="close-button" onClick={() => setMenuOpen(false)} aria-label="Close menu">
-            ✕
+            close
           </button>
           <nav className="mobile-nav">
             <a
@@ -150,13 +131,6 @@ export default function Header({ innerRef, activeSection }) {
               onClick={handleNavClick('projects')}
             >
               projects
-            </a>
-            <a
-              href="/#contact"
-              className={`mobile-nav-link${activeSection === 'contact' ? ' is-active' : ''}`}
-              onClick={handleNavClick('contact')}
-            >
-              contact me
             </a>
           </nav>
         </div>

@@ -28,7 +28,6 @@ import affinityMapImage from '../../img_assets/Create Affinity Map.png';
 import interactionPrototypeImage from '../../img_assets/Create Interaction Prototype.png';
 import apiStackImage from '../../img_assets/API_stack.png';
 import detectionFlowImage from '../../img_assets/Screenshot 2026-01-14 at 7.48.02 PM.png';
-import userflowGif from '../../img_assets/Screen Recording 2026-01-04 at 6.31.53 PM.gif';
 import navigationClipPrimary from '../../img_assets/Screen Recording 2026-01-04 at 7.17.25 PM.mov';
 import navigationClipSecondary from '../../img_assets/Screen Recording 2026-01-04 at 7.19.08 PM.mov';
 import presentationPhoto from '../../img_assets/594362318_1134515405160983_6935414773021549184_n.jpg';
@@ -350,7 +349,7 @@ export default function GuardianAppDetail() {
               layout="bento-up-right"
               title={copy.bentoInsertTitle}
               description={copy.userflowDescription}
-              images={[userflowGif]}
+              images={[detectionFlowImage]}
               hideTopImage={true}
               hideText={false}
               bentoTextAlign="right"
