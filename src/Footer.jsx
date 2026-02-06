@@ -63,8 +63,8 @@ export function Footer() {
       const colorTl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
-          start: 'top 80%',
-          end: 'top 20%',
+          start: 'top 90%',
+          end: 'top 55%',
           scrub: true,
         },
       })

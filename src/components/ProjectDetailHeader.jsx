@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import logoMark from '../../img_assets/logo.svg';
 import '../Header.css';
 import useHeaderBlend from '../hooks/useHeaderBlend';
@@ -9,13 +9,21 @@ export default function ProjectDetailHeader() {
   const headerRef = useRef(null);
   const blendActive = useHeaderBlend(headerRef);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleNavClick = (path) => (event) => {
     event.preventDefault();
     if (typeof window !== 'undefined' && path.startsWith('/')) {
       window.sessionStorage?.setItem('skipIntro', '1');
     }
-    navigate(path);
+    if (path.includes('#')) {
+      const [, hash] = path.split('#');
+      navigate({ pathname: '/', hash: `#${hash}` });
+    } else if (location.pathname !== '/') {
+      navigate(path);
+    } else {
+      window.history.replaceState(null, '', '/');
+    }
     setMenuOpen(false);
   };
 

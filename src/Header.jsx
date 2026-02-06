@@ -1,11 +1,12 @@
 import { useLayoutEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import logoMark from '../img_assets/logo.svg'
 import './Header.css'
 
 export default function Header({ innerRef, activeSection, blendActive }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const navigate = useNavigate()
+  const location = useLocation()
 
   useLayoutEffect(() => {
     const updateOffset = () => {
@@ -64,15 +65,32 @@ export default function Header({ innerRef, activeSection, blendActive }) {
 
   const handleNavClick = (id) => (event) => {
     event.preventDefault()
-    navigate(id === 'home' ? '/' : `/#${id}`)
+    const hash = id === 'home' ? '' : `#${id}`
+    const isHome = location.pathname === '/'
+
+    if (!isHome) {
+      navigate({ pathname: '/', hash })
+      setMenuOpen(false)
+      return
+    }
+
+    if (hash) {
+      window.history.replaceState(null, '', `/${hash}`)
+    } else {
+      window.history.replaceState(null, '', '/')
+    }
     scrollToSection(id)
     setMenuOpen(false)
   }
 
   const handleLogoClick = (event) => {
     event?.preventDefault()
-    navigate('/')
-    scrollToSection('home')
+    if (location.pathname !== '/') {
+      navigate('/')
+    } else {
+      window.history.replaceState(null, '', '/')
+      scrollToSection('home')
+    }
     setMenuOpen(false)
   }
 

@@ -169,9 +169,8 @@ canvas {
   overflow: hidden;
   pointer-events: auto;
   scroll-margin-top: var(--header-offset, 0);
-  padding-bottom: 30vh;
+  padding-bottom: 0;
   will-change: transform;
-  border-radius: 0 0 clamp(0.75rem, 1.5vw, 1.5rem) clamp(0.75rem, 1.5vw, 1.5rem);
 }
 
 .contact-anchor {
