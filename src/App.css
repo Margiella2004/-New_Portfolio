@@ -171,6 +171,7 @@ canvas {
   scroll-margin-top: var(--header-offset, 0);
   padding-bottom: 0;
   will-change: transform;
+  border-radius: 0 0 clamp(1rem, 2vw, 2rem) clamp(1rem, 2vw, 2rem);
 }
 
 .contact-anchor {

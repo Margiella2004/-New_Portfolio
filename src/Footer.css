@@ -8,8 +8,6 @@
   display: flex;
   justify-content: center;
   padding: 8rem 1.25rem 10rem;
-  border-radius: 0 0 clamp(1rem, 2vw, 2rem) clamp(1rem, 2vw, 2rem);
-  overflow: hidden;
 }
 
 .footer-inner {
