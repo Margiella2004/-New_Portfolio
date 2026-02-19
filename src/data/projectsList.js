@@ -1,7 +1,7 @@
 import synechronIntroImage from '../../img_assets/Syenchron cube intro.png'
 import guardianIntroImage from '../../img_assets/gaurdian.png'
 import commuteIntroImage from '../../img_assets/i_hate_my_commute/image2.png'
-import seesawIntroImage from '../../img_assets/Frame 56.png'
+import wanderIntroImage from '../../img_assets/Wander_Screen.png'
 
 export const projects = [
   {
@@ -14,14 +14,13 @@ export const projects = [
       'Synechron Cube is a 3D presentation interface designed for both laptops and a 32-panel touch wall. I defined the object metaphor, built and iterated the interaction system in Babylon.js, and tuned animations to keep the experience clear, fast, and engaging on a fragmented display. The final system let teams customize faces for their department, surface content quickly, and keep the cube in an ambient state between demos.',
   },
   {
-    id: 'seesaw-redesign',
+    id: 'wander-app',
     number: '02',
-    title: 'SeeSaw Redesign',
-    image: seesawIntroImage,
-    tags: ['UX/UI Design', 'Product Redesign'],
-    disabled: true,
+    title: 'Wander App',
+    image: wanderIntroImage,
+    tags: ['UX/UI Design', 'Travel Experience'],
     description:
-      'A focused UX/UI refresh that rethinks the SeeSaw experience with clearer navigation, calmer visual hierarchy, and faster access to key classroom workflows.',
+      'Wander is an AI-powered walking companion for busy city workers, combining guided prompts and route personalization to make short, restorative micro-journeys easier to start and sustain.',
   },
   {
     id: 'guardian-app',
