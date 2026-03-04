@@ -3,14 +3,14 @@
    =========================== */
 .wander-app-page {
   /* Colors */
-  --wander-page-bg: #ffffff;
-  --wander-title-color: #000000;
-  --wander-metadata-primary-color: #363636;
-  --wander-metadata-secondary-color: #919191;
-  --wander-description-color: #3c3c3c;
-  --wander-skill-color: #3c3c3c;
-  --wander-quote-color: #3c3c3c;
-  --wander-hero-bg: #000000;
+  --wander-page-bg: #000000;
+  --wander-title-color: #ffffff;
+  --wander-metadata-primary-color: #e5e5e5;
+  --wander-metadata-secondary-color: #a8a8a8;
+  --wander-description-color: #d6d6d6;
+  --wander-skill-color: #d6d6d6;
+  --wander-quote-color: #d6d6d6;
+  --wander-hero-bg: #ffffff;
 
   /* Spacing */
   --wander-container-padding-mobile: 1.25rem;
@@ -330,7 +330,7 @@
 }
 
 .wander-app-content-module {
-  --content-module-image-bg-dark: #ffffff;
+  --content-module-image-bg-dark: #000000;
   --content-module-image-opacity-dark: 1;
 }
 

@@ -1,0 +1,52 @@
+uniform float progress;
+uniform float uMeshHeight;
+uniform float uProgressMul;
+uniform float uRangeMul;
+uniform float uSmoothCenter;
+uniform float uCurvePow;
+uniform float uTrigFreq;
+uniform float uTrigPhase;
+uniform float uAngleAmp;
+uniform float uAxisMix;
+varying vec2 vUv;
+varying vec3 vPosition;
+float PI = 3.141592653589793238;
+
+vec3 rotatex(vec3 pos, float angle){
+  float c = cos(angle);
+  float s = sin(angle);
+  return vec3(pos.x, pos.y*c - pos.z*s, pos.y*s + pos.z*c);
+}
+
+vec3 rotatey(vec3 pos, float angle){
+  float c = cos(angle);
+  float s = sin(angle);
+  return vec3(pos.x*c + pos.z*s, pos.y, -pos.x*s + pos.z*c);
+}
+
+void main() {
+  vUv = uv;
+  vec3 pos = position;
+
+  float meshHeight = max(uMeshHeight, 0.0001);
+  float range = max(0.0001, uRangeMul * meshHeight);
+  float progressY = progress * uProgressMul;
+  pos.y += progressY;
+
+  float bandStart = uSmoothCenter - range;
+  float bandEnd = uSmoothCenter + range;
+  float normalizedY = smoothstep(bandStart, bandEnd, pos.y);
+  float trigInput = (normalizedY * uTrigFreq + uTrigPhase) * PI;
+  float base = cos(trigInput);
+  float deadZone = 0.93;
+  float mag = max(abs(base) - deadZone, 0.0) / max(1.0 - deadZone, 0.0001);
+  mag = smoothstep(0.0, 1.0, mag);
+  float curve = pow(mag, max(uCurvePow, 0.0001));
+  float angle = sign(base) * curve * uAngleAmp;
+  pos = rotatex(pos, angle * (1.0 - uAxisMix));
+  pos = rotatey(pos, angle * uAxisMix);
+
+  vec3 vWorldPosition = (modelMatrix * vec4(pos, 1.0)).xyz;
+  vPosition = vWorldPosition;
+  gl_Position = projectionMatrix * viewMatrix * vec4(vWorldPosition, 1.0);
+}

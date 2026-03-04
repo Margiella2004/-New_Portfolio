@@ -1,70 +1,89 @@
-# Projects Pages + Sticky Behavior Overview
+# Home + Projects Current Architecture and Progress
 
-This document summarizes how the projects pages are structured and where sticky/scroll reveal behavior is implemented.
+This document tracks the current home hero and `/projects` behavior, plus the latest bugfix progress around plane selection state.
 
-## Projects Section (Home Page)
+## Current Entry Points
 
-**Entry point**
-- `src/App.jsx` renders the projects section inside `#projects` and controls the hero -> projects transition.
+- Home route: `src/main.jsx` -> `<Route path="/" element={<App />} />`
+- Projects route: `src/main.jsx` -> `<Route path="/projects" element={<Projects3DPage />} />`
+- Projects page shell: `src/pages/Projects3DPage.jsx`
 
-**Layout**
-- The hero is sticky (`.hero-section`) and the projects section slides over it.
-- The projects content is built in `src/Projects.jsx` with its styles in `src/Projects.css`.
+## Home Section (Current)
 
-**Sticky behavior (home)**
-- `src/App.css`:
-  - `.hero-section` uses `position: sticky` and `top: 0`.
-  - `.projects-wrapper` has higher z-index so it visually covers the hero.
-- `src/App.jsx`:
-  - The projects container is pinned and horizontally slides in with GSAP ScrollTrigger.
-  - FOV animation is tied to scroll as the hero transitions into projects.
+### Composition
 
-## Project Detail Pages
+- `src/App.jsx` renders a single fullscreen hero section with:
+  - `HeaderNew`
+  - `HeroTextOverlay`
+  - `IntroText`
+  - `DesignEngineer`
+  - `FloatingTabs`
+  - 3D cube `Scene` (`@react-three/fiber`)
 
-There are two patterns in the codebase:
+### Motion and Performance
 
-1) **Template-based details**
-- `src/components/ProjectDetailTemplate.jsx` and `src/components/ProjectDetailTemplate.css`.
-- Used by `src/pages/WanderAppDetail.jsx`.
-- Includes an "Other Projects" grid at the bottom (static, non-sticky).
+- Intro timeline (GSAP) controls initial bloom/fresnel/text/header reveal.
+- Lenis smooth scrolling is enabled when not in low-power mode.
+- Low-power mode disables/reduces expensive visual effects and caps DPR.
 
-2) **Custom detail pages**
-- `src/pages/SynechronCubeDetail.jsx` (custom layout and media blocks).
-- `src/pages/GuardianAppDetail.jsx` (custom layout, timeline, and scroll reveals).
+### Important Notes
 
-## Guardian App Page (Custom + Sticky Reveal)
+- Home currently exposes only `id="home"`; hash targets like `#projects` and `#contact` are not mounted in the current hero-only structure.
 
-**Structure**
-- `src/pages/GuardianAppDetail.jsx` lays out the Guardian content, then two reveal stages:
-  1) Full-screen final image stage.
-  2) Full-screen "Other Projects" stage (Synechron Cube).
-  3) Footer module at the bottom.
+## Projects Section (`/projects`) (Current)
 
-**Other Projects module**
-- `src/components/OtherProjects.jsx` and `src/components/OtherProjects.css`.
-- Renders a full-bleed background image with the project title overlaid.
+### Composition
 
-**Sticky / reveal behavior**
-- `src/pages/GuardianAppDetail.jsx` uses GSAP ScrollTrigger to pin and translate:
-  - Final image stage pins and slides up to reveal the Other Projects stage underneath.
-  - Other Projects stage pins and slides up to reveal the Footer underneath.
-- `src/pages/GuardianAppDetail.css` defines the 100vh reveal stages and ensures the media fills the viewport.
+- `src/components/Projects3D.jsx` mounts:
+  - `Canvas`
+  - `GradientPlanes`
+  - optional `RotatingTitles3D`
+  - `EditorialOverlay`
 
-## Footer Reveal (Home Page)
+### Data Flow
 
-**Sticky behavior**
-- `src/App.jsx` uses ScrollTrigger to pin the about section and translate the footer into view after the FOV animation finishes.
-- The footer is rendered in `src/Footer.jsx` with styles in `src/Footer.css`.
+- `src/adapters/projectAdapter.js` adapts `projectsList` and `projectsData` into the scene/overlay format.
+- `useSharedTexturesWithRenderer` handles texture loading and fallback.
 
-## Files to Inspect
+### Interaction Model
 
-- `src/App.jsx`
-- `src/App.css`
-- `src/Projects.jsx`
-- `src/Projects.css`
-- `src/pages/GuardianAppDetail.jsx`
-- `src/pages/GuardianAppDetail.css`
-- `src/components/OtherProjects.jsx`
-- `src/components/OtherProjects.css`
-- `src/Footer.jsx`
-- `src/Footer.css`
+- Scroll: `VirtualScroll` + spring integration in `GradientPlanes`.
+- Click behavior: first click selects plane; second click navigates to project route.
+
+## Progress Log (This Session)
+
+### 1. Root Cause Analysis Completed
+
+- Reviewed home and projects architecture in:
+  - `src/App.jsx`
+  - `src/components/Projects3D.jsx`
+  - `src/components/GradientPlanes.jsx`
+  - `src/components/HeaderNew.jsx`
+  - supporting CSS and data adapter files
+
+### 2. Plane Selection Reset Fixes Implemented
+
+All changes were applied in `src/components/GradientPlanes.jsx`.
+
+- Added reset behavior so selection no longer remains sticky after scrolling away.
+- Added deterministic reset conditions for infinite loop behavior:
+  - reset when selected plane leaves click/interact range
+  - reset when selected plane is no longer the focused in-range plane
+- Enforced single selection:
+  - selecting a plane now replaces previous selection (`new Set([index])`)
+- Ensured non-selected planes remain default (not hidden by selection state).
+- Updated active/full-opacity logic:
+  - full opacity is tied to the in-range focused plane, not stale selected index.
+
+### 3. Validation
+
+- Linted updated component:
+  - `npx eslint src/components/GradientPlanes.jsx`
+  - status: passing
+
+## Files Touched in This Progress Update
+
+- Code:
+  - `src/components/GradientPlanes.jsx`
+- Documentation:
+  - `Markdown/PROJECTS_AND_STICKY.md`

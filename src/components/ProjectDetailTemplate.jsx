@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import ProjectDetailHeader from './ProjectDetailHeader';
+import HeaderNew from './HeaderNew';
 import OtherProjects from './OtherProjects';
 import { getOtherProjects } from '../data/projectsData';
 import './ProjectDetailTemplate.css';
@@ -14,7 +14,7 @@ export default function ProjectDetailTemplate({ project }) {
 
   return (
     <>
-      <ProjectDetailHeader />
+      <HeaderNew activeSection="projects" />
       <main className="project-detail-page">
         <div className="project-detail-container">
           {/* Header Section */}

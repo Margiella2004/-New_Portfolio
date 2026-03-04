@@ -9,16 +9,16 @@ export const projects = [
     number: '01',
     title: 'Synechron Cube',
     image: synechronIntroImage,
-    tags: ['3D Interface', 'Interaction Design', 'Three.js'],
+    tags: ['3D Design', 'Interaction Design'],
     description:
-      'Synechron Cube is a 3D presentation interface designed for both laptops and a 32-panel touch wall. I defined the object metaphor, built and iterated the interaction system in Babylon.js, and tuned animations to keep the experience clear, fast, and engaging on a fragmented display. The final system let teams customize faces for their department, surface content quickly, and keep the cube in an ambient state between demos.',
+      'A 3D presentation interface designed for laptops and a 32-panel touch wall. Built the interaction system in Babylon.js and tuned animations to keep the experience clear and engaging on a fragmented display.',
   },
   {
     id: 'wander-app',
     number: '02',
     title: 'Wander App',
     image: wanderIntroImage,
-    tags: ['UX/UI Design', 'Travel Experience'],
+    tags: ['UX Design', 'UI Design'],
     description:
       'Wander is an AI-powered walking companion for busy city workers, combining guided prompts and route personalization to make short, restorative micro-journeys easier to start and sustain.',
   },
@@ -27,16 +27,16 @@ export const projects = [
     number: '03',
     title: 'Guardian App',
     image: guardianIntroImage,
-    tags: ['AI for Social Good', 'UX Research', 'Caregiving'],
+    tags: ['UX Research', 'UI Design'],
     description:
-      'Guardian App is a BRIDEGOOD AI for Social Good hackathon concept built to support elders and caregivers during scam calls. I led UX research and interaction design, translating anxiety and confusion into calm, step-by-step guidance that works in the moment. The product focuses on privacy-safe verification, clear risk summaries, and the ability for caregivers to intervene in calls with the help of AI.',
+      'A hackathon concept supporting elders and caregivers during scam calls. Led UX research and interaction design, translating anxiety into calm, step-by-step guidance with AI-assisted caregiver intervention.',
   },
   {
     id: 'i-hate-my-commute',
     number: '04',
     title: 'I Hate My Commute',
     image: commuteIntroImage,
-    tags: ['Creative Coding', 'React Three Fiber', 'Speculative Design'],
+    tags: ['Creative Coding', '3D Design'],
     description:
       'A vibe-coded visualization exploring the global commute experience, built with React Three Fiber and custom shaders. This project reflects on how AI coding tools shape creative outcomes and where human intention must push back against algorithmic biases.',
   },

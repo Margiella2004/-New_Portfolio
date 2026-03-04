@@ -1,0 +1,74 @@
+.about-overlay-host {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+}
+
+.about-overlay-backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(0, 0, 0, 0.32);
+  opacity: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  animation: about-overlay-backdrop-in 420ms ease-out forwards;
+}
+
+.about-overlay-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100dvh;
+  border-radius: 0;
+  background: #6f3d59;
+  box-shadow: none;
+  padding: 1.25rem;
+  overflow: auto;
+  transform: translateY(100%);
+  will-change: transform;
+  animation: about-overlay-slide-up 620ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.about-overlay-original {
+  padding: 8rem 1.25rem 10rem;
+  min-height: calc(100dvh - 3rem);
+}
+
+.about-overlay-original.module-footer {
+  justify-content: flex-start;
+  background-color: transparent;
+}
+
+.about-overlay-original .aboutme-heading,
+.about-overlay-original .aboutme-status-text,
+.about-overlay-original .aboutme-para {
+  color: #ffffff;
+}
+
+.about-overlay-original .aboutme-status-dot {
+  background: #e6e6e6;
+}
+
+.about-overlay-original .aboutme-underline {
+  background-image: linear-gradient(#ffffff, #ffffff);
+}
+
+@keyframes about-overlay-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes about-overlay-slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0%);
+  }
+}

@@ -3,14 +3,14 @@
    =========================== */
 .guardian-app-page {
   /* Colors */
-  --guardian-page-bg: #ffffff;
-  --guardian-title-color: #000000;
-  --guardian-metadata-primary-color: #363636;
-  --guardian-metadata-secondary-color: #919191;
-  --guardian-description-color: #3c3c3c;
-  --guardian-skill-color: #3c3c3c;
-  --guardian-quote-color: #3c3c3c;
-  --guardian-hero-bg: #000000;
+  --guardian-page-bg: #000000;
+  --guardian-title-color: #ffffff;
+  --guardian-metadata-primary-color: #e5e5e5;
+  --guardian-metadata-secondary-color: #a8a8a8;
+  --guardian-description-color: #d6d6d6;
+  --guardian-skill-color: #d6d6d6;
+  --guardian-quote-color: #d6d6d6;
+  --guardian-hero-bg: #ffffff;
 
   /* Spacing - Matching Synechron */
   --guardian-container-padding-mobile: 1.25rem;
@@ -437,7 +437,7 @@
 .guardian-app-three-image-item {
   flex: 1;
   width: 100%;
-  background: #000000;
+  background: #ffffff;
   border-radius: 1.25rem;
   overflow: hidden;
   height: auto;
@@ -481,7 +481,7 @@
 
 .guardian-app-single-image-item {
   width: 100%;
-  background: #000000;
+  background: #ffffff;
   border-radius: 1.25rem;
   overflow: hidden;
   height: auto;
@@ -540,7 +540,7 @@
 
 .guardian-app-two-image-item {
   width: 100%;
-  background: #000000;
+  background: #ffffff;
   border-radius: 1.25rem;
   overflow: hidden;
   height: auto;

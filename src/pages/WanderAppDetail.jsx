@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import ProjectDetailHeader from '../components/ProjectDetailHeader';
+import HeaderNew from '../components/HeaderNew';
 import ContentModule from '../components/ContentModule';
 import OtherProjects from '../components/OtherProjects';
 import { projectsData } from '../data/projectsData';
@@ -68,7 +68,7 @@ export default function WanderAppDetail() {
 
   return (
     <>
-      <ProjectDetailHeader />
+      <HeaderNew activeSection="projects" />
       <main className="wander-app-page">
         <div className="wander-app-container">
           <header className="wander-app-header">

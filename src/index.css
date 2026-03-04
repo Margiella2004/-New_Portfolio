@@ -30,12 +30,6 @@ body {
   scroll-behavior: auto;
 }
 
-body,
-body * {
-  cursor: none !important;
-}
-
-
 .route-preload {
   opacity: 0;
   pointer-events: none;

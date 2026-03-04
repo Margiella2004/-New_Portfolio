@@ -3,15 +3,15 @@
    =========================== */
 .commute-page {
   /* Colors */
-  --commute-page-bg: #ffffff;
-  --commute-title-color: #000000;
-  --commute-metadata-primary-color: #363636;
-  --commute-metadata-secondary-color: #919191;
-  --commute-description-color: #3c3c3c;
-  --commute-skill-color: #3c3c3c;
-  --commute-quote-color: #3c3c3c;
-  --commute-other-projects-title-color: #323232;
-  --commute-hero-bg: #000000;
+  --commute-page-bg: #000000;
+  --commute-title-color: #ffffff;
+  --commute-metadata-primary-color: #e5e5e5;
+  --commute-metadata-secondary-color: #a8a8a8;
+  --commute-description-color: #d6d6d6;
+  --commute-skill-color: #d6d6d6;
+  --commute-quote-color: #d6d6d6;
+  --commute-other-projects-title-color: #f0f0f0;
+  --commute-hero-bg: #ffffff;
   --commute-hero-image-opacity: 0.9;
 
   /* Spacing */
@@ -357,7 +357,7 @@
   font-family: 'Pangea Afrikan VAR 2.003', sans-serif;
   font-weight: 400;
   font-size: 1.5rem;
-  color: #000000;
+  color: #ffffff;
   letter-spacing: -0.03em;
   line-height: 1.2;
   text-decoration: underline;

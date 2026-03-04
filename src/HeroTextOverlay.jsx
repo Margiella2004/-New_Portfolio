@@ -10,6 +10,7 @@ export default function HeroTextOverlay({
   opacity = 1,
   startDelay = 0,
   autoplayOverride,
+  levaStore,
 }) {
   const containerRef = useRef(null)
   const phraseRef = useRef(null)
@@ -25,7 +26,8 @@ export default function HeroTextOverlay({
       yOffset: { value: 0, min: -200, max: 200, step: 1, label: 'offset Y' },
       textColor: { value: '#ffffff', label: 'left text' },
     },
-    { collapsed: false }
+    { collapsed: false },
+    { store: levaStore }
   )
 
   const shouldAutoplay =

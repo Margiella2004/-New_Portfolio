@@ -3,11 +3,11 @@
    =========================== */
 .content-module {
   /* Colors */
-  --content-module-bg: #ffffff;
-  --content-module-image-bg: #f3f3f3;
-  --content-module-image-bg-dark: #000000;
-  --content-module-title-color: #323232;
-  --content-module-description-color: #5f5d5d;
+  --content-module-bg: #000000;
+  --content-module-image-bg: #0c0c0c;
+  --content-module-image-bg-dark: #ffffff;
+  --content-module-title-color: #f2f2f2;
+  --content-module-description-color: #cfcfcf;
   --content-module-overlay-text-color: #ffffff;
   --content-module-image-opacity: 1;
   --content-module-image-opacity-dark: 0.9;

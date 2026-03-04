@@ -37,3 +37,5 @@ export const useControls = (...args) => {
 }
 
 export const Leva = () => null
+export const LevaPanel = () => null
+export const useCreateStore = () => ({})

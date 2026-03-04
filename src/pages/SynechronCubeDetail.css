@@ -3,15 +3,15 @@
    =========================== */
 .synechron-cube-page {
   /* Colors */
-  --synechron-page-bg: #ffffff;
-  --synechron-title-color: #000000;
-  --synechron-metadata-primary-color: #363636;
-  --synechron-metadata-secondary-color: #919191;
-  --synechron-description-color: #3c3c3c;
-  --synechron-skill-color: #3c3c3c;
-  --synechron-quote-color: #3c3c3c;
-  --synechron-other-projects-title-color: #323232;
-  --synechron-hero-bg: #000000;
+  --synechron-page-bg: #000000;
+  --synechron-title-color: #ffffff;
+  --synechron-metadata-primary-color: #e5e5e5;
+  --synechron-metadata-secondary-color: #a8a8a8;
+  --synechron-description-color: #d6d6d6;
+  --synechron-skill-color: #d6d6d6;
+  --synechron-quote-color: #d6d6d6;
+  --synechron-other-projects-title-color: #f0f0f0;
+  --synechron-hero-bg: #ffffff;
   --synechron-hero-image-opacity: 0.9;
 
   /* Spacing */
@@ -440,7 +440,7 @@
   width: 100%;
   border-radius: 1.25rem;
   overflow: hidden;
-  background: #000000;
+  background: #ffffff;
   aspect-ratio: 4 / 3;
 }
 

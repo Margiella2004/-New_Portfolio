@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Leva, folder, useControls } from 'leva';
-import ProjectDetailHeader from '../components/ProjectDetailHeader';
+import HeaderNew from '../components/HeaderNew';
 import ContentModule from '../components/ContentModule';
 import { projectsData } from '../data/projectsData';
 import SynechronTimeline from '../components/SynechronTimeline';
@@ -123,7 +123,7 @@ export default function SynechronCubeDetail() {
 
   return (
     <>
-      <ProjectDetailHeader />
+      <HeaderNew activeSection="projects" />
       <main
         className="synechron-cube-page"
         style={{

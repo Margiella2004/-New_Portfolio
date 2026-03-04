@@ -4,10 +4,11 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import posthog from 'posthog-js'
 import gsap from 'gsap'
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
-import GlobalCursor from './components/GlobalCursor'
+import AboutOverlayHost from './components/AboutOverlayHost'
 import './index.css'
 
 const App = lazy(() => import('./App.jsx'))
+const Projects3DPage = lazy(() => import('./pages/Projects3DPage'))
 const GuardianAppDetail = lazy(() => import('./pages/GuardianAppDetail'))
 const WanderAppDetail = lazy(() => import('./pages/WanderAppDetail'))
 const SynechronCubeDetail = lazy(() => import('./pages/SynechronCubeDetail'))
@@ -51,7 +52,7 @@ function ScrollToHash() {
     if (typeof window === 'undefined') return
 
     const getHeaderOffset = () => {
-      const header = document.querySelector('.header')
+      const header = document.querySelector('.header-new, .header')
       if (!header) return 0
       const rect = header.getBoundingClientRect()
       const extraOffset = 8
@@ -99,6 +100,7 @@ function ScrollToHash() {
 
     const targetId = hash.replace('#', '')
     if (!targetId) return
+    if (targetId === 'projects' || targetId === 'about') return
 
     let cancelled = false
     let attempts = 0
@@ -163,13 +165,14 @@ function AppShell() {
 
   return (
     <BrowserRouter>
-      <GlobalCursor />
       <PosthogPageView />
       <ScrollToHash />
+      <AboutOverlayHost />
       <RouteLoadingOverlay active={routeLoading} />
       <Suspense fallback={<RouteLoadingFallback onLoadingChange={setRouteLoading} />}>
         <Routes>
           <Route path="/" element={<App />} />
+          <Route path="/projects" element={<Projects3DPage />} />
           <Route path="/project/guardian-app" element={<GuardianAppDetail />} />
           <Route path="/project/wander-app" element={<WanderAppDetail />} />
           <Route path="/project/synechron-cube" element={<SynechronCubeDetail />} />

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import ProjectDetailHeader from '../components/ProjectDetailHeader';
+import HeaderNew from '../components/HeaderNew';
 import GuardianTimeline from '../components/GuardianTimeline';
 import ContentModule from '../components/ContentModule';
 import OtherProjects from '../components/OtherProjects';
@@ -91,7 +91,7 @@ export default function GuardianAppDetail() {
 
   return (
     <>
-      <ProjectDetailHeader />
+      <HeaderNew activeSection="projects" />
       <main className="guardian-app-page">
         <div className="guardian-app-container">
 
