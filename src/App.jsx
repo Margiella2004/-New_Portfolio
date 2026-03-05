@@ -13,7 +13,6 @@ import { Iridescence } from './IridescenceMaterial'
 import HeaderNew from './components/HeaderNew'
 import IntroText from './IntroText'
 import DesignEngineer from './DesignEngineer'
-import FloatingTabs from './FloatingTabs'
 import HeroTextOverlay from './HeroTextOverlay'
 import Projects3D from './components/Projects3D'
 import { preloadAssets } from './preloadAssets'
@@ -789,20 +788,6 @@ function App() {
       },
       { collapsed: false }
     ),
-    'Floating Tabs': folder(
-      {
-        tabsEnabled: { value: true, label: 'enabled' },
-        tabsFloatAmpX: { value: 24, min: 0, max: 80, step: 1, label: 'float X' },
-        tabsFloatAmpY: { value: 26, min: 0, max: 80, step: 1, label: 'float Y' },
-        tabsFloatSpeedX: { value: 9, min: 1, max: 20, step: 0.5, label: 'speed X' },
-        tabsFloatSpeedY: { value: 8, min: 1, max: 20, step: 0.5, label: 'speed Y' },
-        tabsHoverScale: { value: 1.05, min: 1, max: 1.6, step: 0.01, label: 'hover scale' },
-        tabsDragScale: { value: 1.1, min: 1, max: 2, step: 0.01, label: 'drag scale' },
-        tabsArrowWiggle: { value: 3, min: 0, max: 12, step: 0.1, label: 'arrow wiggle' },
-        tabsArrowDelayOffset: { value: 0, min: -2, max: 2, step: 0.1, label: 'arrow delay' },
-      },
-      { collapsed: true }
-    ),
   }, { store: homeLevaStore })
 
   useEffect(() => {
@@ -1184,8 +1169,6 @@ function App() {
   const showProjectsLeva = projectsRequested && !introActive
   const projectsInteractive = projectsRevealProgress > 0.88 && !introActive
   const canvasOpacity = 1
-  const tabsOpacity = introActive ? 0 : clamp(1 - (projectsRevealProgress * 1.35), 0, 1)
-  const tabsEnabled = controls.tabsEnabled && tabsOpacity > 0.02
   const bloomMouseX = mouseTrackingEnabled ? (mouseBloom.x - 0.5) * 2 : 0
   const bloomMouseY = mouseTrackingEnabled ? (mouseBloom.y - 0.5) * 2 : 0
   const dynamicBloomIntensity = clamp(
@@ -1371,25 +1354,6 @@ function App() {
             <p className="hero-end-title">Call me beep me if you want to reach me</p>
             <p className="hero-end-email">jonatharameshdesign@gmail.com</p>
           </div>
-        </div>
-
-        <div
-          className="floating-tabs-layer"
-          style={{ opacity: tabsOpacity }}
-          aria-hidden={!tabsEnabled}
-        >
-          <FloatingTabs
-            enabled={tabsEnabled}
-            introActive={introActive}
-            floatAmpX={controls.tabsFloatAmpX}
-            floatAmpY={controls.tabsFloatAmpY}
-            floatSpeedX={controls.tabsFloatSpeedX}
-            floatSpeedY={controls.tabsFloatSpeedY}
-            hoverScale={controls.tabsHoverScale}
-            dragScale={controls.tabsDragScale}
-            arrowWiggle={controls.tabsArrowWiggle}
-            arrowDelayOffset={controls.tabsArrowDelayOffset}
-          />
         </div>
 
         <div
