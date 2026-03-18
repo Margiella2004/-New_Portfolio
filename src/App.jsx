@@ -7,14 +7,13 @@ import { Color } from 'three'
 import { BlendFunction } from 'postprocessing'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { useLocation } from 'react-router-dom'
 import Lenis from 'lenis'
 import { Iridescence } from './IridescenceMaterial'
 import HeaderNew from './components/HeaderNew'
 import IntroText from './IntroText'
 import DesignEngineer from './DesignEngineer'
 import HeroTextOverlay from './HeroTextOverlay'
-import Projects3D from './components/Projects3D'
+import Projects from './Projects'
 import { preloadAssets } from './preloadAssets'
 import './App.css'
 import heroLogo from '../img_assets/logo.svg'
@@ -351,7 +350,6 @@ function Scene({
 }
 
 function App() {
-  const location = useLocation()
   const homeLevaStore = useCreateStore()
   // Container ref for scroll structure
   const containerRef = useRef(null)
@@ -370,7 +368,6 @@ function App() {
   const [introBloom, setIntroBloom] = useState({ ...INTRO_BLOOM_START })
   const [introFresnelOffset, setIntroFresnelOffset] = useState(INTRO_FRESNEL_START)
   const [introActive, setIntroActive] = useState(true)
-  const [projectsRevealProgress, setProjectsRevealProgress] = useState(0)
   const scrollFov = 0
   const scrollStopBCRef = useRef(0)
   const scrollStopBCTargetRef = useRef(0)
@@ -389,10 +386,7 @@ function App() {
   const mouseBloomRafRef = useRef(null)
   const mouseBloomLastTimeRef = useRef(0)
   const mouseBloomStateRef = useRef({ x: 0.5, y: 0.5 })
-  const projectsRevealProgressRef = useRef(0)
-  const previousProjectsRequestedRef = useRef(false)
   const mouseActivityRef = useRef(0)
-  const [projectsIntroCycle, setProjectsIntroCycle] = useState(0)
   const defaultFov = typeof window !== 'undefined' && window.innerWidth <= 768 ? 22 : 12
   const isLowPower = useMemo(() => {
     if (typeof window === 'undefined' || typeof navigator === 'undefined') return false
@@ -417,7 +411,7 @@ function App() {
     if (typeof window === 'undefined') return false
     return new URLSearchParams(window.location.search).get('preload') === 'block'
   }, [])
-  const projectsRequested = location.hash === '#projects'
+
   const updateScrollStopBC = useCallback(
     (value) => {
       if (lowPowerMode) return
@@ -437,12 +431,6 @@ function App() {
     },
     [lowPowerMode]
   )
-  const updateProjectsRevealProgress = useCallback((value) => {
-    const clamped = Math.min(1, Math.max(0, value))
-    if (Math.abs(clamped - projectsRevealProgressRef.current) < 0.002) return
-    projectsRevealProgressRef.current = clamped
-    setProjectsRevealProgress(clamped)
-  }, [])
 
   useEffect(() => {
     if (!lowPowerMode) return
@@ -520,15 +508,12 @@ function App() {
       }
 
       if (heroContentRef.current) {
-        if (introActiveRef.current) {
+        if (introActive) {
           heroContentRef.current.style.opacity = '0'
-          updateProjectsRevealProgress(0)
           return
         }
 
-        const targetReveal = projectsRequested ? 1 : 0
-        heroContentRef.current.style.opacity = String(1 - targetReveal)
-        updateProjectsRevealProgress(targetReveal)
+        heroContentRef.current.style.opacity = '1'
       }
     }
 
@@ -556,46 +541,11 @@ function App() {
       window.removeEventListener('resize', handleResize)
       if (rafId) cancelAnimationFrame(rafId)
     }
-  }, [enableScrollStopBC, projectsRequested, updateProjectsRevealProgress, updateScrollStopBC])
-
-  useEffect(() => {
-    if (typeof document === 'undefined') return undefined
-    if (!projectsRequested || introActive) return undefined
-
-    const body = document.body
-    const html = document.documentElement
-    const previousBodyOverflow = body.style.overflow
-    const previousHtmlOverflow = html.style.overflow
-
-    body.style.overflow = 'hidden'
-    html.style.overflow = 'hidden'
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
-
-    return () => {
-      body.style.overflow = previousBodyOverflow
-      html.style.overflow = previousHtmlOverflow
-    }
-  }, [introActive, projectsRequested])
-
-  useEffect(() => {
-    const wasRequested = previousProjectsRequestedRef.current
-    if (!wasRequested && projectsRequested && !introActive) {
-      setProjectsIntroCycle((current) => current + 1)
-    }
-    previousProjectsRequestedRef.current = projectsRequested
-  }, [introActive, projectsRequested])
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return undefined
-    const handleProjectsTabClicked = () => {
-      if (!projectsRequested || introActive) return
-      setProjectsIntroCycle((current) => current + 1)
-    }
-    window.addEventListener('projects-tab-clicked', handleProjectsTabClicked)
-    return () => {
-      window.removeEventListener('projects-tab-clicked', handleProjectsTabClicked)
-    }
-  }, [introActive, projectsRequested])
+  }, [
+    enableScrollStopBC,
+    introActive,
+    updateScrollStopBC,
+  ])
 
   useEffect(() => {
     if (typeof window === 'undefined' || !heroEndRef.current) return undefined
@@ -646,13 +596,11 @@ function App() {
         1,
         Math.max(0, (heroProgress - revealStart) / (1 - revealStart))
       )
-      const projectsMask = Math.min(1, projectsRevealProgressRef.current * 1.25)
-      const heroEndOpacity = revealProgress * (1 - projectsMask)
-      heroEndRef.current.style.opacity = String(heroEndOpacity)
-      heroEndRef.current.style.pointerEvents = heroEndOpacity > 0.1 ? 'auto' : 'none'
+      heroEndRef.current.style.opacity = String(revealProgress)
+      heroEndRef.current.style.pointerEvents = revealProgress > 0.1 ? 'auto' : 'none'
       heroEndRef.current.style.setProperty(
         '--hero-end-offset',
-        `${(1 - heroEndOpacity) * 16}px`
+        `${(1 - revealProgress) * 16}px`
       )
     }
 
@@ -970,22 +918,6 @@ function App() {
       INTRO_TEXT_START_DELAY + INTRO_TEXT_VISIBLE_DURATION
     )
 
-    if (headerRef.current) {
-      tl.to(
-        headerRef.current,
-        {
-          opacity: 1,
-          y: 0,
-          duration: INTRO_HEADER_FADE_DURATION,
-          ease: 'power2.inOut',
-          onStart: () => {
-            headerRef.current.style.pointerEvents = 'auto'
-          },
-        },
-        INTRO_HEADER_FADE_START
-      )
-    }
-
     if (heroContentRef.current) {
       tl.to(
         heroContentRef.current,
@@ -1162,13 +1094,9 @@ function App() {
     : controls.fresnelOffset
 
   const mouseTrackingEnabled =
-    activeSection !== 'contact' &&
+    activeSection === 'home' &&
     !lowPowerMode &&
-    !introActive &&
-    projectsRevealProgress < 0.2
-  const showProjectsLeva = projectsRequested && !introActive
-  const projectsInteractive = projectsRevealProgress > 0.88 && !introActive
-  const canvasOpacity = 1
+    !introActive
   const bloomMouseX = mouseTrackingEnabled ? (mouseBloom.x - 0.5) * 2 : 0
   const bloomMouseY = mouseTrackingEnabled ? (mouseBloom.y - 0.5) * 2 : 0
   const dynamicBloomIntensity = clamp(
@@ -1204,9 +1132,33 @@ function App() {
   )
 
   useEffect(() => {
-    if (headerRef.current) {
-      gsap.set(headerRef.current, { opacity: 1, y: 0, clearProps: 'opacity,y' })
+    if (!headerRef.current) return undefined
+
+    if (introActive) {
+      gsap.set(headerRef.current, { opacity: 0, y: -10, pointerEvents: 'none' })
+      return undefined
     }
+
+    gsap.to(headerRef.current, {
+      opacity: 1,
+      y: 0,
+      duration: INTRO_HEADER_FADE_DURATION,
+      ease: 'power2.inOut',
+      overwrite: 'auto',
+      onStart: () => {
+        if (headerRef.current) {
+          headerRef.current.style.pointerEvents = 'auto'
+        }
+      },
+      onComplete: () => {
+        if (headerRef.current) {
+          gsap.set(headerRef.current, { clearProps: 'opacity,y' })
+        }
+      },
+    })
+  }, [introActive])
+
+  useEffect(() => {
     const ctx = gsap.context(() => {
       if (!heroContentRef.current) return
 
@@ -1244,21 +1196,12 @@ function App() {
 
     const sections = [
       { id: 'home', element: heroSectionRef.current },
-      ...(projectsRequested
-        ? [{ id: 'projects', element: projectsSectionRef.current }]
-        : []),
+      { id: 'projects', element: projectsSectionRef.current },
     ].filter((section) => section.element)
 
     let rafId = null
 
     const updateActiveSection = () => {
-      if (projectsRequested) {
-        setActiveSection((current) =>
-          current === 'projects' ? current : 'projects'
-        )
-        return
-      }
-
       const offset = getHeaderOffset() + 4
       const scrollPosition = window.scrollY + offset
       let nextSection = sections[0]?.id || 'home'
@@ -1291,7 +1234,7 @@ function App() {
       window.removeEventListener('scroll', handleScroll)
       window.removeEventListener('resize', handleScroll)
     }
-  }, [projectsRequested])
+  }, [])
 
   if (preloadBlocking && !assetsReady) {
     return (
@@ -1313,7 +1256,7 @@ function App() {
       <LevaPanel
         store={homeLevaStore}
         collapsed={false}
-        hidden={showProjectsLeva}
+        hidden={false}
         fill={false}
         flat={false}
         oneLineLabels={false}
@@ -1325,6 +1268,7 @@ function App() {
         innerRef={headerRef}
         activeSection={activeSection}
         blendActive={headerBlendActive}
+        hidden={introActive}
       />
 
       {/* Sticky Hero Section */}
@@ -1363,7 +1307,6 @@ function App() {
             '--canvas-blur': `${effectiveBlur}px`,
             '--noise-opacity': effectiveNoiseOpacity,
             '--canvas-saturation': saturationFactor,
-            opacity: canvasOpacity,
           }}
         >
           <Scene
@@ -1408,28 +1351,15 @@ function App() {
             lowPowerMode={lowPowerMode}
           />
         </div>
-
-        <div
-          className={`projects-canvas-overlay${projectsInteractive ? ' is-interactive' : ''}`}
-          style={{ opacity: projectsRevealProgress }}
-          aria-hidden={!projectsInteractive}
-        >
-          <Projects3D
-            key={`projects-intro-${projectsIntroCycle}`}
-            className="projects-3d--overlay"
-            showLeva={showProjectsLeva}
-            pointerEvents={showProjectsLeva ? 'auto' : 'none'}
-            transparentBackground
-          />
-        </div>
       </div>
 
       <div
         ref={projectsSectionRef}
         id="projects"
-        className="projects-scroll-spacer"
-        aria-hidden="true"
-      />
+        className="projects-wrapper"
+      >
+        <Projects />
+      </div>
 
     </div>
   )

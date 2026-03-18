@@ -4,10 +4,10 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import posthog from 'posthog-js'
 import gsap from 'gsap'
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
-import AboutOverlayHost from './components/AboutOverlayHost'
 import './index.css'
 
 const App = lazy(() => import('./App.jsx'))
+const AboutPage = lazy(() => import('./pages/AboutPage'))
 const Projects3DPage = lazy(() => import('./pages/Projects3DPage'))
 const GuardianAppDetail = lazy(() => import('./pages/GuardianAppDetail'))
 const WanderAppDetail = lazy(() => import('./pages/WanderAppDetail'))
@@ -100,7 +100,6 @@ function ScrollToHash() {
 
     const targetId = hash.replace('#', '')
     if (!targetId) return
-    if (targetId === 'projects' || targetId === 'about') return
 
     let cancelled = false
     let attempts = 0
@@ -167,11 +166,11 @@ function AppShell() {
     <BrowserRouter>
       <PosthogPageView />
       <ScrollToHash />
-      <AboutOverlayHost />
       <RouteLoadingOverlay active={routeLoading} />
       <Suspense fallback={<RouteLoadingFallback onLoadingChange={setRouteLoading} />}>
         <Routes>
           <Route path="/" element={<App />} />
+          <Route path="/about" element={<AboutPage />} />
           <Route path="/projects" element={<Projects3DPage />} />
           <Route path="/project/guardian-app" element={<GuardianAppDetail />} />
           <Route path="/project/wander-app" element={<WanderAppDetail />} />

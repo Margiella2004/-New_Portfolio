@@ -1,0 +1,14 @@
+.about-page {
+  min-height: 100dvh;
+  width: 100%;
+  background: #ffffff;
+}
+
+.about-page-content {
+  width: 100%;
+  padding-top: 4.5rem;
+}
+
+.about-page-module {
+  padding-top: 4rem;
+}

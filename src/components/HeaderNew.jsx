@@ -6,7 +6,7 @@ import './HeaderNew.css'
 
 const PRIMARY_NAV_ITEMS = ['Home', 'Projects', 'About']
 
-export default function HeaderNew({ innerRef, activeSection, blendActive }) {
+export default function HeaderNew({ innerRef, activeSection, blendActive, hidden = false }) {
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -16,22 +16,25 @@ export default function HeaderNew({ innerRef, activeSection, blendActive }) {
   const primaryItemRefs = useRef({})
   const primaryInitializedRef = useRef(false)
 
-  // Sync primary nav with activeSection prop
   useLayoutEffect(() => {
-    if (location.hash === '#about') {
+    if (location.pathname === '/about') {
       setActivePrimaryNav('About')
-    } else if (location.pathname.startsWith('/project/')) {
-      setActivePrimaryNav('Projects')
-    } else if (activeSection === 'home') {
-      setActivePrimaryNav('Home')
-    } else if (activeSection === 'projects') {
-      setActivePrimaryNav('Projects')
-    } else if (activeSection === 'contact') {
-      setActivePrimaryNav('About')
+      return
     }
-  }, [activeSection, location.hash])
 
-  // Move primary indicator
+    if (
+      location.pathname.startsWith('/project/') ||
+      location.pathname === '/projects' ||
+      location.hash === '#projects' ||
+      activeSection === 'projects'
+    ) {
+      setActivePrimaryNav('Projects')
+      return
+    }
+
+    setActivePrimaryNav('Home')
+  }, [activeSection, location.hash, location.pathname])
+
   const movePrimaryIndicator = useCallback((animate) => {
     const activeNode = primaryItemRefs.current[activePrimaryNav]
     const indicatorNode = primaryIndicatorRef.current
@@ -88,29 +91,18 @@ export default function HeaderNew({ innerRef, activeSection, blendActive }) {
   const handlePrimaryNavClick = (item) => {
     const sectionId = item.toLowerCase()
 
-    // Projects tab scrolls to the on-page projects reveal anchor.
     if (sectionId === 'projects') {
-      if (location.pathname.startsWith('/project/')) {
-        navigate('/projects')
-        setActivePrimaryNav(item)
-        return
-      }
-      if (typeof window !== 'undefined') {
-        window.dispatchEvent(new CustomEvent('projects-tab-clicked'))
-      }
       navigate({ pathname: '/', hash: '#projects' })
       setActivePrimaryNav(item)
       return
     }
 
-    // About opens the global about overlay.
     if (sectionId === 'about') {
-      navigate({ pathname: location.pathname, hash: '#about' })
+      navigate('/about')
       setActivePrimaryNav(item)
       return
     }
 
-    // Home
     navigate('/')
     setActivePrimaryNav(item)
   }
@@ -122,14 +114,16 @@ export default function HeaderNew({ innerRef, activeSection, blendActive }) {
   }
 
   return (
-    <header ref={innerRef} className={`header-new${blendActive ? ' header-new--blend' : ''}`}>
-      {/* Brand */}
+    <header
+      ref={innerRef}
+      className={`header-new${blendActive ? ' header-new--blend' : ''}`}
+      style={hidden ? { opacity: 0, pointerEvents: 'none' } : undefined}
+    >
       <a href="/" className="header-new-brand" onClick={handleLogoClick} aria-label="Go to home">
         <img src={logoMark} alt="" className="header-new-brand-icon" aria-hidden="true" />
         <span className="header-new-brand-name">jon.ram</span>
       </a>
 
-      {/* Primary Pill Navigation */}
       <nav className="header-navbar header-navbar-primary">
         <span ref={primaryIndicatorRef} className="header-navbar-indicator" aria-hidden="true" />
         {PRIMARY_NAV_ITEMS.map((item) => (

@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import logoMark from '../../img_assets/logo.svg';
 import '../Header.css';
 import useHeaderBlend from '../hooks/useHeaderBlend';
@@ -9,7 +9,6 @@ export default function ProjectDetailHeader() {
   const headerRef = useRef(null);
   const blendActive = useHeaderBlend(headerRef);
   const navigate = useNavigate();
-  const location = useLocation();
 
   const handleNavClick = (path) => (event) => {
     event.preventDefault();
@@ -19,10 +18,8 @@ export default function ProjectDetailHeader() {
     if (path.includes('#')) {
       const [, hash] = path.split('#');
       navigate({ pathname: '/', hash: `#${hash}` });
-    } else if (location.pathname !== '/') {
-      navigate(path);
     } else {
-      window.history.replaceState(null, '', '/');
+      navigate(path);
     }
     setMenuOpen(false);
   };
@@ -47,7 +44,7 @@ export default function ProjectDetailHeader() {
         <nav className="nav-links">
           <a href="/" className="nav-link" onClick={handleNavClick('/')}>home</a>
           <a href="/#projects" className="nav-link" onClick={handleNavClick('/#projects')}>projects</a>
-          <a href="/#about" className="nav-link" onClick={handleNavClick('/#about')}>about</a>
+          <a href="/about" className="nav-link" onClick={handleNavClick('/about')}>about</a>
         </nav>
 
         <button
@@ -69,7 +66,7 @@ export default function ProjectDetailHeader() {
           <nav className="mobile-nav">
             <a href="/" className="mobile-nav-link" onClick={handleNavClick('/')}>home</a>
             <a href="/#projects" className="mobile-nav-link" onClick={handleNavClick('/#projects')}>projects</a>
-            <a href="/#about" className="mobile-nav-link" onClick={handleNavClick('/#about')}>about</a>
+            <a href="/about" className="mobile-nav-link" onClick={handleNavClick('/about')}>about</a>
           </nav>
         </div>
       </div>

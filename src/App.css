@@ -4,10 +4,10 @@
 
 .stage {
   width: 100%;
-  height: 100dvh;
+  min-height: 100dvh;
   position: relative;
   background: #ffffff;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 .asset-preload {
@@ -35,9 +35,7 @@
 
 /* Sticky Hero Section */
 .hero-section {
-  position: -webkit-sticky; /* Safari */
-  position: sticky;
-  top: 0;
+  position: relative;
   width: 100%;
   height: 100vh;
   z-index: 0;
@@ -153,19 +151,6 @@
   transition: opacity 0.18s linear;
 }
 
-.projects-canvas-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 95;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.18s linear;
-}
-
-.projects-canvas-overlay.is-interactive {
-  pointer-events: auto;
-}
-
 .header-new,
 .hero-overlay,
 .hero-end-callout,
@@ -219,6 +204,8 @@ canvas {
   position: relative;
   z-index: 10;
   width: 100%;
+  height: 100dvh;
+  min-height: 100dvh;
   overflow: hidden;
   pointer-events: auto;
   scroll-margin-top: var(--header-offset, 0);
